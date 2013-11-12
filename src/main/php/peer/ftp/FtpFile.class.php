@@ -4,12 +4,10 @@ use io\streams\Streams;
 use io\streams\InputStream;
 use io\streams\OutputStream;
 
-
 /**
  * FTP file
  *
- * @see      xp://peer.ftp.FtpDir#getFile
- * @purpose  FtpEntry implementation
+ * @see   xp://peer.ftp.FtpDir#getFile
  */
 class FtpFile extends FtpEntry {
 
@@ -70,7 +68,7 @@ class FtpFile extends FtpEntry {
    * @return  peer.ftp.FtpFile this file
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function uploadFrom(InputStream $in, $mode= \FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function uploadFrom(InputStream $in, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
     $transfer= create(new FtpUpload($this, $in))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
@@ -94,7 +92,7 @@ class FtpFile extends FtpEntry {
    * @param   int mode default FtpTransfer::ASCII
    * @return  peer.ftp.FtpTransfer 
    */
-  public function start(\FtpTransfer $transfer, $mode= \FtpTransfer::ASCII) {
+  public function start(FtpTransfer $transfer, $mode= FtpTransfer::ASCII) {
     $transfer->setRemote($this);
     $transfer->start($mode);
     return $transfer;
@@ -109,7 +107,7 @@ class FtpFile extends FtpEntry {
    * @return  io.streams.OutputStream the output stream passed
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function downloadTo(OutputStream $out, $mode= \FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function downloadTo(OutputStream $out, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
     $transfer= create(new FtpDownload($this, $out))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 

@@ -2,14 +2,12 @@
  
 use util\Date;
 
-
 /**
  * Base class for all FTP entries
  *
- * @see      xp://peer.ftp.FtpDir
- * @see      xp://peer.ftp.FtpFile
- * @test     xp://net.xp_framework.unittest.peer.ftp.FtpEntryListTest
- * @purpose  Abstract base class
+ * @see   xp://peer.ftp.FtpDir
+ * @see   xp://peer.ftp.FtpFile
+ * @test  xp://peer.ftp.unittest.FtpEntryListTest
  */
 abstract class FtpEntry extends \lang\Object {
   protected
@@ -28,7 +26,7 @@ abstract class FtpEntry extends \lang\Object {
    * @param   string name
    * @param   peer.ftp.FtpConnection connection
    */
-  public function __construct($name, \FtpConnection $connection) {
+  public function __construct($name, FtpConnection $connection) {
     $this->name= $name;
     $this->connection= $connection;
   }
@@ -93,7 +91,7 @@ abstract class FtpEntry extends \lang\Object {
    * @param   string name default NULL the new name - if omitted, will stay the same
    * @throws  io.IOException in case of an I/O error
    */
-  public function moveTo(\FtpDir $to, $name= null) {
+  public function moveTo(FtpDir $to, $name= null) {
     try {
       $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), array(350));
       $this->connection->expect($this->connection->sendCommand(

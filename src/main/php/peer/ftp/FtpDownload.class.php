@@ -2,12 +2,10 @@
 
 use io\streams\OutputStream;
 
-
 /**
  * Represents an download
  *
- * @see      xp://peer.ftp.FtpFile#downloadTo
- * @purpose  FtpTransfer implementation
+ * @see   xp://peer.ftp.FtpFile#downloadTo
  */
 class FtpDownload extends FtpTransfer {
   protected $out= null;
@@ -18,7 +16,7 @@ class FtpDownload extends FtpTransfer {
    * @param   peer.ftp.FtpFile remote
    * @param   io.streams.OutputStream out
    */
-  public function __construct(\FtpFile $remote= null, OutputStream $out) {
+  public function __construct(FtpFile $remote= null, OutputStream $out) {
     $this->remote= $remote;
     $this->out= $out;
   }

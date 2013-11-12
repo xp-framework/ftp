@@ -1,6 +1,6 @@
 <?php namespace peer\ftp;
 
-
+use util\Date;
 
 /**
  * Parses output from a FTP LIST command.
@@ -18,21 +18,20 @@
  *   11-08-06  10:04AM                   27 info.txt 
  * </pre>
  *
- * @see      xp://peer.ftp.FtpConnection
- * @see      php://ftp_rawlist
- * @purpose  Interface
+ * @see   xp://peer.ftp.FtpConnection
+ * @see   php://ftp_rawlist
  */
 interface FtpListParser {
   
   /**
    * Parse raw listing entry.
    *
-   * @param   string raw a single line
-   * @param   peer.ftp.FtpConnection connection
-   * @param   string base default "/"
-   * @param   util.Date ref default NULL
+   * @param   string $raw a single line
+   * @param   peer.ftp.FtpConnection $connection
+   * @param   string $base default "/"
+   * @param   util.Date $ref default NULL
    * @return  peer.ftp.FtpEntry
    */
-  public function entryFrom($raw, \FtpConnection $conn= null, $base= '/', \util\Date $ref= null);
+  public function entryFrom($raw, FtpConnection $conn= null, $base= '/', Date $ref= null);
 
 }

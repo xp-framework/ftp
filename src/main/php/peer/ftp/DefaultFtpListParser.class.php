@@ -1,27 +1,26 @@
 <?php namespace peer\ftp;
 
 use util\DateUtil;
-
+use util\Date;
 
 /**
  * Parses output from a FTP LIST command from Un*x FTP daemons.
  *
- * @test     xp://net.xp_framework.unittest.peer.DefaultFtpListParserTest
- * @see      xp://peer.ftp.FtpListParser
- * @purpose  FTP LIST parser implementation
+ * @test  xp://peer.ftp.unittest.DefaultFtpListParserTest
+ * @see   xp://peer.ftp.FtpListParser
  */
 class DefaultFtpListParser extends \lang\Object implements FtpListParser {
 
   /**
    * Parse raw listing entry.
    *
-   * @param   string raw a single line
-   * @param   peer.ftp.FtpConnection connection
-   * @param   string base default "/"
-   * @param   util.Date ref default NULL
+   * @param   string $raw a single line
+   * @param   peer.ftp.FtpConnection $connection
+   * @param   string $base default "/"
+   * @param   util.Date $ref default NULL
    * @return  peer.ftp.FtpEntry
    */
-  public function entryFrom($raw, \FtpConnection $conn= null, $base= '/', \util\Date $ref= null) {
+  public function entryFrom($raw, FtpConnection $conn= null, $base= '/', Date $ref= null) {
     sscanf(
       $raw, 
       '%s %d %s %s %d %s %d %[^ ] %[^$]',
@@ -43,9 +42,9 @@ class DefaultFtpListParser extends \lang\Object implements FtpListParser {
     
     // Create a directory or an entry
     if ('d' === $permissions{0}) {
-      $e= new \FtpDir($filename, $conn);
+      $e= new FtpDir($filename, $conn);
     } else {
-      $e= new \FtpFile($filename, $conn);
+      $e= new FtpFile($filename, $conn);
     }
     
     // If the entry contains a timestamp, the year is omitted, "Apr 4 20:16" 
@@ -55,15 +54,14 @@ class DefaultFtpListParser extends \lang\Object implements FtpListParser {
     // *] #define SIXMONTHS       ((365 / 2) * 86400) := 15724800
     //    See http://svn.freebsd.org/base/projects/releng_7_xen/bin/ls/print.c
     if (strstr($date, ':')) {
-      $ref || $ref= \util\Date::now();
-      $d= new \util\Date($month.' '.$day.' '.$ref->getYear().' '.$date);
+      $ref || $ref= Date::now();
+      $d= new Date($month.' '.$day.' '.$ref->getYear().' '.$date);
       if ($d->getTime() - $ref->getTime() > 15724800) {
         $d= DateUtil::addMonths($d, -12);
       }
     } else {
-      $d= new \util\Date($month.' '.$day.' '.$date);
+      $d= new Date($month.' '.$day.' '.$date);
     }
-
       
     try {
       $e->setPermissions(substr($permissions, 1));

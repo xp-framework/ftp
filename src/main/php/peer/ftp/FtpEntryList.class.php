@@ -1,12 +1,9 @@
 <?php namespace peer\ftp;
 
-
-
 /**
  * List of entries on an FTP server
  *
- * @see      xp://peer.ftp.FtpDir#entries
- * @purpose  List object
+ * @see   xp://peer.ftp.FtpDir#entries
  */
 class FtpEntryList extends \lang\Object implements \IteratorAggregate {
   protected
@@ -21,7 +18,7 @@ class FtpEntryList extends \lang\Object implements \IteratorAggregate {
    * @param   peer.ftp.FtpConnection connection
    * @param   string base default "/"
    */
-  public function __construct(array $list, \FtpConnection $connection, $base= '/') {
+  public function __construct(array $list, FtpConnection $connection, $base= '/') {
     $this->list= $list;
     $this->connection= $connection;
     $this->base= $base;

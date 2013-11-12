@@ -22,7 +22,7 @@ class FtpDir extends FtpEntry {
    * @param   string name
    * @param   peer.ftp.FtpConnection connection
    */
-  public function __construct($name, \FtpConnection $connection) {
+  public function __construct($name, FtpConnection $connection) {
     $normalized= '/'.trim($name, '/').'/';
     parent::__construct('//' === $normalized ? '/' : $normalized, $connection);
   }

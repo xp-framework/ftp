@@ -1,26 +1,25 @@
 <?php namespace peer\ftp;
 
-
+use util\Date;
 
 /**
  * Parses output from a FTP LIST command from Windows FTP daemons.
  *
- * @test     xp://net.xp_framework.unittest.peer.WindowsFtpListParserTest
- * @see      xp://peer.ftp.FtpListParser
- * @purpose  FTP LIST parser implementation
+ * @test  xp://peer.ftp.unittest.WindowsFtpListParserTest
+ * @see   xp://peer.ftp.FtpListParser
  */
 class WindowsFtpListParser extends \lang\Object implements FtpListParser {
 
   /**
-   * Parse raw listing entry.
+   * Parse raw listing entry
    *
-   * @param   string raw a single line
-   * @param   peer.ftp.FtpConnection connection
-   * @param   string base default "/"
-   * @param   util.Date ref default NULL
+   * @param   string $raw a single line
+   * @param   peer.ftp.FtpConnection $connection
+   * @param   string $base default "/"
+   * @param   util.Date $ref default NULL
    * @return  peer.ftp.FtpEntry
    */
-  public function entryFrom($raw, \FtpConnection $conn= null, $base= '/', \util\Date $ref= null) {
+  public function entryFrom($raw, FtpConnection $conn= null, $base= '/', Date $ref= null) {
     preg_match(
       '/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +(<DIR>)?([0-9]+)? +(.+)/',
       $raw,
@@ -28,9 +27,9 @@ class WindowsFtpListParser extends \lang\Object implements FtpListParser {
     );
 
     if ($result[7]) {
-      $e= new \FtpDir($base.$result[9], $conn);
+      $e= new FtpDir($base.$result[9], $conn);
     } else {
-      $e= new \FtpFile($base.$result[9], $conn);
+      $e= new FtpFile($base.$result[9], $conn);
     }
 
     $e->setPermissions(0);
@@ -38,7 +37,7 @@ class WindowsFtpListParser extends \lang\Object implements FtpListParser {
     $e->setUser(null);
     $e->setGroup(null);
     $e->setSize(intval($result[8]));
-    $e->setDate(new \util\Date(sprintf(
+    $e->setDate(new Date(sprintf(
       '%02d/%02d/%02d %02d:%02d%02s', 
       $result[1], 
       $result[2], 

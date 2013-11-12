@@ -2,7 +2,6 @@
 
 use io\streams\InputStream;
 
-
 /**
  * Represents an upload
  *
@@ -18,7 +17,7 @@ class FtpUpload extends FtpTransfer {
    * @param   peer.ftp.FtpFile remote
    * @param   io.streams.InputStream in
    */
-  public function __construct(\FtpFile $remote= null, InputStream $in) {
+  public function __construct(FtpFile $remote= null, InputStream $in) {
     $this->remote= $remote;
     $this->in= $in;
   }

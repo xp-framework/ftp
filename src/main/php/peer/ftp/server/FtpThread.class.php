@@ -4,28 +4,22 @@ use lang\Thread;
 use lang\reflect\Proxy;
 use util\log\Traceable;
 
-
 /**
  * Server thread which does all of the accept()ing on the sockets.
- *
- * @purpose   Thread
  */
 class FtpThread extends Thread implements Traceable {
   public
-    $server                 = null,
-    $terminate              = false,
-    $cat                    = null,
-    $authenticatorHandler   = null,
-    $storageHandler         = null,
-    $interceptors           = array(),
-    
-    $processOwner           = null,
-    $processGroup           = null;
-
+    $server               = null,
+    $terminate            = false,
+    $cat                  = null,
+    $authenticatorHandler = null,
+    $storageHandler       = null,
+    $interceptors         = array(),    
+    $processOwner         = null,
+    $processGroup         = null;
 
   /**
    * Constructor
-   *
    */
   public function __construct() {
     parent::__construct('server');
