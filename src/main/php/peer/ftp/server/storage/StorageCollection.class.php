@@ -1,26 +1,21 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace peer\ftp\server\storage;
 
-  uses('peer.ftp.server.storage.StorageEntry');
+
+
+/**
+ * This interface describes objects that implement a single storage 
+ * element for FTP servers.
+ *
+ * @see      xp://peer.ftp.server.storage.StorageEntry
+ * @purpose  Storage
+ */
+interface StorageCollection extends StorageEntry {
 
   /**
-   * This interface describes objects that implement a single storage 
-   * element for FTP servers.
+   * Retrieves a list of elements
    *
-   * @see      xp://peer.ftp.server.storage.StorageEntry
-   * @purpose  Storage
+   * @return  peer.ftp.server.storage.StorageEntry[]
    */
-  interface StorageCollection extends StorageEntry {
+  public function elements();
 
-    /**
-     * Retrieves a list of elements
-     *
-     * @return  peer.ftp.server.storage.StorageEntry[]
-     */
-    public function elements();
-  
-  }
-?>
+}
