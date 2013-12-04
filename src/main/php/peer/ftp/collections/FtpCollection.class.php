@@ -27,7 +27,16 @@ class FtpCollection extends \lang\Object implements IOCollection {
     $this->dir= $dir;
     $this->it= \xp::null();
   }
-  
+
+  /**
+   * Returns this element's name
+   *
+   * @return  string
+   */
+  public function getName() {
+    return basename($this->dir->getName());
+  }
+
   /**
    * Returns this element's URI
    *
