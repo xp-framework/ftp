@@ -27,6 +27,8 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
   const MODE_BLOCK=      'B';
   const MODE_COMPRESSED= 'C';
 
+  protected $mode= [];
+
   public
     $sessions         = array(),
     $timeout          = 300.0,      // 5 minutes
@@ -927,22 +929,23 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     $this->mode[$socket->hashCode()]= self::DATA_PASSIVE;
 
     // Open a new server socket if non exists
-    if (!$this->datasock[$socket->hashCode()]) {
-      $this->datasock[$socket->hashCode()]= new \peer\ServerSocket($socket->localEndpoint()->getHost(), 0);
+    $key= $socket->hashCode();
+    if (!isset($this->datasock[$key])) {
+      $this->datasock[$key]= new \peer\ServerSocket($socket->localEndpoint()->getHost(), 0);
       try {
-        $this->datasock[$socket->hashCode()]->create();
-        $this->datasock[$socket->hashCode()]->bind();
-        $this->datasock[$socket->hashCode()]->listen();
+        $this->datasock[$key]->create();
+        $this->datasock[$key]->bind();
+        $this->datasock[$key]->listen();
       } catch (\io\IOException $e) {
         $this->answer($socket, 425, 'Cannot open passive connection '.$e->getMessage());
-        delete($this->datasock[$socket->hashCode()]);
+        delete($this->datasock[$key]);
         return;
       }
     }
 
     // Enter passive
-    $this->cat && $this->cat->debug('Passive mode: Data socket is', $this->datasock[$socket->hashCode()]);
-    $port= $this->datasock[$socket->hashCode()]->port;
+    $this->cat && $this->cat->debug('Passive mode: Data socket is', $this->datasock[$key]);
+    $port= $this->datasock[$key]->port;
     $octets= strtr(gethostbyname($this->server->socket->host), '.', ',').','.($port >> 8).','.($port & 0xFF);
     $this->answer($socket, 227, 'Entering passive mode ('.$octets.')');
   }
