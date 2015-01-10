@@ -1,13 +1,12 @@
 <?php namespace peer\ftp\unittest;
 
 use net\xp_framework\unittest\StartServer;
-use unittest\TestCase;
 use io\streams\MemoryInputStream;
 use io\streams\MemoryOutputStream;
 use io\streams\Streams;
-use lang\Process;
-use lang\Runtime;
+use io\IOException;
 use peer\ftp\FtpConnection;
+use lang\Throwable;
 
 /**
  * TestCase for FTP API.
@@ -15,7 +14,7 @@ use peer\ftp\FtpConnection;
  * @see      xp://peer.ftp.FtpConnection
  */
 #[@action(new StartServer('peer.ftp.unittest.TestingServer', 'connected', 'shutdown'))]
-class IntegrationTest extends TestCase {
+class IntegrationTest extends \unittest\TestCase {
   public static $bindAddress= null;
   protected $conn= null;
 
@@ -59,26 +58,27 @@ class IntegrationTest extends TestCase {
 
   #[@test, @expect('peer.AuthenticationException')]
   public function incorrect_credentials() {
-    create(new FtpConnection('ftp://test:INCORRECT@'.self::$bindAddress.'?timeout=1'))->connect();
+    (new FtpConnection('ftp://test:INCORRECT@'.self::$bindAddress.'?timeout=1'))->connect();
   }
 
   #[@test]
   public function retrieve_root_dir() {
     $this->conn->connect();
     with ($root= $this->conn->rootDir()); {
-      $this->assertClass($root, 'peer.ftp.FtpDir');
+      $this->assertInstanceOf('peer.ftp.FtpDir', $root);
       $this->assertEquals('/', $root->getName());
     }
   }
+
 
   #[@test]
   public function retrieve_root_dir_entries() {
     $this->conn->connect();
     $entries= $this->conn->rootDir()->entries();
-    $this->assertClass($entries, 'peer.ftp.FtpEntryList');
+    $this->assertInstanceOf('peer.ftp.FtpEntryList', $entries);
     $this->assertFalse($entries->isEmpty());
     foreach ($entries as $entry) {
-      $this->assertSubClass($entry, 'peer.ftp.FtpEntry');
+      $this->assertInstanceOf('peer.ftp.FtpEntry', $entry);
     }
   }
 
@@ -124,7 +124,7 @@ class IntegrationTest extends TestCase {
     with ($r= $this->conn->rootDir()); {
       $this->assertTrue($r->hasDir('.trash'));
       $dir= $r->getDir('.trash');
-      $this->assertClass($dir, 'peer.ftp.FtpDir');
+      $this->assertInstanceOf('peer.ftp.FtpDir', $dir);
       $this->assertEquals('/.trash/', $dir->getName());
       
       // 2 entries exist: do-not-remove.txt & possibly .svn
@@ -138,7 +138,7 @@ class IntegrationTest extends TestCase {
     with ($r= $this->conn->rootDir()); {
       $this->assertTrue($r->hasDir('htdocs'));
       $dir= $r->getDir('htdocs');
-      $this->assertClass($dir, 'peer.ftp.FtpDir');
+      $this->assertInstanceOf('peer.ftp.FtpDir', $dir);
       $this->assertEquals('/htdocs/', $dir->getName());
       $this->assertNotEquals(0, $dir->entries()->size());
     }
@@ -162,7 +162,7 @@ class IntegrationTest extends TestCase {
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
       $this->assertTrue($htdocs->hasFile('index.html'));
       $index= $htdocs->getFile('index.html');
-      $this->assertClass($index, 'peer.ftp.FtpFile');
+      $this->assertInstanceOf('peer.ftp.FtpFile', $index);
       $this->assertEquals('/htdocs/index.html', $index->getName());
     }
   }
@@ -173,7 +173,7 @@ class IntegrationTest extends TestCase {
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
       $this->assertTrue($htdocs->hasFile('file with whitespaces.html'));
       $file= $htdocs->getFile('file with whitespaces.html');
-      $this->assertClass($file, 'peer.ftp.FtpFile');
+      $this->assertInstanceOf('peer.ftp.FtpFile', $file);
       $this->assertEquals('/htdocs/file with whitespaces.html', $file->getName());
     }
   }
@@ -313,7 +313,7 @@ class IntegrationTest extends TestCase {
       try {
         $s= $dir->getFile('index.html')->getInputStream();
         $this->assertEquals("<html/>\n", Streams::readAll($s));
-      } catch (\io\IOException $e) {
+      } catch (IOException $e) {
         $this->fail('Round '.($i + 1), $e, null);
       }
     }
@@ -332,12 +332,12 @@ class IntegrationTest extends TestCase {
       $this->assertTrue($file->exists());
       $this->assertEquals(strlen($this->name), $file->getSize());
       $file->delete();
-    } catch (\lang\Throwable $e) {
+    } catch (Throwable $e) {
 
       // Unfortunately, try { } finally does not exist...
       try {
         $file && $file->delete();
-      } catch (\io\IOException $ignored) {
+      } catch (IOException $ignored) {
         // Can't really do anything here
       }
       throw $e;
