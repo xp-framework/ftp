@@ -27,8 +27,6 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
   const MODE_BLOCK=      'B';
   const MODE_COMPRESSED= 'C';
 
-  protected $mode= [];
-
   public
     $sessions         = array(),
     $timeout          = 300.0,      // 5 minutes
@@ -891,7 +889,6 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @param   string params
    */
   public function onPort($socket, $params) {
-    $this->mode[$socket->hashCode()]= self::DATA_ACTIVE;
     $octets= sscanf($params, '%d,%d,%d,%d,%d,%d');
     $host= sprintf('%s.%s.%s.%s', $octets[0], $octets[1], $octets[2], $octets[3]);
     $port= ($octets[4] * 256) + $octets[5];
@@ -926,7 +923,6 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @param   string params
    */
   public function onPasv($socket, $params) {
-    $this->mode[$socket->hashCode()]= self::DATA_PASSIVE;
 
     // Open a new server socket if non exists
     $key= $socket->hashCode();
