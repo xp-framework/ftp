@@ -28,13 +28,13 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
   const MODE_COMPRESSED= 'C';
 
   public
-    $sessions         = array(),
+    $sessions         = [],
     $timeout          = 300.0,      // 5 minutes
     $cat              = null,
     $authenticator    = null,
     $storage          = null,
-    $datasock         = array(),
-    $interceptors     = array();
+    $datasock         = [],
+    $interceptors     = [];
 
   /**
    * Constructor
@@ -1009,6 +1009,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     
     // Kill associated session
     delete($this->sessions[$socket->hashCode()]);
+    delete($this->datasock[$socket->hashCode()]);
   }
 
   /**
@@ -1022,5 +1023,6 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     
     // Kill associated session
     delete($this->sessions[$socket->hashCode()]);
+    delete($this->datasock[$socket->hashCode()]);
   }
 } 
