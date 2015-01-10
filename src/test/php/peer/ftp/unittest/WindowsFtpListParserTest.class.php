@@ -1,41 +1,34 @@
 <?php namespace peer\ftp\unittest;
  
-use unittest\TestCase;
+use peer\ftp\FtpConnection;
 use peer\ftp\WindowsFtpListParser;
 use peer\ftp\FtpDir;
 use peer\ftp\FtpEntry;
 use util\Date;
 
-
 /**
  * Tests Windows list parser
  *
  * @see      xp://peer.ftp.WindowsFtpListParser
- * @purpose  Unit Test
  */
-class WindowsFtpListParserTest extends TestCase {
-  protected
-    $parser     = null,
-    $connection = null;
-  
+class WindowsFtpListParserTest extends \unittest\TestCase {
+  protected $parser, $connectionl;
+
   /**
    * Setup this testcase
    *
+   * @return void
    */
   public function setUp() {
     $this->parser= new WindowsFtpListParser();
-    $this->connection= new \peer\ftp\FtpConnection('ftp://mock/');
+    $this->connection= new FtpConnection('ftp://mock/');
   }
   
-  /**
-   * Test directory
-   *
-   */
   #[@test]
   public function directory() {
     $e= $this->parser->entryFrom('01-04-06  04:51PM       <DIR>          _db_import', $this->connection, '/');
 
-    $this->assertSubclass($e, 'peer.ftp.FtpDir');
+    $this->assertInstanceOf('peer.ftp.FtpDir', $e);
     $this->assertEquals('/_db_import/', $e->getName());
     $this->assertEquals(0, $e->getNumlinks());
     $this->assertEquals(null, $e->getUser());
@@ -45,15 +38,11 @@ class WindowsFtpListParserTest extends TestCase {
     $this->assertEquals(0, $e->getPermissions());
   }
 
-  /**
-   * Test file
-   *
-   */
   #[@test]
   public function regularFile() {
     $e= $this->parser->entryFrom('11-08-06  10:04AM                   27 info.txt', $this->connection, '/');
 
-    $this->assertSubclass($e, 'peer.ftp.FtpEntry');
+    $this->assertInstanceOf('peer.ftp.FtpEntry', $e);
     $this->assertEquals('/info.txt', $e->getName());
     $this->assertEquals(0, $e->getNumlinks());
     $this->assertEquals(null, $e->getUser());
