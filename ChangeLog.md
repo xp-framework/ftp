@@ -7,7 +7,7 @@ FTP protocol support for the XP Framework ChangeLog
 
 * Changed dependency to use XP ~6.0 (instead of dev-master) - @thekid
 
-## 6.0.0 / 2015-10-01
+## 6.0.0 / 2015-01-10
 
 * Heads up: Renoved deprecated peer.ftp.server.FtpConnectionListener
   class which has been superseded by FtpProtocol - (@thekid)
