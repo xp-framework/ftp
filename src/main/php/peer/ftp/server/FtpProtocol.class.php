@@ -214,7 +214,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @param   string params
    */
   public function onRein($socket, $params) {
-    delete($this->datasock[$socket->hashCode()]);
+    unset($this->datasock[$socket->hashCode()]);
     $this->sessions[$socket->hashCode()]->setAuthenticated(false);
   }
       
@@ -424,7 +424,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     if (!($entry= $this->storage->lookup($socket->hashCode(), $params))) {
       $this->answer($socket, 550, $params.': No such file or directory');
       $dataSocket->close();
-      delete($dataSocket);
+      unset($dataSocket);
       $this->cat && $this->cat->debug($socket, $this->datasock[$socket->hashCode()]);
       return;
     }
@@ -879,7 +879,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     $socket->close();
     
     // Kill associated session
-    delete($this->sessions[$socket->hashCode()]);
+    unset($this->sessions[$socket->hashCode()]);
   }
 
   /**
@@ -934,7 +934,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
         $this->datasock[$key]->listen();
       } catch (\io\IOException $e) {
         $this->answer($socket, 425, 'Cannot open passive connection '.$e->getMessage());
-        delete($this->datasock[$key]);
+        unset($this->datasock[$key]);
         return;
       }
     }
@@ -1008,8 +1008,8 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     $this->cat && $this->cat->debugf('Client %s disconnected', $socket->host);
     
     // Kill associated session
-    delete($this->sessions[$socket->hashCode()]);
-    delete($this->datasock[$socket->hashCode()]);
+    unset($this->sessions[$socket->hashCode()]);
+    unset($this->datasock[$socket->hashCode()]);
   }
 
   /**
@@ -1022,7 +1022,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     $this->cat && $this->cat->debugf('Client %s I/O error ~ %s', $socket->host, $e->toString());
     
     // Kill associated session
-    delete($this->sessions[$socket->hashCode()]);
-    delete($this->datasock[$socket->hashCode()]);
+    unset($this->sessions[$socket->hashCode()]);
+    unset($this->datasock[$socket->hashCode()]);
   }
 } 
