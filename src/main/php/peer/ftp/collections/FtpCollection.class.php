@@ -17,7 +17,19 @@ class FtpCollection extends \lang\Object implements IOCollection {
 
   private 
     $it     = null;
-    
+
+  private static $INVALID;
+
+  static function __static() {
+    self::$INVALID= newinstance('Iterator', [], '{
+      public function rewind() { throw new \lang\IllegalStateException("Collection needs to be opened first"); }
+      public function key() { return null; }
+      public function current() { return null; }
+      public function next() { return null; }
+      public function valid() { return false; }
+    }');
+  }
+
   /**
    * Constructor
    *
@@ -25,7 +37,7 @@ class FtpCollection extends \lang\Object implements IOCollection {
    */
   public function __construct(FtpDir $dir) {
     $this->dir= $dir;
-    $this->it= \xp::null();
+    $this->it= self::$INVALID;
   }
 
   /**
@@ -86,7 +98,7 @@ class FtpCollection extends \lang\Object implements IOCollection {
    *
    */
   public function close() { 
-    $this->it= \xp::null();
+    $this->it= self::$INVALID;
   }
 
   /**

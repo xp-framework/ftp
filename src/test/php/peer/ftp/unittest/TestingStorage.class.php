@@ -97,7 +97,7 @@ class TestingStorage extends \lang\Object implements Storage {
       case Storage::ELEMENT: return new TestingElement($qualified, $this);
       case Storage::COLLECTION: return new TestingCollection($qualified, $this);
     }
-    return \xp::null();
+    return null;
   }
 
   /**

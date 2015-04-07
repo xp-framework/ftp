@@ -118,7 +118,7 @@ class FilesystemStorage extends \lang\Object {
       case ST_COLLECTION:
         return new FilesystemStorageCollection($path, $this->root);
     }
-    return \xp::null();
+    return null;
   }
   
   /**
