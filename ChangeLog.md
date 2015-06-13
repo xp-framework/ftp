@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 6.1.0 / 2015-06-13
+
+* Added forward compatibility with PHP7 - @thekid
+
 ## 6.0.1 / 2015-02-12
 
 * Changed dependency to use XP ~6.0 (instead of dev-master) - @thekid
