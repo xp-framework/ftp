@@ -69,7 +69,7 @@ class FtpFile extends FtpEntry {
    * @throws  peer.SocketException in case of an I/O error
    */
   public function uploadFrom(InputStream $in, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
-    $transfer= create(new FtpUpload($this, $in))->withListener($listener)->start($mode);
+    $transfer= (new FtpUpload($this, $in))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
     if ($transfer->aborted()) {
@@ -108,7 +108,7 @@ class FtpFile extends FtpEntry {
    * @throws  peer.SocketException in case of an I/O error
    */
   public function downloadTo(OutputStream $out, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
-    $transfer= create(new FtpDownload($this, $out))->withListener($listener)->start($mode);
+    $transfer= (new FtpDownload($this, $out))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
     if ($transfer->aborted()) {
