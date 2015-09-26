@@ -37,7 +37,7 @@ class FilesystemStorageCollection extends \lang\Object implements StorageCollect
     $this->f= new Folder($uri);
     $this->st= stat($this->f->getURI());
     if (!extension_loaded('posix')) {
-      $this->st['pwuid']= $this->st['grgid']= array('name' => 'none');
+      $this->st['pwuid']= $this->st['grgid']= ['name' => 'none'];
     } else {
       $this->st['pwuid']= posix_getpwuid($this->st['uid']);
       $this->st['grgid']= posix_getgrgid($this->st['gid']);
@@ -162,7 +162,7 @@ class FilesystemStorageCollection extends \lang\Object implements StorageCollect
   public function elements() {
     $rpath= substr($this->f->getURI(), strlen($this->root));
         
-    $r= array();
+    $r= [];
     $r[]= new FilesystemStorageCollection($rpath.'.', $this->root);
     $r[]= new FilesystemStorageCollection($rpath.'..', $this->root);
     while ($entry= $this->f->getEntry()) {

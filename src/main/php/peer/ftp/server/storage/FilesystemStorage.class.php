@@ -10,7 +10,7 @@
  */
 class FilesystemStorage extends \lang\Object {
   public
-    $base   = array(),
+    $base   = [],
     $root   = '';
 
   /**
@@ -44,7 +44,7 @@ class FilesystemStorage extends \lang\Object {
     
     with (
       $parts= explode(DIRECTORY_SEPARATOR, $path),
-      $stack= array()
+      $stack= []
     ); {
       foreach ($parts as $part) {
         switch ($part) {

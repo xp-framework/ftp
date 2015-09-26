@@ -11,7 +11,7 @@
 class FtpListIterator extends \lang\Object implements \Iterator {
   private 
     $i= 0, 
-    $v= array(), 
+    $v= [], 
     $c= null, 
     $e= null,
     $b= '';
@@ -69,7 +69,7 @@ class FtpListIterator extends \lang\Object implements \Iterator {
    * @return  bool
    */
   public function valid() { 
-    $dotdirs= array($this->b.'./', $this->b.'../');
+    $dotdirs= [$this->b.'./', $this->b.'../'];
     do {
       if ($this->i >= sizeof($this->v)) return false;
 

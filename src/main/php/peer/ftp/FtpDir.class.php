@@ -47,7 +47,7 @@ class FtpDir extends FtpEntry {
    * @throws  io.IOException in case of an I/O error
    */
   public function delete() {
-    $this->connection->expect($this->connection->sendCommand('RMD %s', $this->name), array(250));
+    $this->connection->expect($this->connection->sendCommand('RMD %s', $this->name), [250]);
   }
   
   /**
@@ -198,7 +198,7 @@ class FtpDir extends FtpEntry {
    * @throws  peer.ProtocolException in case the created directory cannot be located or is a file
    */
   protected function makeDir($name) {
-    $this->connection->expect($this->connection->sendCommand('MKD %s', $this->name.$name), array(257));
+    $this->connection->expect($this->connection->sendCommand('MKD %s', $this->name.$name), [257]);
     
     if (!($created= $this->findEntry($name))) {
       throw new ProtocolException('MKDIR "'.$name.'" succeeded but could not find created directory afterwards');

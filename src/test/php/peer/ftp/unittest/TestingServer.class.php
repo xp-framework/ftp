@@ -42,13 +42,13 @@ class TestingServer extends \lang\Object {
     $stor->add(new TestingCollection('/outer/inner', $stor));
     $stor->add(new TestingElement('/outer/inner/index.html', $stor));
 
-    $auth= newinstance('lang.Object', array(), '{
+    $auth= newinstance('lang.Object', [], '{
       public function authenticate($user, $password) {
         return ("testtest" == $user.$password);
       }
     }');
 
-    $protocol= newinstance('peer.ftp.server.FtpProtocol', array($stor, $auth), '{
+    $protocol= newinstance('peer.ftp.server.FtpProtocol', [$stor, $auth], '{
       public function onShutdown($socket, $params) {
         $this->answer($socket, 200, "Shutting down");
         $this->server->terminate= true;

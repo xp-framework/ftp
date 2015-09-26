@@ -135,7 +135,7 @@ class TestingCollection extends \lang\Object implements \peer\ftp\server\storage
    */
   public function elements() {
     $cmp= rtrim($this->name, '/').'/';
-    $r= array(new self($cmp.'.', $this->storage), new self($cmp.'..', $this->storage));
+    $r= [new self($cmp.'.', $this->storage), new self($cmp.'..', $this->storage)];
     foreach ($this->storage->entries as $name => $entry) {
       if ($cmp === substr($name, 0, strrpos($name, '/')+ 1) && $entry !== $this) $r[]= $entry;
     }
