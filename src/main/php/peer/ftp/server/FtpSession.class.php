@@ -14,7 +14,7 @@ class FtpSession extends \lang\Object {
     $username       = '',
     $authenticated  = false,
     $type           = TYPE_ASCII,
-    $tempVar        = array();
+    $tempVar        = [];
 
   /**
    * Returns type name depending on the type
@@ -41,10 +41,10 @@ class FtpSession extends \lang\Object {
    * @return  string
    */
   public function typeName() {
-    static $names= array(
+    static $names= [
       TYPE_ASCII  => 'ASCII',
       TYPE_BINARY => 'BINARY'
-    );
+    ];
     return $names[$this->type];
   }
 

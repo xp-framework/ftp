@@ -90,11 +90,11 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
    */
   public function compactDates() {
     return [
-      array('Jul 23 20:16', '23.07.2009 20:16'),   // 182 days in the future
-      array('Apr 4 20:16' , '04.04.2009 20:16'),
-      array('Jan 22 20:16', '22.01.2009 20:16'),   // exactly "today"
-      array('Dec 1 20:16' , '01.12.2008 20:16'),
-      array('Jul 24 20:16', '24.07.2008 20:16'),   // 182 days in the past
+      ['Jul 23 20:16', '23.07.2009 20:16'],   // 182 days in the future
+      ['Apr 4 20:16' , '04.04.2009 20:16'],
+      ['Jan 22 20:16', '22.01.2009 20:16'],   // exactly "today"
+      ['Dec 1 20:16' , '01.12.2008 20:16'],
+      ['Jul 24 20:16', '24.07.2008 20:16'],   // 182 days in the past
     ];
   }
 

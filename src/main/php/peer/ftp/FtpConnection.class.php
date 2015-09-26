@@ -90,13 +90,13 @@ class FtpConnection extends \lang\Object implements Traceable {
     $this->socket->connect($timeout);
     
     // Read banner message
-    $this->expect($this->getResponse(), array(220));
+    $this->expect($this->getResponse(), [220]);
     
     // User & password
     if ($this->url->getUser()) {
       try {
-        $this->expect($this->sendCommand('USER %s', $this->url->getUser()), array(331));
-        $this->expect($this->sendCommand('PASS %s', $this->url->getPassword()), array(230));
+        $this->expect($this->sendCommand('USER %s', $this->url->getUser()), [331]);
+        $this->expect($this->sendCommand('PASS %s', $this->url->getPassword()), [230]);
       } catch (\peer\ProtocolException $e) {
         $this->socket->close();
         throw new AuthenticationException(sprintf(
@@ -118,7 +118,7 @@ class FtpConnection extends \lang\Object implements Traceable {
     $this->setupListParser();
     
     // Retrieve root directory
-    sscanf($this->expect($this->sendCommand('PWD'), array(257)), '"%[^"]"', $dir);
+    sscanf($this->expect($this->sendCommand('PWD'), [257]), '"%[^"]"', $dir);
     $this->root= new FtpDir(strtr($dir, '\\', '/'), $this);
 
     return $this;
@@ -129,7 +129,7 @@ class FtpConnection extends \lang\Object implements Traceable {
    *
    */
   protected function setupListParser() {
-    $type= $this->expect($this->sendCommand('SYST'), array(215));
+    $type= $this->expect($this->sendCommand('SYST'), [215]);
     if ('Windows_NT' == $type) {
       $this->parser= new WindowsFtpListParser();
     } else {
@@ -161,8 +161,8 @@ class FtpConnection extends \lang\Object implements Traceable {
    * @return  peer.Socket
    */
   public function transferSocket() {
-    $port= $this->expect($this->sendCommand('PASV'), array(227));
-    $a= $p= array();
+    $port= $this->expect($this->sendCommand('PASV'), [227]);
+    $a= $p= [];
     sscanf($port, '%*[^(] (%d,%d,%d,%d,%d,%d)', $a[0], $a[1], $a[2], $a[3], $p[0], $p[1]);
       
     // Open transfer socket
@@ -252,7 +252,7 @@ class FtpConnection extends \lang\Object implements Traceable {
         $transfer->close();
         return null;
       } else if (150 === $code) {   // Listing
-        $list= array();
+        $list= [];
         while ($line= $transfer->readLine()) {
           $list[]= $line;
         }
@@ -262,7 +262,7 @@ class FtpConnection extends \lang\Object implements Traceable {
         if (450 === $code) {        // No such file or directory
           return null;
         } else {                    // Some FTP servers send an empty directory listing
-          $this->expect($r, array(226));
+          $this->expect($r, [226]);
           return $list ? $list : null;
         }
       } else {                      // Unexpected response

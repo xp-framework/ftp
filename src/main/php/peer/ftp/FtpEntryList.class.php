@@ -8,7 +8,7 @@
 class FtpEntryList extends \lang\Object implements \IteratorAggregate {
   protected
     $connection   = null,
-    $list         = array(),
+    $list         = [],
     $base         = '';
 
   /**
@@ -59,9 +59,9 @@ class FtpEntryList extends \lang\Object implements \IteratorAggregate {
    * @throws  lang.FormatException in case an entry cannot be parsed
    */
   public function asArray() {
-    $dotdirs= array($this->base.'./', $this->base.'../');
+    $dotdirs= [$this->base.'./', $this->base.'../'];
 
-    for ($i= 0, $r= array(), $s= sizeof($this->list); $i < $s; $i++) {
+    for ($i= 0, $r= [], $s= sizeof($this->list); $i < $s; $i++) {
       $e= $this->connection->parser->entryFrom($this->list[$i], $this->connection, $this->base);
       in_array($e->getName(), $dotdirs) || $r[]= $e;
     }

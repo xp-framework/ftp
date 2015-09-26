@@ -14,7 +14,7 @@ class FtpThread extends Thread implements Traceable {
     $cat                  = null,
     $authenticatorHandler = null,
     $storageHandler       = null,
-    $interceptors         = array(),    
+    $interceptors         = [],    
     $processOwner         = null,
     $processGroup         = null;
 
@@ -69,7 +69,7 @@ class FtpThread extends Thread implements Traceable {
    * @param peer.ftp.server.interceptor.StorageActionInterceptor Interceptor
    */
   public function addInterceptorFor($conditions, $interceptor) {
-    $this->interceptors[]= array($conditions, $interceptor);
+    $this->interceptors[]= [$conditions, $interceptor];
   }
   
   /**
@@ -78,7 +78,7 @@ class FtpThread extends Thread implements Traceable {
    * @param peer.ftp.server.interceptor.StorageActionInterceptor Interceptor
    */
   public function addInterceptor($interceptor) {
-    $this->addInterceptorFor(array(), $interceptor);
+    $this->addInterceptorFor([], $interceptor);
   }
   
   /**
@@ -145,12 +145,12 @@ class FtpThread extends Thread implements Traceable {
         $this->server->setProtocol($proto= $class->newInstance(
           $storage= Proxy::newProxyInstance(
             $cl,
-            array(\lang\XPClass::forName('peer.ftp.server.storage.Storage')),
+            [\lang\XPClass::forName('peer.ftp.server.storage.Storage')],
             $this->storageHandler
           ),
           Proxy::newProxyInstance(
             $cl,
-            array(\lang\XPClass::forName('security.auth.Authenticator')),
+            [\lang\XPClass::forName('security.auth.Authenticator')],
             $this->authenticatorHandler
           )
         ));

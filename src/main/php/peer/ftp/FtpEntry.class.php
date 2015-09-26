@@ -77,8 +77,8 @@ abstract class FtpEntry extends \lang\Object {
   public function rename($to) {
     $target= ('/' === $to{0} ? $to : dirname($this->name).'/'.$to);
     try {
-      $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), array(350));
-      $this->connection->expect($this->connection->sendCommand('RNTO %s', $target), array(250));
+      $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), [350]);
+      $this->connection->expect($this->connection->sendCommand('RNTO %s', $target), [250]);
     } catch (\peer\ProtocolException $e) {
       throw new \io\IOException('Could not rename '.$this->name.' to '.$to.': '.$e->getMessage());
     }
@@ -93,12 +93,12 @@ abstract class FtpEntry extends \lang\Object {
    */
   public function moveTo(FtpDir $to, $name= null) {
     try {
-      $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), array(350));
+      $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), [350]);
       $this->connection->expect($this->connection->sendCommand(
         'RNTO %s%s', 
         $to->getName(), 
         $name ? $name : basename($this->name)
-      ), array(250));
+      ), [250]);
     } catch (\peer\ProtocolException $e) {
       throw new \io\IOException('Could not rename '.$this->name.' to '.$to->getName().': '.$e->getMessage());
     }
@@ -134,7 +134,7 @@ abstract class FtpEntry extends \lang\Object {
    * @throws  lang.IllegalArgumentException
    */
   public function setPermissions($perm) {
-    static $m= array('r' => 4, 'w' => 2, 'x' => 1, '-' => 0, 't' => 0);
+    static $m= ['r' => 4, 'w' => 2, 'x' => 1, '-' => 0, 't' => 0];
 
     if (is_string($perm) && 9 == strlen($perm)) {
       $this->permissions= (

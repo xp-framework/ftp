@@ -280,7 +280,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @param   string params
    */
   public function onFeat($socket, $params) {
-    $this->answer($socket, 211, 'Features', array('MDTM', 'SIZE'));
+    $this->answer($socket, 211, 'Features', ['MDTM', 'SIZE']);
   }
 
   /**
@@ -291,7 +291,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @param   string params
    */
   public function onHelp($socket, $params) {
-    $methods= array();
+    $methods= [];
     $i= 0;
     foreach (get_class_methods($this) as $name) {
       if (0 != strncmp('on', $name, 2) || strlen($name) > 6) continue;
@@ -445,7 +445,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     if ($entry instanceof StorageCollection && !strstr($options, 'd')) {
       $elements= $entry->elements();
     } else {
-      $elements= array($entry);
+      $elements= [$entry];
     }
     
     $before6Months= DateUtil::addMonths(Date::now(), -6)->getTime();
@@ -511,7 +511,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
     if ($entry instanceof StorageCollection && !strstr($options, 'd')) {
       $elements= $entry->elements();
     } else {
-      $elements= array($entry);
+      $elements= [$entry];
     }
     
     for ($i= 0, $s= sizeof($elements); $i < $s; $i++) {
@@ -967,7 +967,7 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
    * @return  var
    */
   public function handleData($socket)  {
-    static $public= array('onhelp', 'onuser', 'onpass', 'onquit');
+    static $public= ['onhelp', 'onuser', 'onpass', 'onquit'];
 
     $data= $socket->readLine();      
     $this->cat && $this->cat->debug('>>> ', addcslashes($data, "\0..\17"));

@@ -13,7 +13,7 @@ class FilesystemStorageElement extends \lang\Object implements StorageElement {
   public
     $path = null,
     $f    = null,
-    $st   = array();
+    $st   = [];
 
   /**
    * Constructor
@@ -27,7 +27,7 @@ class FilesystemStorageElement extends \lang\Object implements StorageElement {
     $this->f= new File($root.$path);
     $this->st= stat($this->f->getURI());
     if (!extension_loaded('posix')) {
-      $this->st['pwuid']= $this->st['grgid']= array('name' => 'none');
+      $this->st['pwuid']= $this->st['grgid']= ['name' => 'none'];
     } else {
       $this->st['pwuid']= posix_getpwuid($this->st['uid']);
       $this->st['grgid']= posix_getgrgid($this->st['gid']);

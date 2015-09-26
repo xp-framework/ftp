@@ -9,8 +9,8 @@ use peer\ftp\server\storage\StorageEntry;
  * @see   xp://net.xp_framework.unittest.peer.ftp.TestingServer
  */
 class TestingStorage extends \lang\Object implements Storage {
-  protected $base= array();
-  public $entries= array();
+  protected $base= [];
+  public $entries= [];
 
   /**
    * Sets base

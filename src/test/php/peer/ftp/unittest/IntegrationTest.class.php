@@ -1,5 +1,8 @@
 <?php namespace peer\ftp\unittest;
 
+use peer\AuthenticationException;
+use io\FileNotFoundException;
+use lang\IllegalStateException;
 use net\xp_framework\unittest\StartServer;
 use io\streams\MemoryInputStream;
 use io\streams\MemoryOutputStream;
@@ -56,7 +59,7 @@ class IntegrationTest extends \unittest\TestCase {
     $this->conn->connect();
   }
 
-  #[@test, @expect('peer.AuthenticationException')]
+  #[@test, @expect(AuthenticationException::class)]
   public function incorrect_credentials() {
     (new FtpConnection('ftp://test:INCORRECT@'.self::$bindAddress.'?timeout=1'))->connect();
   }
@@ -150,7 +153,7 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertFalse($this->conn->rootDir()->hasDir(':DOES_NOT_EXIST'));
   }
 
-  #[@test, @expect('io.FileNotFoundException')]
+  #[@test, @expect(FileNotFoundException::class)]
   public function getNonExistantDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir(':DOES_NOT_EXIST');
@@ -184,19 +187,19 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertFalse($this->conn->rootDir()->getDir('htdocs')->hasFile(':DOES_NOT_EXIST'));
   }
 
-  #[@test, @expect('io.FileNotFoundException')]
+  #[@test, @expect(FileNotFoundException::class)]
   public function getNonExistantFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getFile(':DOES_NOT_EXIST');
   }
 
-  #[@test, @expect('lang.IllegalStateException')]
+  #[@test, @expect(IllegalStateException::class)]
   public function directoryViaGetFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getFile('htdocs');
   }
 
-  #[@test, @expect('lang.IllegalStateException')]
+  #[@test, @expect(IllegalStateException::class)]
   public function fileViaGetDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getDir('index.html');

@@ -11,10 +11,10 @@ abstract class FtpTransfer extends \lang\Object {
   const ASCII  = 1;
   const BINARY = 2;
 
-  protected static $modes= array(
+  protected static $modes= [
     self::ASCII  => 'A',
     self::BINARY => 'I'
-  );
+  ];
   
   protected
     $remote      = null,
@@ -97,7 +97,7 @@ abstract class FtpTransfer extends \lang\Object {
     with ($conn= $this->remote->getConnection()); {
 
       // Set mode
-      $conn->expect($conn->sendCommand('TYPE %s', self::$modes[$mode]), array(200));
+      $conn->expect($conn->sendCommand('TYPE %s', self::$modes[$mode]), [200]);
     
       // Issue the transfer command
       $this->socket= $conn->transferSocket();
@@ -127,7 +127,7 @@ abstract class FtpTransfer extends \lang\Object {
   protected function close() {
     $this->socket->close();
     with ($conn= $this->remote->getConnection()); {
-      $conn->expect($conn->getResponse(), array(226));
+      $conn->expect($conn->getResponse(), [226]);
     }
   }
 

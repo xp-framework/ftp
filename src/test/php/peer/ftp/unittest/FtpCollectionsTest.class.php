@@ -22,7 +22,7 @@ class FtpCollectionsTest extends TestCase {
   public function setUp() {
     $conn= new FtpConnection('ftp://mock');
     $conn->parser= new \peer\ftp\DefaultFtpListParser();
-    $this->dir= newinstance('peer.ftp.FtpDir', array('/', $conn), '{
+    $this->dir= newinstance('peer.ftp.FtpDir', ['/', $conn], '{
       public function entries() {
         return new FtpEntryList(array(
           "drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 .",
@@ -40,11 +40,11 @@ class FtpCollectionsTest extends TestCase {
    */
   #[@test]
   public function hasNextAndNext() {
-    $results= array();
+    $results= [];
     for ($c= new IOCollectionIterator(new FtpCollection($this->dir)); $c->hasNext(); ) {
       $results[]= $c->next()->getURI();
     }
-    $this->assertEquals(array('/.ssh/', '/.bash_history'), $results);
+    $this->assertEquals(['/.ssh/', '/.bash_history'], $results);
   }
 
   /**
@@ -53,10 +53,10 @@ class FtpCollectionsTest extends TestCase {
    */
   #[@test]
   public function foreachIteration() {
-    $results= array();
+    $results= [];
     foreach (new IOCollectionIterator(new FtpCollection($this->dir)) as $e) {
       $results[]= $e->getURI();
     }
-    $this->assertEquals(array('/.ssh/', '/.bash_history'), $results);
+    $this->assertEquals(['/.ssh/', '/.bash_history'], $results);
   }
 }

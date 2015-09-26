@@ -26,7 +26,7 @@ abstract class FtpTransferStream extends \lang\Object {
 
       // Always use binary mode
       // Check for "200 Type set to X"
-      $conn->expect($conn->sendCommand('TYPE I'), array(200));
+      $conn->expect($conn->sendCommand('TYPE I'), [200]);
 
       // Always use passive mode, just to be sure
       // Check for "227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)."
@@ -34,7 +34,7 @@ abstract class FtpTransferStream extends \lang\Object {
       
       // Begin transfer depending on the direction returned by getCommand()
       // Check for "150 Opening XXX mode data connection for ..."
-      $conn->expect($conn->sendCommand($cmd.' '.$file->getName()), array(150));
+      $conn->expect($conn->sendCommand($cmd.' '.$file->getName()), [150]);
     }
     $this->file= $file;
   }
@@ -68,7 +68,7 @@ abstract class FtpTransferStream extends \lang\Object {
     // Reset mode to ASCII
     with ($conn= $this->file->getConnection()); {
       $r= $conn->getResponse();
-      $conn->expect($conn->sendCommand('TYPE A'), array(200));
+      $conn->expect($conn->sendCommand('TYPE A'), [200]);
       sscanf($r[0], "%d %[^\r\n]", $code, $message);
       if (226 != $code) {
         throw new \peer\ProtocolException('Transfer incomplete ('.$code.': '.$message.')');

@@ -17,7 +17,7 @@ class FtpFile extends FtpEntry {
    * @throws  io.IOException in case of an I/O error
    */
   public function delete() {
-    $this->connection->expect($this->connection->sendCommand('DELE %s', $this->name), array(250));
+    $this->connection->expect($this->connection->sendCommand('DELE %s', $this->name), [250]);
   }
   
   /**
