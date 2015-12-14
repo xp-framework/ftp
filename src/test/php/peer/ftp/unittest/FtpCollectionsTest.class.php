@@ -1,5 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
+use peer\ftp\FtpDir;
 use unittest\TestCase;
 use io\collections\iterate\IOCollectionIterator;
 use peer\ftp\collections\FtpCollection;
@@ -22,7 +23,7 @@ class FtpCollectionsTest extends TestCase {
   public function setUp() {
     $conn= new FtpConnection('ftp://mock');
     $conn->parser= new \peer\ftp\DefaultFtpListParser();
-    $this->dir= newinstance('peer.ftp.FtpDir', ['/', $conn], '{
+    $this->dir= newinstance(FtpDir::class, ['/', $conn], '{
       public function entries() {
         return new FtpEntryList(array(
           "drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 .",

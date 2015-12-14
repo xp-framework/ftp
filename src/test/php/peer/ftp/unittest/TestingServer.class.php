@@ -1,5 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
+use lang\Object;
 use util\cmd\Console;
 use util\log\Logger;
 use util\log\FileAppender;
@@ -42,13 +43,13 @@ class TestingServer extends \lang\Object {
     $stor->add(new TestingCollection('/outer/inner', $stor));
     $stor->add(new TestingElement('/outer/inner/index.html', $stor));
 
-    $auth= newinstance('lang.Object', [], '{
+    $auth= newinstance(Object::class, [], '{
       public function authenticate($user, $password) {
         return ("testtest" == $user.$password);
       }
     }');
 
-    $protocol= newinstance('peer.ftp.server.FtpProtocol', [$stor, $auth], '{
+    $protocol= newinstance(FtpProtocol::class, [$stor, $auth], '{
       public function onShutdown($socket, $params) {
         $this->answer($socket, 200, "Shutting down");
         $this->server->terminate= true;

@@ -1,5 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
+use peer\ftp\FtpDir;
+use peer\ftp\FtpEntryList;
+use peer\ftp\FtpEntry;
+use peer\ftp\FtpFile;
 use peer\AuthenticationException;
 use io\FileNotFoundException;
 use lang\IllegalStateException;
@@ -68,7 +72,7 @@ class IntegrationTest extends \unittest\TestCase {
   public function retrieve_root_dir() {
     $this->conn->connect();
     with ($root= $this->conn->rootDir()); {
-      $this->assertInstanceOf('peer.ftp.FtpDir', $root);
+      $this->assertInstanceOf(FtpDir::class, $root);
       $this->assertEquals('/', $root->getName());
     }
   }
@@ -78,10 +82,10 @@ class IntegrationTest extends \unittest\TestCase {
   public function retrieve_root_dir_entries() {
     $this->conn->connect();
     $entries= $this->conn->rootDir()->entries();
-    $this->assertInstanceOf('peer.ftp.FtpEntryList', $entries);
+    $this->assertInstanceOf(FtpEntryList::class, $entries);
     $this->assertFalse($entries->isEmpty());
     foreach ($entries as $entry) {
-      $this->assertInstanceOf('peer.ftp.FtpEntry', $entry);
+      $this->assertInstanceOf(FtpEntry::class, $entry);
     }
   }
 
@@ -127,7 +131,7 @@ class IntegrationTest extends \unittest\TestCase {
     with ($r= $this->conn->rootDir()); {
       $this->assertTrue($r->hasDir('.trash'));
       $dir= $r->getDir('.trash');
-      $this->assertInstanceOf('peer.ftp.FtpDir', $dir);
+      $this->assertInstanceOf(FtpDir::class, $dir);
       $this->assertEquals('/.trash/', $dir->getName());
       
       // 2 entries exist: do-not-remove.txt & possibly .svn
@@ -141,7 +145,7 @@ class IntegrationTest extends \unittest\TestCase {
     with ($r= $this->conn->rootDir()); {
       $this->assertTrue($r->hasDir('htdocs'));
       $dir= $r->getDir('htdocs');
-      $this->assertInstanceOf('peer.ftp.FtpDir', $dir);
+      $this->assertInstanceOf(FtpDir::class, $dir);
       $this->assertEquals('/htdocs/', $dir->getName());
       $this->assertNotEquals(0, $dir->entries()->size());
     }
@@ -165,7 +169,7 @@ class IntegrationTest extends \unittest\TestCase {
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
       $this->assertTrue($htdocs->hasFile('index.html'));
       $index= $htdocs->getFile('index.html');
-      $this->assertInstanceOf('peer.ftp.FtpFile', $index);
+      $this->assertInstanceOf(FtpFile::class, $index);
       $this->assertEquals('/htdocs/index.html', $index->getName());
     }
   }
@@ -176,7 +180,7 @@ class IntegrationTest extends \unittest\TestCase {
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
       $this->assertTrue($htdocs->hasFile('file with whitespaces.html'));
       $file= $htdocs->getFile('file with whitespaces.html');
-      $this->assertInstanceOf('peer.ftp.FtpFile', $file);
+      $this->assertInstanceOf(FtpFile::class, $file);
       $this->assertEquals('/htdocs/file with whitespaces.html', $file->getName());
     }
   }

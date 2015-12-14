@@ -28,7 +28,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
   public function dotDirectory() {
     $e= $this->parser->entryFrom('drwx---r-t 37 p159995 ftpusers 4096 Apr 4 2009 .', $this->connection, '/');
 
-    $this->assertInstanceOf('peer.ftp.FtpDir', $e);
+    $this->assertInstanceOf(FtpDir::class, $e);
     $this->assertEquals('/./', $e->getName());
     $this->assertEquals(37, $e->getNumlinks());
     $this->assertEquals('p159995', $e->getUser());
@@ -42,7 +42,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
   public function regularFile() {
     $e= $this->parser->entryFrom('-rw----r-- 1 p159995 ftpusers 415 May 23 2000 write.html', $this->connection, '/');
 
-    $this->assertInstanceOf('peer.ftp.FtpEntry', $e);
+    $this->assertInstanceOf(FtpEntry::class, $e);
     $this->assertEquals('/write.html', $e->getName());
     $this->assertEquals(1, $e->getNumlinks());
     $this->assertEquals('p159995', $e->getUser());
@@ -56,7 +56,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
   public function whitespaceInFileName() {
     $e= $this->parser->entryFrom('-rw----r-- 1 p159995 ftpusers 415 May 23 2000 answer me.html', $this->connection, '/');
 
-    $this->assertInstanceOf('peer.ftp.FtpEntry', $e);
+    $this->assertInstanceOf(FtpEntry::class, $e);
     $this->assertEquals('/answer me.html', $e->getName());
     $this->assertEquals(1, $e->getNumlinks());
     $this->assertEquals('p159995', $e->getUser());

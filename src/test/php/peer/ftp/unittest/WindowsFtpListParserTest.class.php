@@ -28,7 +28,7 @@ class WindowsFtpListParserTest extends \unittest\TestCase {
   public function directory() {
     $e= $this->parser->entryFrom('01-04-06  04:51PM       <DIR>          _db_import', $this->connection, '/');
 
-    $this->assertInstanceOf('peer.ftp.FtpDir', $e);
+    $this->assertInstanceOf(FtpDir::class, $e);
     $this->assertEquals('/_db_import/', $e->getName());
     $this->assertEquals(0, $e->getNumlinks());
     $this->assertEquals(null, $e->getUser());
@@ -42,7 +42,7 @@ class WindowsFtpListParserTest extends \unittest\TestCase {
   public function regularFile() {
     $e= $this->parser->entryFrom('11-08-06  10:04AM                   27 info.txt', $this->connection, '/');
 
-    $this->assertInstanceOf('peer.ftp.FtpEntry', $e);
+    $this->assertInstanceOf(FtpEntry::class, $e);
     $this->assertEquals('/info.txt', $e->getName());
     $this->assertEquals(0, $e->getNumlinks());
     $this->assertEquals(null, $e->getUser());
