@@ -3,6 +3,12 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 6.2.0 / 2015-12-14
+
+* **Heads up**: Changed minimum XP version to XP 6.5.0, and with it the
+  minimum PHP version to PHP 5.5.
+  (@thekid)
+
 ## 6.1.2 / 2015-09-26
 
 * Merged PR #1: Use short array syntax / ::class in annotations - @thekid
