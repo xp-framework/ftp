@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 6.2.1 / 2015-12-20
+
+* Rewrote code to avoid deprecated ensure statement - @thekid
+
 ## 6.2.0 / 2015-12-14
 
 * **Heads up**: Changed minimum XP version to XP 6.5.0, and with it the

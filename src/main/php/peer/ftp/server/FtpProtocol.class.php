@@ -662,13 +662,12 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
         if (!$dataSocket->write($buf)) break;
       }
       $entry->close();
+      $dataSocket->close();
+      $this->answer($socket, 226, 'Transfer complete');
     } catch (\lang\XPException $e) {
       $this->answer($socket, 550, $params.': '.$e->getMessage());
-    } ensure($e); {
       $dataSocket->close();
-      if ($e) return;
     }
-    $this->answer($socket, 226, 'Transfer complete');
   }
 
   /**
@@ -713,20 +712,20 @@ class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
         $entry->write($buf);
       }
       $entry->close();
+      $dataSocket->close();
+
+      // Post check interception
+      if (!$this->checkInterceptors($socket, $entry, 'onStored')) {
+        $entry->delete();
+        return;
+      }
+
+      $this->answer($socket, 226, 'Transfer complete');
     } catch (\lang\XPException $e) {
       $this->answer($socket, 550, $params.': '.$e->getMessage());
-    } ensure($e); {
       $dataSocket->close();
-      if ($e) return;
-    }
-    
-    // Post check interception
-    if (!$this->checkInterceptors($socket, $entry, 'onStored')) {
-      $entry->delete();
       return;
     }
-
-    $this->answer($socket, 226, 'Transfer complete');
   }
 
   /**
