@@ -7,7 +7,6 @@ use peer\ftp\FtpFile;
 use peer\AuthenticationException;
 use io\FileNotFoundException;
 use lang\IllegalStateException;
-use net\xp_framework\unittest\StartServer;
 use io\streams\MemoryInputStream;
 use io\streams\MemoryOutputStream;
 use io\streams\Streams;
