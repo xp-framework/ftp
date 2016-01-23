@@ -85,7 +85,7 @@ class FtpElement extends \lang\Object implements IOElement {
    * @return  string
    */
   public function toString() { 
-    return $this->getClassName().'(->'.$this->file->toString().')';
+    return nameof($this).'(->'.$this->file->toString().')';
   }
 
   /**

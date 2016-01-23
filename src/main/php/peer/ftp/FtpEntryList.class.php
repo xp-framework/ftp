@@ -74,6 +74,6 @@ class FtpEntryList extends \lang\Object implements \IteratorAggregate {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'('.$this->size().' entries)@'.\xp::stringOf($this->list);
+    return nameof($this).'('.$this->size().' entries)@'.\xp::stringOf($this->list);
   }
 }

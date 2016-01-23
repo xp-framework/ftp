@@ -100,7 +100,7 @@ class FtpDownload extends FtpTransfer {
   public function toString() {
     return sprintf(
       '%s@(%s -> %s)',
-      $this->getClassName(),
+      nameof($this),
       $this->remote ? $this->remote->getName() : '(null)',
       $this->out->toString()
     );

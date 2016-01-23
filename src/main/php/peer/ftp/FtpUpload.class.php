@@ -92,6 +92,6 @@ class FtpUpload extends FtpTransfer {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'@('.$this->in->toString().' -> '.$this->remote->getName().')';
+    return nameof($this).'@('.$this->in->toString().' -> '.$this->remote->getName().')';
   }
 }

@@ -143,7 +143,7 @@ class FtpCollection extends \lang\Object implements IOCollection {
    * @return  string
    */
   public function toString() { 
-    return $this->getClassName().'(->'.$this->dir->toString().')';
+    return nameof($this).'(->'.$this->dir->toString().')';
   }
 
   /**

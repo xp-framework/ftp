@@ -149,6 +149,6 @@ class TestingCollection extends \lang\Object implements \peer\ftp\server\storage
    * @return string
    */
   public function toString() {
-    return $this->getClassName().'('.$this->name.')';
+    return nameof($this).'('.$this->name.')';
   }
 }

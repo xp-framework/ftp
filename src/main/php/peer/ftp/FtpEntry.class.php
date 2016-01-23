@@ -301,7 +301,7 @@ abstract class FtpEntry extends \lang\Object {
       "  [size        ] %d\n".
       "  [date        ] %s\n".
       "}",
-      $this->getClassName(),
+      nameof($this),
       $this->name,
       $this->permissions,
       $this->numlinks,

@@ -34,7 +34,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     $it= new FtpListIterator($list, $this->conn);
     $r= [];
     foreach ($it as $entry) {
-      $r[]= $entry->getClassName().'('.$entry->getName().')';
+      $r[]= nameof($entry).'('.$entry->getName().')';
     }
     return $r;
   }

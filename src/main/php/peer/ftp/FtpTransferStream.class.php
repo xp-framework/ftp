@@ -52,7 +52,7 @@ abstract class FtpTransferStream extends \lang\Object {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'<'.$this->file->toString().'>';
+    return nameof($this).'<'.$this->file->toString().'>';
   }
 
   /**

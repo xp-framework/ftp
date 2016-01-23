@@ -176,6 +176,6 @@ class TestingElement extends \lang\Object implements \peer\ftp\server\storage\St
    * @return string
    */
   public function toString() {
-    return $this->getClassName().'('.$this->name.', '.strlen($this->content).' bytes)';
+    return nameof($this).'('.$this->name.', '.strlen($this->content).' bytes)';
   }
 }
