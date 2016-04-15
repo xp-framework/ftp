@@ -28,7 +28,7 @@ abstract class FtpTransfer extends \lang\Object {
    *
    * @param   peer.ftp.FtpFile remote
    */
-  public function setRemote(\FtpFile $remote) {
+  public function setRemote(FtpFile $remote) {
     $this->remote= $remote;
   }
 
@@ -47,7 +47,7 @@ abstract class FtpTransfer extends \lang\Object {
    * @return  peer.ftp.FtpTransferListener l
    * @return  peer.ftp.FtpTransfer this transfer object
    */
-  public function withListener(\FtpTransferListener $l= null) {
+  public function withListener(FtpTransferListener $l= null) {
     $this->listener= $l;
     return $this;
   }
