@@ -34,7 +34,7 @@ class FtpDir extends FtpEntry {
    * @throws  io.IOException in case of an I/O error
    */
   public function entries() {
-    if (null === ($list= $this->connection->listingOf($this->name))) {
+    if (null === ($list= $this->connection->listingOf($this->name, '-al'))) {
       throw new IOException('Cannot list "'.$this->name.'"');
     }
     
