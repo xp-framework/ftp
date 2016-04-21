@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.0.1 / 2016-04-21
+
+* Merged PR #2: Fix problem with listing empty directories - @thekid
+
 ## 7.0.0 / 2016-02-22
 
 * **Adopted semantic versioning. See xp-framework/rfc#300** - @thekid 
