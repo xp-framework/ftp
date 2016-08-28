@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.1.0 / 2016-08-29
+
+* Added forward compatibility with XP 8.0.0 - @thekid
+
 ## 7.0.1 / 2016-04-21
 
 * Merged PR #2: Fix problem with listing empty directories - @thekid
