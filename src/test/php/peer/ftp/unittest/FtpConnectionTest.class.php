@@ -58,8 +58,8 @@ class FtpConnectionTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function passive_mode_defaults_to_false() {
-    $this->assertEquals(false, (new FtpConnection('ftp://localhost'))->passive());
+  public function passive_mode_defaults_to_true() {
+    $this->assertEquals(true, (new FtpConnection('ftp://localhost'))->passive());
   }
 
   #[@test, @values([

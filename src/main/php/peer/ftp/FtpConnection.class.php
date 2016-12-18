@@ -71,7 +71,7 @@ class FtpConnection extends \lang\Object implements Traceable {
         throw new IllegalArgumentException('Unsupported scheme "'.$this->url->getScheme().'"');
     }
 
-    switch (strtolower($this->url->getParam('passive', 'false'))) {
+    switch (strtolower($this->url->getParam('passive', 'true'))) {
       case 'true': case 'yes': case 'on': case '1':
         $this->setPassive(true);
         break;
