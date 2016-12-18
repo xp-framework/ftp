@@ -47,7 +47,7 @@ class IntegrationTest extends \unittest\TestCase {
    * Sets up test case
    */
   public function setUp() {
-    $this->conn= new FtpConnection('ftp://test:test@'.self::$bindAddress.'?passive=1&timeout=1');
+    $this->conn= new FtpConnection('ftp://test:test@'.self::$bindAddress.'?timeout=1');
   }
 
   /**
