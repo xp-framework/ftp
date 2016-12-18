@@ -58,8 +58,26 @@ class IntegrationTest extends \unittest\TestCase {
   }
 
   #[@test]
+  public function initially_not_connected() {
+    $this->assertFalse($this->conn->isConnected());
+  }
+
+  #[@test]
   public function connect() {
     $this->conn->connect();
+  }
+
+  #[@test]
+  public function is_connected_after_connect() {
+    $this->conn->connect();
+    $this->assertTrue($this->conn->isConnected());
+  }
+
+  #[@test]
+  public function is_no_longer_connected_after_close() {
+    $this->conn->connect();
+    $this->conn->close();
+    $this->assertFalse($this->conn->isConnected());
   }
 
   #[@test, @expect(AuthenticationException::class)]

@@ -7,24 +7,24 @@ use peer\Socket;
 use peer\SSLSocket;
 use peer\SocketException;
 use util\log\Traceable;
-
+use lang\IllegalArgumentException;
 
 /**
  * FTP client
  *
  * Usage example:
- * <code>
- *   $c= create(new FtpConnection('ftp://user:pass@example.com/'))->connect();
- *   
- *   // Retrieve root directory's listing
- *   Console::writeLine($c->rootDir()->entries());
+ * ```
+ * $c= create(new FtpConnection('ftp://user:pass@example.com/'))->connect();
+ * 
+ * // Retrieve root directory's listing
+ * Console::writeLine($c->rootDir()->entries());
  *
- *   $c->close();
- * </code>
+ * $c->close();
+ * ```
  *
- * @test     xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
- * @see      rfc://959
- * @purpose  FTP protocol implementation
+ * @test  xp://net.xp_framework.unittest.peer.ftp.FtpConnectionTest
+ * @test  xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
+ * @see   rfc://959
  */
 class FtpConnection extends \lang\Object implements Traceable {
   protected
@@ -39,31 +39,64 @@ class FtpConnection extends \lang\Object implements Traceable {
 
   /**
    * Constructor. Accepts a DSN of the following form:
-   * <pre>
-   *   {scheme}://[{user}:{password}@]{host}[:{port}]/[?{options}]
-   * </pre>
+   * `{scheme}://[{user}:{password}@]{host}[:{port}]/[?{options}]`
    *
    * Scheme is one of the following:
-   * <ul>
-   *   <li>ftp (default)</li>
-   *   <li>ftps (with SSL)</li>
-   * </ul>
+   * - ftp (default)
+   * - ftps (with SSL)
    *
    * Note: SSL connect is only available if OpenSSL support is enabled 
    * into your version of PHP.
    *
    * Options include:
-   * <ul>
-   *   <li>timeout - integer value indicating connection timeout in seconds, default: 4</li>
-   *   <li>passive - boolean value controlling whether to use passive mode or not</li>
-   * </ul>
+   * - timeout - integer value indicating connection timeout in seconds, default: 4
+   * - passive - boolean value controlling whether to use passive mode or not, default: true
    *
-   * @param   string dsn
+   * @param  string|peer.URL $dsn
+   * @throws lang.IllegalArgumentException if scheme is unsupported
    */
   public function __construct($dsn) {
-    $this->url= new URL($dsn);
+    $this->url= $dsn instanceof URL ? $dsn : new URL($dsn);
+
+    switch ($this->url->getScheme()) {
+      case 'ftp':
+        $this->socket= new Socket($this->url->getHost(), $this->url->getPort(21));
+        break;
+
+      case 'ftps':
+        $this->socket= new SSLSocket($this->url->getHost(), $this->url->getPort(21));
+        break;
+
+      default:
+        throw new IllegalArgumentException('Unsupported scheme "'.$this->url->getScheme().'"');
+    }
+
+    switch (strtolower($this->url->getParam('passive', 'false'))) {
+      case 'true': case 'yes': case 'on': case '1':
+        $this->setPassive(true);
+        break;
+
+      case 'false': case 'no': case 'off': case '0':
+        $this->setPassive(false);
+        break;
+
+      default:
+        throw new IllegalArgumentException('Unexpected value "'.$this->url->getParam('passive').'" for passive');
+    }
   }
-  
+
+  /** @return string */
+  public function user() { return $this->url->getUser(); }
+
+  /** @return peer.SocketEndpoint */
+  public function remoteEndpoint() { return $this->socket->remoteEndpoint(); }
+
+  /** @return bool */
+  public function passive() { return $this->passive; }
+
+  /** @return double */
+  public function timeout() { return (double)$this->url->getParam('timeout', 4); }
+
   /**
    * Connect (and log in, if necessary)
    *
@@ -73,47 +106,29 @@ class FtpConnection extends \lang\Object implements Traceable {
    * @throws  peer.SocketException for general I/O failures
    */
   public function connect() {
-    $host= $this->url->getHost();
-    $port= $this->url->getPort(21);
-    $timeout= $this->url->getParam('timeout', 4);
-
-    switch ($this->url->getScheme()) {
-      case 'ftp':
-        $this->socket= new Socket($host, $port);
-        break;
-
-      case 'ftps':
-        $this->socket= new SSLSocket($host, $port);
-        break;
-    }
-    
-    $this->socket->connect($timeout);
+    $this->socket->connect($this->timeout());
     
     // Read banner message
     $this->expect($this->getResponse(), [220]);
     
     // User & password
-    if ($this->url->getUser()) {
+    if (null !== ($user= $this->url->getUser())) {
       try {
-        $this->expect($this->sendCommand('USER %s', $this->url->getUser()), [331]);
+        $this->expect($this->sendCommand('USER %s', $user), [331]);
         $this->expect($this->sendCommand('PASS %s', $this->url->getPassword()), [230]);
       } catch (\peer\ProtocolException $e) {
         $this->socket->close();
         throw new AuthenticationException(sprintf(
-          'Authentication failed for %s@%s (using password: %s): %s',
-          $this->url->getUser(), 
-          $host, 
+          'Authentication failed for %s@%s:%d (using password: %s): %s',
+          $this->url->getUser(),
+          $this->url->getPort(21),
+          $this->url->getHost(),
           $this->url->getPassword() ? 'yes' : 'no',
           $e->getMessage()
         ), $this->url->getUser(), $this->url->getPassword());
       }
     }
 
-    // Set passive mode
-    if (null !== ($pasv= $this->url->getParam('passive'))) {
-      $this->setPassive((bool)$pasv);
-    }
-    
     // Setup list parser
     $this->setupListParser();
     
@@ -154,7 +169,16 @@ class FtpConnection extends \lang\Object implements Traceable {
     }
     return true;
   }
-  
+
+  /**
+   * Returns true if connection is established
+   *
+   * @return bool
+   */
+  public function isConnected() {
+    return $this->socket !== null && $this->socket->isConnected();
+  }
+
   /**
    * Retrieve transfer socket
    *
@@ -176,7 +200,6 @@ class FtpConnection extends \lang\Object implements Traceable {
    *
    * @param   bool enable enable or disable passive mode
    * @return  bool success
-   * @throws  peer.SocketException
    */
   public function setPassive($enable) {
     $this->passive= $enable;
@@ -187,9 +210,7 @@ class FtpConnection extends \lang\Object implements Traceable {
    *
    * @return  peer.ftp.FtpDir
    */
-  public function rootDir() {
-    return $this->root;
-  }
+  public function rootDir() { return $this->root; }
   
   /**
    * Read response

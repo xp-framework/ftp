@@ -3,6 +3,12 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added `isConnected()` method to FtpConnection class in order to detect
+  and gracefully handle disconnects.
+* Added `timeout()`, `passive()`, `user` and `remoteEndpoint` accessors
+  to FtpConnection class
+  (@thekid)
+
 ## 7.1.0 / 2016-08-29
 
 * Added forward compatibility with XP 8.0.0 - @thekid
