@@ -3,6 +3,12 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 8.0.0 / 2017-10-14
+
+* Added forward compatibility with XP 9.0.0 - @thekid
+* **Heads up: Dropped PHP 5.5 support**. Minimum PHP version is now PHP 5.6.0
+  (@thekid)
+
 ## 7.2.0 / 2016-12-18
 
 * Added `isConnected()` method to FtpConnection class in order to detect
