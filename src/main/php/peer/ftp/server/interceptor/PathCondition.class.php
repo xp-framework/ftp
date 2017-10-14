@@ -7,7 +7,7 @@
  *
  * @purpose  Path condition
  */
-class PathCondition extends \lang\Object implements InterceptorCondition {
+class PathCondition implements InterceptorCondition {
   protected
     $path = null;
 

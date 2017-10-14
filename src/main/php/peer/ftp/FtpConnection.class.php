@@ -26,7 +26,7 @@ use lang\IllegalArgumentException;
  * @test  xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
  * @see   rfc://959
  */
-class FtpConnection extends \lang\Object implements Traceable {
+class FtpConnection implements Traceable {
   protected
     $url      = null,
     $root     = null,

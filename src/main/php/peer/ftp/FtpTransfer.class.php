@@ -7,7 +7,7 @@
  * @see      xp://peer.ftp.FtpDownload
  * @purpose  Abstract base class
  */
-abstract class FtpTransfer extends \lang\Object {
+abstract class FtpTransfer {
   const ASCII  = 1;
   const BINARY = 2;
 

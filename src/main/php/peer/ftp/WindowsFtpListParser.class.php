@@ -8,7 +8,7 @@ use util\Date;
  * @test  xp://peer.ftp.unittest.WindowsFtpListParserTest
  * @see   xp://peer.ftp.FtpListParser
  */
-class WindowsFtpListParser extends \lang\Object implements FtpListParser {
+class WindowsFtpListParser implements FtpListParser {
 
   /**
    * Parse raw listing entry

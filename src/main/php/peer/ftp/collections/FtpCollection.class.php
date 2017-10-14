@@ -10,7 +10,7 @@ use io\collections\IOCollection;
  * @test     xp://net.xp_framework.unittest.peer.ftp.FtpCollectionsTest
  * @purpose  IOCollection implementation
  */
-class FtpCollection extends \lang\Object implements IOCollection {
+class FtpCollection implements IOCollection {
   protected 
     $dir    = null,
     $origin = null;

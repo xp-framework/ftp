@@ -8,7 +8,7 @@
  *
  * @purpose  Interceptor
  */
-class DefaultInterceptor extends \lang\Object implements StorageActionInterceptor {
+class DefaultInterceptor implements StorageActionInterceptor {
 
   /**
    * Invoked when chdir'ing into a directory

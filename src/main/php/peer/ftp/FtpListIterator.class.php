@@ -8,7 +8,7 @@
  * @see      php://language.oop5.iterations
  * @purpose  Iterator implementation
  */
-class FtpListIterator extends \lang\Object implements \Iterator {
+class FtpListIterator implements \Iterator {
   private 
     $i= 0, 
     $v= [], 

@@ -9,7 +9,7 @@ use util\Date;
  * @test  xp://peer.ftp.unittest.DefaultFtpListParserTest
  * @see   xp://peer.ftp.FtpListParser
  */
-class DefaultFtpListParser extends \lang\Object implements FtpListParser {
+class DefaultFtpListParser implements FtpListParser {
 
   /**
    * Parse raw listing entry.

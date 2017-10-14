@@ -11,7 +11,7 @@ use peer\ftp\FtpOutputStream;
  * @test     xp://net.xp_framework.unittest.peer.ftp.FtpCollectionsTest
  * @purpose  Interface
  */
-class FtpElement extends \lang\Object implements IOElement {
+class FtpElement implements IOElement {
   protected 
     $file   = null,
     $origin = null;

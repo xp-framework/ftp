@@ -8,7 +8,7 @@
  *
  * @purpose  Storage
  */
-class FilesystemStorage extends \lang\Object {
+class FilesystemStorage {
   public
     $base   = [],
     $root   = '';

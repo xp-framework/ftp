@@ -5,7 +5,7 @@
  *
  * @see   xp://peer.ftp.FtpDir#entries
  */
-class FtpEntryList extends \lang\Object implements \IteratorAggregate {
+class FtpEntryList implements \IteratorAggregate {
   protected
     $connection   = null,
     $list         = [],

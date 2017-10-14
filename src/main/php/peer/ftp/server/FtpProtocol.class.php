@@ -17,7 +17,7 @@ use peer\ftp\server\storage\StorageElement;
  * @see  http://ipswitch.com/Support/WS_FTP-Server/guide/v4/A_FTPref4.html 
  * @see  xp://peer.server.ServerProtocol
  */
-class FtpProtocol extends \lang\Object implements ServerProtocol, Traceable {
+class FtpProtocol implements ServerProtocol, Traceable {
   const DATA_PASSIVE=    0x0001;
   const DATA_ACTIVE=     0x0002;
   const STRU_FILE=       'F';

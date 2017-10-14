@@ -9,7 +9,7 @@ use util\Date;
  * @see   xp://peer.ftp.FtpFile
  * @test  xp://peer.ftp.unittest.FtpEntryListTest
  */
-abstract class FtpEntry extends \lang\Object {
+abstract class FtpEntry {
   protected
     $connection   = null,
     $name         = '',

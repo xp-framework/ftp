@@ -5,7 +5,7 @@
  *
  * @see   xp://net.xp_framework.unittest.peer.ftp.TestingServer
  */
-class TestingElement extends \lang\Object implements \peer\ftp\server\storage\StorageElement {
+class TestingElement implements \peer\ftp\server\storage\StorageElement {
   protected $name= '';
   protected $storage= null;
   protected $perm= 0666;

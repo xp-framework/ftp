@@ -9,7 +9,7 @@ define('TYPE_BINARY', 'I');
  * @see      xp://peer.ftp.server.FtpConnectionListener
  * @purpose  Session information
  */
-class FtpSession extends \lang\Object {
+class FtpSession {
   public
     $username       = '',
     $authenticated  = false,

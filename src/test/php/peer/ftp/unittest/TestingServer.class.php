@@ -24,7 +24,7 @@ use peer\ftp\server\FtpProtocol;
  *
  * @see   xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
  */
-class TestingServer extends \lang\Object {
+class TestingServer {
 
   /**
    * Start server

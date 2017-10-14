@@ -10,7 +10,7 @@ use peer\Socket;
  * @see      xp://peer.ftp.FtpIntputStream
  * @purpose  Abstract base class
  */
-abstract class FtpTransferStream extends \lang\Object {
+abstract class FtpTransferStream {
   protected
     $eof    = false,
     $file   = null,

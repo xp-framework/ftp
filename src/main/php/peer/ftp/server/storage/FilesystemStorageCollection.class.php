@@ -9,7 +9,7 @@ use io\Folder;
  * @ext      posix
  * @purpose  StorageCollection
  */
-class FilesystemStorageCollection extends \lang\Object implements StorageCollection {
+class FilesystemStorageCollection implements StorageCollection {
   public
     $root = null,
     $path = null,

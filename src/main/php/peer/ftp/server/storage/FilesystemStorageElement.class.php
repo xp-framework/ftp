@@ -9,7 +9,7 @@ use io\File;
  * @ext      posix
  * @purpose  StorageElement
  */
-class FilesystemStorageElement extends \lang\Object implements StorageElement {
+class FilesystemStorageElement implements StorageElement {
   public
     $path = null,
     $f    = null,
