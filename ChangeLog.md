@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 9.0.0 / 2017-11-13
+
+* Merged PR #3: Default passive mode to true - @thekid
+
 ## 8.0.0 / 2017-10-14
 
 * Added forward compatibility with XP 9.0.0 - @thekid
