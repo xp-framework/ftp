@@ -15,8 +15,7 @@ Client
 ### Example: Uploading
 
 ```php
-use peer\ftp\FtpConnection;
-use peer\ftp\FtpTransfer;
+use peer\ftp\{FtpConnection, FtpTransfer};
 use io\streams\FileInputStream;
 use io\File;
 
