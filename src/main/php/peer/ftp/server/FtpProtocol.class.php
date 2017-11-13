@@ -40,7 +40,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
    * Constructor
    *
    * @param   peer.ftp.server.Storage storage
-   * @param   security.auth.Authenticator authenticator
+   * @param   peer.ftp.server.Authentication authenticator
    */
   public function __construct($storage, $authenticator) {
     $this->storage= $storage;

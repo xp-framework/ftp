@@ -1,11 +1,11 @@
 <?php namespace peer\ftp\unittest;
 
-use lang\Object;
 use util\cmd\Console;
 use util\log\Logger;
 use util\log\FileAppender;
 use peer\server\Server;
 use peer\ftp\server\FtpProtocol;
+use peer\ftp\server\Authentication;
 
 /**
  * FTP Server used by IntegrationTest. 
@@ -43,7 +43,7 @@ class TestingServer {
     $stor->add(new TestingCollection('/outer/inner', $stor));
     $stor->add(new TestingElement('/outer/inner/index.html', $stor));
 
-    $auth= newinstance(Object::class, [], '{
+    $auth= newinstance(Authentication::class, [], '{
       public function authenticate($user, $password) {
         return ("testtest" == $user.$password);
       }
