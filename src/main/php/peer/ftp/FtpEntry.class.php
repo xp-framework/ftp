@@ -1,5 +1,6 @@
 <?php namespace peer\ftp;
  
+use lang\Value;
 use util\Date;
 
 /**
@@ -9,7 +10,7 @@ use util\Date;
  * @see   xp://peer.ftp.FtpFile
  * @test  xp://peer.ftp.unittest.FtpEntryListTest
  */
-abstract class FtpEntry {
+abstract class FtpEntry implements Value {
   protected
     $connection   = null,
     $name         = '',
@@ -268,29 +269,16 @@ abstract class FtpEntry {
     }
   }
 
-  /**
-   * Set Name
-   *
-   * @param   var name
-   */
-  public function setName($name) {
-    $this->name= $name;
-  }
+  /** @param string $name */
+  public function setName($name) { $this->name= $name; }
 
-  /**
-   * Get Name
-   *
-   * @return  string
-   */
-  public function getName() {
-    return $this->name;
-  }
+  /** @return string */
+  public function getName() { return $this->name; }
+
+  /** @return string */
+  public function hashCode() { return md5($this->name); }
   
-  /**
-   * Creates a string representation of this object
-   *
-   * @return  string
-   */
+  /** @return string */
   public function toString() {
     return sprintf(
       "%s(name= %s) {\n".
@@ -310,5 +298,15 @@ abstract class FtpEntry {
       $this->size,
       \xp::stringOf($this->date)
     );
+  }
+
+  /**
+   * Comparison implementation
+   *
+   * @param  var $value
+   * @return int
+   */
+  public function compareTo($value) {
+    return $value instanceof self ? strcmp($this->name, $value->name) : 1;
   }
 }

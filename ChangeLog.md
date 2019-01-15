@@ -3,6 +3,9 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Maded `peer.ftp.FtpEntry` implement `lang.Value` to restore string
+  representations and hashability of files and folders.
+  (@thekid)
 * Added compatibility with PHP 7.3 - @thekid
 
 ## 9.0.1 / 2018-08-24
