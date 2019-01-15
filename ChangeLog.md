@@ -3,8 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
-* Made `FtpEntry`, `FtpEntryList` and `FtpTransfer` implement `lang.Value`,
-  restoring their custom string representations.
+## 9.1.0 / 2019-01-15
+
+* Made `FtpEntry`, `FtpEntryList`, `FtpTransfer` and `FtpTransferStream`
+  implement `lang.Value`, restoring their custom string representations.
   (@thekid)
 * Added compatibility with PHP 7.3 - @thekid
 

@@ -1,14 +1,13 @@
 <?php namespace peer\ftp;
 
+use lang\Value;
 use peer\Socket;
-
 
 /**
  * Base class for in- and output streams
  *
- * @see      xp://peer.ftp.FtpOutputStream
- * @see      xp://peer.ftp.FtpIntputStream
- * @purpose  Abstract base class
+ * @see   xp://peer.ftp.FtpOutputStream
+ * @see   xp://peer.ftp.FtpIntputStream
  */
 abstract class FtpTransferStream {
   protected
@@ -47,15 +46,6 @@ abstract class FtpTransferStream {
   protected abstract function getCommand();
 
   /**
-   * Creates a string representation of this file
-   *
-   * @return  string
-   */
-  public function toString() {
-    return nameof($this).'<'.$this->file->toString().'>';
-  }
-
-  /**
    * Close this buffer.
    *
    */
@@ -74,6 +64,22 @@ abstract class FtpTransferStream {
         throw new \peer\ProtocolException('Transfer incomplete ('.$code.': '.$message.')');
       }
     }
+  }
+
+  /** @return string */
+  public function hashCode() { return '>'.$this->file->hashCode(); }
+
+  /** @return string */
+  public function toString() { return nameof($this).'<'.$this->file->toString().'>'; }
+
+  /**
+   * Comparison implementation
+   *
+   * @param  var $value
+   * @return int
+   */
+  public function compareTo($value) {
+    return $value instanceof self ? $this->file->compareTo($value->file) : 1;
   }
 
   /**
