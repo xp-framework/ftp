@@ -1,13 +1,14 @@
 <?php namespace peer\ftp;
 
+use lang\Value;
+
 /**
  * Base class for up- and downloads
  *
- * @see      xp://peer.ftp.FtpUpload
- * @see      xp://peer.ftp.FtpDownload
- * @purpose  Abstract base class
+ * @see   xp://peer.ftp.FtpUpload
+ * @see   xp://peer.ftp.FtpDownload
  */
-abstract class FtpTransfer {
+abstract class FtpTransfer implements Value {
   const ASCII  = 1;
   const BINARY = 2;
 
@@ -175,4 +176,20 @@ abstract class FtpTransfer {
    * @param   int size
    */
   public abstract function size();
+
+  /** @return string */
+  public function hashCode() { return spl_object_hash($this); }
+
+  /** @return string */
+  public function toString() { return nameof($this); }
+
+  /**
+   * Comparison implementation
+   *
+   * @param  var $value
+   * @return int
+   */
+  public function compareTo($value) {
+    return $value === $this ? 0 : 1;
+  }
 }
