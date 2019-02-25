@@ -30,15 +30,36 @@ class FtpDir extends FtpEntry {
   /**
    * Returns a list of entries
    *
+   * @see     https://tools.ietf.org/html/rfc3659#page-23
    * @return  peer.ftp.FtpEntryList
    * @throws  io.IOException in case of an I/O error
    */
   public function entries() {
-    if (null === ($list= $this->connection->listingOf($this->name, '-al'))) {
-      throw new IOException('Cannot list "'.$this->name.'"');
+    $transfer= $this->connection->transferSocket();
+
+    $r= $this->connection->sendCommand('MLSD %s', $this->name);
+    sscanf($r[0], "%d %[^\r\n]", $code, $message);
+
+    // Expect "150 Opening ASCII mode data connection for MLSD"
+    if (150 === $code) {
+      $list= [];
+      while ($line= $transfer->readLine()) {
+        $list[]= $line;
+      }
+      $transfer->close();
+
+      $r= $this->connection->getResponse();
+      sscanf($r[0], "%d %[^\r\n]", $code, $message);
+
+      // Expect "226 Transfer complete"
+      if (226 === $code) {
+        return new FtpEntryList($list, $this->connection, $this->name);
+      }
+    } else {
+      $transfer->close();
     }
-    
-    return new FtpEntryList($list, $this->connection, $this->name);
+
+    throw new IOException('Cannot list "'.$this->name.'": '.$code.' '.$message);
   }
 
   /**
