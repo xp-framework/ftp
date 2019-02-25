@@ -1,9 +1,9 @@
 <?php namespace peer\ftp\unittest;
  
 use peer\ftp\FtpConnection;
-use peer\ftp\WindowsFtpListParser;
 use peer\ftp\FtpDir;
 use peer\ftp\FtpEntry;
+use peer\ftp\WindowsFtpListParser;
 use util\Date;
 
 /**
