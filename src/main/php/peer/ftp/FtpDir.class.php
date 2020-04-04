@@ -69,7 +69,7 @@ class FtpDir extends FtpEntry {
     // name. Otherwise, we don't expect more than one result!
     $entry= $list[0];
     if (($s= sizeof($list)) > 1) {
-      if ('.' === $entry{strlen($entry)- 1}) {
+      if ('.' === $entry[strlen($entry)- 1]) {
         $entry= substr($entry, 0, -1).basename($name);
       } else {
         throw new ProtocolException('List "'.$this->name.$name.'" yielded '.$s.' result(s), expected: 1 ('.\xp::stringOf($list).')');

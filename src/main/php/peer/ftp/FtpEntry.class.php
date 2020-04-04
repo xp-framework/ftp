@@ -75,7 +75,7 @@ abstract class FtpEntry {
    * @throws  io.IOException in case of an I/O error
    */
   public function rename($to) {
-    $target= ('/' === $to{0} ? $to : dirname($this->name).'/'.$to);
+    $target= ('/' === $to[0] ? $to : dirname($this->name).'/'.$to);
     try {
       $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), [350]);
       $this->connection->expect($this->connection->sendCommand('RNTO %s', $target), [250]);
@@ -136,16 +136,16 @@ abstract class FtpEntry {
   public function setPermissions($perm) {
     static $m= ['r' => 4, 'w' => 2, 'x' => 1, '-' => 0, 't' => 0];
 
-    if (is_string($perm) && 9 == strlen($perm)) {
+    if (is_string($perm) && 9 === strlen($perm)) {
       $this->permissions= (
-        ($m[$perm{0}] | $m[$perm{1}] | $m[$perm{2}]) * 100 +
-        ($m[$perm{3}] | $m[$perm{4}] | $m[$perm{5}]) * 10 +
-        ($m[$perm{6}] | $m[$perm{7}] | $m[$perm{8}])
+        ($m[$perm[0]] | $m[$perm[1]] | $m[$perm[2]]) * 100 +
+        ($m[$perm[3]] | $m[$perm[4]] | $m[$perm[5]]) * 10 +
+        ($m[$perm[6]] | $m[$perm[7]] | $m[$perm[8]])
       );
     } else if (is_int($perm)) {
       $this->permissions= $perm;
     } else {
-      throw new \lang\IllegalArgumentException('Expected either a string(9) or int, have '.\xp::stringOf($perm));
+      throw new \lang\IllegalArgumentException('Expected either a string(9) or int, have '.$perm);
     }
   }
 

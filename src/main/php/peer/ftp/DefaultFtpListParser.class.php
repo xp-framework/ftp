@@ -1,7 +1,7 @@
 <?php namespace peer\ftp;
 
-use util\DateUtil;
 use util\Date;
+use util\DateUtil;
 
 /**
  * Parses output from a FTP LIST command from Un*x FTP daemons.
@@ -36,12 +36,12 @@ class DefaultFtpListParser implements FtpListParser {
     );
     
     // Only qualify filenames if they appear unqualified in the listing
-    if ('/' !== $filename{0}) {
+    if ('/' !== $filename[0]) {
       $filename= $base.$filename;
     }
     
     // Create a directory or an entry
-    if ('d' === $permissions{0}) {
+    if ('d' === $permissions[0]) {
       $e= new FtpDir($filename, $conn);
     } else {
       $e= new FtpFile($filename, $conn);
