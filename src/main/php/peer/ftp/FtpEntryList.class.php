@@ -1,11 +1,13 @@
 <?php namespace peer\ftp;
 
+use lang\Value;
+
 /**
  * List of entries on an FTP server
  *
  * @see   xp://peer.ftp.FtpDir#entries
  */
-class FtpEntryList implements \IteratorAggregate {
+class FtpEntryList implements Value, \IteratorAggregate {
   protected
     $connection   = null,
     $list         = [],
@@ -68,12 +70,21 @@ class FtpEntryList implements \IteratorAggregate {
     return $r;
   }
 
-  /**
-   * Creates a string representation of this list
-   *
-   * @return  string
-   */
+  /** @return string */
+  public function hashCode() { return spl_object_hash($this); }
+
+  /** @return string */
   public function toString() {
     return nameof($this).'('.$this->size().' entries)@'.\xp::stringOf($this->list);
+  }
+
+  /**
+   * Comparison implementation
+   *
+   * @param  var $value
+   * @return int
+   */
+  public function compareTo($value) {
+    return $value === $this ? 0 : 1;
   }
 }

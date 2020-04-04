@@ -3,9 +3,16 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
-## 9.0.2 / 2020-04-04
+## 9.1.1 / 2020-04-04
 
 * Made compatible with XP 10 - @thekid
+
+## 9.1.0 / 2019-01-15
+
+* Made `FtpEntry`, `FtpEntryList`, `FtpTransfer` and `FtpTransferStream`
+  implement `lang.Value`, restoring their custom string representations.
+  (@thekid)
+* Added compatibility with PHP 7.3 - @thekid
 
 ## 9.0.1 / 2018-08-24
 
