@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 9.0.2 / 2020-04-04
+
+* Made compatible with XP 10 - @thekid
+
 ## 9.0.1 / 2018-08-24
 
 * Made compatible with `xp-framework/logging` version 9.0.0 - @thekid
