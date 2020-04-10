@@ -1,15 +1,11 @@
 <?php namespace peer\ftp\server;
 
-use util\Date;
-use util\DateUtil;
-use peer\BSDSocket;
+use peer\{BSDSocket, SocketException};
+use peer\ftp\server\storage\{Storage, StorageCollection, StorageElement};
 use peer\server\ServerProtocol;
-use peer\SocketException;
 use security\auth\Authenticator;
+use util\{Date, DateUtil};
 use util\log\Traceable;
-use peer\ftp\server\storage\Storage;
-use peer\ftp\server\storage\StorageCollection;
-use peer\ftp\server\storage\StorageElement;
 
 /**
  * Implement FTP server functionality

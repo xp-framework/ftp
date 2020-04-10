@@ -1,10 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\FtpDir;
-use unittest\TestCase;
 use io\collections\iterate\IOCollectionIterator;
+use peer\ftp\{FtpConnection, FtpDir};
 use peer\ftp\collections\FtpCollection;
-use peer\ftp\FtpConnection;
+use unittest\TestCase;
 
 
 /**

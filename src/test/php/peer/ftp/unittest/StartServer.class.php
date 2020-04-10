@@ -1,9 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
-use lang\Runtime;
-use lang\IllegalStateException;
-use lang\Throwable;
-use lang\XPClass;
+use lang\{IllegalStateException, Runtime, Throwable, XPClass};
 
 /**
  * Starts a server for integration tests

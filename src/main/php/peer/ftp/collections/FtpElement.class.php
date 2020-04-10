@@ -1,8 +1,7 @@
 <?php namespace peer\ftp\collections;
 
 use io\collections\IOElement;
-use peer\ftp\FtpInputStream;
-use peer\ftp\FtpOutputStream;
+use peer\ftp\{FtpInputStream, FtpOutputStream};
 
 
 /**

@@ -1,18 +1,10 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\FtpDir;
-use peer\ftp\FtpEntryList;
-use peer\ftp\FtpEntry;
-use peer\ftp\FtpFile;
+use io\{FileNotFoundException, IOException};
+use io\streams\{MemoryInputStream, MemoryOutputStream, Streams};
+use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
-use io\FileNotFoundException;
-use lang\IllegalStateException;
-use io\streams\MemoryInputStream;
-use io\streams\MemoryOutputStream;
-use io\streams\Streams;
-use io\IOException;
-use peer\ftp\FtpConnection;
-use lang\Throwable;
+use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
 
 /**
  * TestCase for FTP API.

@@ -1,7 +1,6 @@
 <?php namespace peer\ftp;
 
-use io\FileNotFoundException;
-use io\IOException;
+use io\{FileNotFoundException, IOException};
 use peer\ProtocolException;
 
 

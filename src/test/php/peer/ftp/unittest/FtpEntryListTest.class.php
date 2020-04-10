@@ -1,9 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\FtpEntryList;
-use peer\ftp\FtpConnection;
-use peer\ftp\DefaultFtpListParser;
-use peer\ftp\FtpListIterator;
+use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpEntryList, FtpListIterator};
 
 /**
  * TestCase FTP listing functionality

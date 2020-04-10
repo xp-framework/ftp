@@ -1,7 +1,6 @@
 <?php namespace peer\ftp;
 
-use util\Date;
-use util\DateUtil;
+use util\{Date, DateUtil};
 
 /**
  * Parses output from a FTP LIST command from Un*x FTP daemons.

@@ -1,11 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
-use util\cmd\Console;
-use util\log\Logger;
-use util\log\FileAppender;
+use peer\ftp\server\{Authentication, FtpProtocol};
 use peer\server\Server;
-use peer\ftp\server\FtpProtocol;
-use peer\ftp\server\Authentication;
+use util\cmd\Console;
+use util\log\{FileAppender, Logger};
 
 /**
  * FTP Server used by IntegrationTest. 

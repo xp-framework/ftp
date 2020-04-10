@@ -1,7 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\server\storage\Storage;
-use peer\ftp\server\storage\StorageEntry;
+use peer\ftp\server\storage\{Storage, StorageEntry};
 
 /**
  * Memory storage used by testing server

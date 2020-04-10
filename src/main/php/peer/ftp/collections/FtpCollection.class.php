@@ -1,7 +1,7 @@
 <?php namespace peer\ftp\collections;
 
-use peer\ftp\FtpDir;
 use io\collections\IOCollection;
+use peer\ftp\FtpDir;
 
 
 /**

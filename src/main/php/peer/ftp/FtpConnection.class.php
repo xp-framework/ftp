@@ -1,13 +1,8 @@
 <?php namespace peer\ftp;
  
-use peer\URL;
-use peer\ConnectException;
-use peer\AuthenticationException;
-use peer\Socket;
-use peer\SSLSocket;
-use peer\SocketException;
-use util\log\Traceable;
 use lang\IllegalArgumentException;
+use peer\{AuthenticationException, ConnectException, SSLSocket, Socket, SocketException, URL};
+use util\log\Traceable;
 
 /**
  * FTP client

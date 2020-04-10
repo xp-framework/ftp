@@ -1,9 +1,8 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\FtpConnection;
+use lang\{FormatException, IllegalArgumentException};
 use peer\URL;
-use lang\IllegalArgumentException;
-use lang\FormatException;
+use peer\ftp\FtpConnection;
 
 class FtpConnectionTest extends \unittest\TestCase {
 
