@@ -1,24 +1,23 @@
 <?php namespace peer\ftp\unittest;
 
+use lang\Throwable;
 use peer\ftp\server\{Authentication, FtpProtocol};
 use peer\server\Server;
 use util\cmd\Console;
-use util\log\{FileAppender, Logger};
+use util\log\Logging;
 
 /**
  * FTP Server used by IntegrationTest. 
  *
  * Specifics
- * ~~~~~~~~~
- * <ul>
- *   <li>Server listens on a free port @ 127.0.0.1</li>
- *   <li>Authentication requires "test" / "test" as credentials</li>
- *   <li>Storage is inside an "ftproot" subdirectory of this directory</li>
- *   <li>Server can be shut down by issuing the "SHUTDOWN" command</li>
- *   <li>On startup success, "+ Service (IP):(PORT)" is written to standard out</li>
- *   <li>On shutdown, "+ Done" is written to standard out</li>
- *   <li>On errors during any phase, "- " and the exception message are written</li>
- * </ul>
+ * ---------
+ * - Server listens on a free port @ 127.0.0.1</li>
+ * - Authentication requires "test" / "test" as credentials</li>
+ * - Storage is inside an "ftproot" subdirectory of this directory</li>
+ * - Server can be shut down by issuing the "SHUTDOWN" command</li>
+ * - On startup success, "+ Service (IP):(PORT)" is written to standard out</li>
+ * - On shutdown, "+ Done" is written to standard out</li>
+ * - On errors during any phase, "- " and the exception message are written</li>
  *
  * @see   xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
  */
@@ -41,24 +40,20 @@ class TestingServer {
     $stor->add(new TestingCollection('/outer/inner', $stor));
     $stor->add(new TestingElement('/outer/inner/index.html', $stor));
 
-    $auth= newinstance(Authentication::class, [], '{
+    $auth= new class() implements Authentication {
       public function authenticate($user, $password) {
-        return ("testtest" == $user.$password);
+        return ('testtest' == $user.$password);
       }
-    }');
+    };
 
-    $protocol= newinstance(FtpProtocol::class, [$stor, $auth], '{
+    $protocol= new class($stor, $auth) extends FtpProtocol {
       public function onShutdown($socket, $params) {
-        $this->answer($socket, 200, "Shutting down");
+        $this->answer($socket, 200, 'Shutting down');
         $this->server->terminate= true;
       }
-    }');
+    };
+    isset($args[0]) && $protocol->setTrace(Logging::all()->toFile($args[0]));
 
-    isset($args[0]) && $protocol->setTrace(Logger::getInstance()
-      ->getCategory()
-      ->withAppender(new FileAppender($args[0]))
-    );
-    
     $s= new Server('127.0.0.1', 0);
     try {
       $s->setProtocol($protocol);
@@ -66,7 +61,7 @@ class TestingServer {
       Console::writeLinef('+ Service %s:%d', $s->socket->host, $s->socket->port);
       $s->service();
       Console::writeLine('+ Done');
-    } catch (\lang\Throwable $e) {
+    } catch (Throwable $e) {
       Console::writeLine('- ', $e->getMessage());
     }
   }
