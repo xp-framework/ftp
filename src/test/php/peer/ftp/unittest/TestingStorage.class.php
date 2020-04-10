@@ -109,7 +109,7 @@ class TestingStorage implements Storage {
   public function lookup($clientId, $uri) {
     $qualified= $this->normalize($this->base[$clientId], $uri);
     // Logger::getInstance()->getCategory()->warn('*** LOOKUP', $qualified, $this->entries[$qualified]);
-    return isset($this->entries[$qualified]) ? $this->entries[$qualified] : null;
+    return $this->entries[$qualified] ?? null;
   }
 
   /**
