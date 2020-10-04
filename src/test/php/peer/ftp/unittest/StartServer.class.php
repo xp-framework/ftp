@@ -1,11 +1,12 @@
 <?php namespace peer\ftp\unittest;
 
 use lang\{IllegalStateException, Runtime, Throwable, XPClass};
+use unittest\{TestClassAction, PrerequisitesNotMetError};
 
 /**
  * Starts a server for integration tests
  */
-class StartServer implements \unittest\TestClassAction {
+class StartServer implements TestClassAction {
   protected $serverProcess;
   protected $mainClass;
   protected $connected;
@@ -47,7 +48,7 @@ class StartServer implements \unittest\TestClassAction {
       } catch (IllegalStateException $e) {
         $status.= $e->getMessage();
       }
-      throw new \unittest\PrerequisitesNotMetError('Cannot start server: '.$status, null);
+      throw new PrerequisitesNotMetError('Cannot start server: '.$status, null);
     }
 
     $c->getMethod($this->connected)->invoke(null, [$bindAddress]);
@@ -69,7 +70,7 @@ class StartServer implements \unittest\TestClassAction {
     }
 
     $status= $this->serverProcess->out->readLine();
-    if (!strlen($status) || '+' != $status{0}) {
+    if (!strlen($status) || '+' != $status[0]) {
       while ($l= $this->serverProcess->out->readLine()) {
         $status.= $l;
       }

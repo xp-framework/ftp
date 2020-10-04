@@ -52,7 +52,7 @@ class TestingStorage implements Storage {
    * @return  string
    */
   protected function normalize($base, $uri) {
-    if ('/' !== $uri{0}) $uri= $base.'/'.$uri;
+    if ('/' !== $uri[0]) $uri= $base.'/'.$uri;
     $r= '';
     $o= 0;
     $l= strlen($uri);

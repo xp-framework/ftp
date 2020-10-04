@@ -1,6 +1,7 @@
 <?php namespace peer\ftp\unittest;
  
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, WindowsFtpListParser};
+use unittest\Test;
 use util\Date;
 
 /**
@@ -21,7 +22,7 @@ class WindowsFtpListParserTest extends \unittest\TestCase {
     $this->connection= new FtpConnection('ftp://mock/');
   }
   
-  #[@test]
+  #[Test]
   public function directory() {
     $e= $this->parser->entryFrom('01-04-06  04:51PM       <DIR>          _db_import', $this->connection, '/');
 
@@ -35,7 +36,7 @@ class WindowsFtpListParserTest extends \unittest\TestCase {
     $this->assertEquals(0, $e->getPermissions());
   }
 
-  #[@test]
+  #[Test]
   public function regularFile() {
     $e= $this->parser->entryFrom('11-08-06  10:04AM                   27 info.txt', $this->connection, '/');
 

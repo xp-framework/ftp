@@ -1,6 +1,7 @@
 <?php namespace peer\ftp\unittest;
 
 use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpEntryList, FtpListIterator};
+use unittest\Test;
 
 /**
  * TestCase FTP listing functionality
@@ -51,7 +52,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     ], $this->conn);
   }
 
-  #[@test]
+  #[Test]
   public function iteration() {
     $names= ['/secret/', '/wetter.html', '/.htaccess'];
     $classes= ['peer.ftp.FtpDir', 'peer.ftp.FtpFile', 'peer.ftp.FtpFile'];
@@ -64,7 +65,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     } 
   }
 
-  #[@test]
+  #[Test]
   public function asArray() {
     $names= ['/secret/', '/wetter.html', '/.htaccess'];
     $classes= ['peer.ftp.FtpDir', 'peer.ftp.FtpFile', 'peer.ftp.FtpFile'];
@@ -77,7 +78,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     } 
   }
 
-  #[@test]
+  #[Test]
   public function emptyDirectoryIsEmpty() {
     $empty= [
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -86,7 +87,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     $this->assertTrue((new FtpEntryList($empty, $this->conn))->isEmpty());
   }
 
-  #[@test]
+  #[Test]
   public function emptyDirectorySize() {
     $empty= [
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -95,7 +96,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     $this->assertEquals(0, (new FtpEntryList($empty, $this->conn))->size());
   }
 
-  #[@test]
+  #[Test]
   public function emptyDirectory() {
     $empty= [
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -104,17 +105,17 @@ class FtpEntryListTest extends \unittest\TestCase {
     $this->assertEquals([], $this->iterationOn($empty));
   }
 
-  #[@test]
+  #[Test]
   public function fixtureIsEmpty() {
     $this->assertFalse($this->listFixture()->isEmpty());
   }
 
-  #[@test]
+  #[Test]
   public function fixtureSize() {
     $this->assertEquals(3, $this->listFixture()->size());
   }
 
-  #[@test]
+  #[Test]
   public function directoryWithOneFile() {
     $this->assertEquals(['peer.ftp.FtpFile(/wetter.html)'], $this->iterationOn([
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -123,7 +124,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     ])); 
   }
 
-  #[@test]
+  #[Test]
   public function directoryWithOneDir() {
     $this->assertEquals(['peer.ftp.FtpDir(/secret/)'], $this->iterationOn([
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -132,7 +133,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     ])); 
   }
 
-  #[@test]
+  #[Test]
   public function directoryWithDirsAndFiles() {
     $this->assertEquals(['peer.ftp.FtpDir(/secret/)', 'peer.ftp.FtpFile(/wetter.html)', 'peer.ftp.FtpFile(/.htaccess)'], $this->iterationOn([
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',
@@ -143,7 +144,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     ])); 
   }
 
-  #[@test]
+  #[Test]
   public function dotDirectoriesAtEnd() {
     $this->assertEquals(['peer.ftp.FtpDir(/secret/)'], $this->iterationOn([
       'drwxr-xr-x   2 p159995  ftpusers     4096 Mar  9  2007 secret',
@@ -152,7 +153,7 @@ class FtpEntryListTest extends \unittest\TestCase {
     ])); 
   }
 
-  #[@test]
+  #[Test]
   public function dotDirectoriesMixedWithRegularResults() {
     $this->assertEquals(['peer.ftp.FtpDir(/secret/)', 'peer.ftp.FtpFile(/wetter.html)', 'peer.ftp.FtpFile(/.htaccess)'], $this->iterationOn([
       'drwx---r-t  36 p159995  ftpusers     4096 May 14 17:44 .',

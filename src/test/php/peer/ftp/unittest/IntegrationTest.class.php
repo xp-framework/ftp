@@ -1,17 +1,18 @@
 <?php namespace peer\ftp\unittest;
 
-use io\{FileNotFoundException, IOException};
 use io\streams\{MemoryInputStream, MemoryOutputStream, Streams};
+use io\{FileNotFoundException, IOException};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
+use unittest\{Expect, Test};
 
 /**
  * TestCase for FTP API.
  *
  * @see      xp://peer.ftp.FtpConnection
  */
-#[@action(new StartServer('peer.ftp.unittest.TestingServer', 'connected', 'shutdown'))]
+#[Action(eval: 'new StartServer("peer.ftp.unittest.TestingServer", "connected", "shutdown")')]
 class IntegrationTest extends \unittest\TestCase {
   public static $bindAddress= null;
   protected $conn= null;
@@ -49,35 +50,35 @@ class IntegrationTest extends \unittest\TestCase {
     $this->conn->close();
   }
 
-  #[@test]
+  #[Test]
   public function initially_not_connected() {
     $this->assertFalse($this->conn->isConnected());
   }
 
-  #[@test]
+  #[Test]
   public function connect() {
     $this->conn->connect();
   }
 
-  #[@test]
+  #[Test]
   public function is_connected_after_connect() {
     $this->conn->connect();
     $this->assertTrue($this->conn->isConnected());
   }
 
-  #[@test]
+  #[Test]
   public function is_no_longer_connected_after_close() {
     $this->conn->connect();
     $this->conn->close();
     $this->assertFalse($this->conn->isConnected());
   }
 
-  #[@test, @expect(AuthenticationException::class)]
+  #[Test, Expect(AuthenticationException::class)]
   public function incorrect_credentials() {
     (new FtpConnection('ftp://test:INCORRECT@'.self::$bindAddress.'?timeout=1'))->connect();
   }
 
-  #[@test]
+  #[Test]
   public function retrieve_root_dir() {
     $this->conn->connect();
     with ($root= $this->conn->rootDir()); {
@@ -87,7 +88,7 @@ class IntegrationTest extends \unittest\TestCase {
   }
 
 
-  #[@test]
+  #[Test]
   public function retrieve_root_dir_entries() {
     $this->conn->connect();
     $entries= $this->conn->rootDir()->entries();
@@ -98,14 +99,14 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function sendCwd() {
     $this->conn->connect();
     $r= $this->conn->sendCommand('CWD %s', '/htdocs/');
     $this->assertEquals('250 "/htdocs" is new working directory', $r[0]);
   }
 
-  #[@test]
+  #[Test]
   public function listingWithoutParams() {
     $this->conn->connect();
     $this->conn->sendCommand('CWD %s', '/htdocs/');
@@ -114,14 +115,14 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertEquals(true, (bool)strpos($list, 'index.html'), $list);
   }
 
-  #[@test]
+  #[Test]
   public function cwdBackToRoot() {
     $this->sendCwd();
     $r= $this->conn->sendCommand('CWD %s', '/');
     $this->assertEquals('250 "/" is new working directory', $r[0]);
   }
 
-  #[@test]
+  #[Test]
   public function cwdRelative() {
     $this->conn->connect();
     $r= $this->conn->sendCommand('CWD %s', '/outer/inner');
@@ -134,7 +135,7 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertEquals('250 "/outer/inner" is new working directory', $r[0]);
   }
 
-  #[@test]
+  #[Test]
   public function dotTrashDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
@@ -148,7 +149,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function htdocsDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
@@ -160,7 +161,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function emptyDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
@@ -170,19 +171,19 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function nonExistantDir() {
     $this->conn->connect();
     $this->assertFalse($this->conn->rootDir()->hasDir(':DOES_NOT_EXIST'));
   }
 
-  #[@test, @expect(FileNotFoundException::class)]
+  #[Test, Expect(FileNotFoundException::class)]
   public function getNonExistantDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir(':DOES_NOT_EXIST');
   }
 
-  #[@test]
+  #[Test]
   public function indexHtml() {
     $this->conn->connect();
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
@@ -193,7 +194,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function whitespacesHtml() {
     $this->conn->connect();
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
@@ -204,31 +205,31 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function nonExistantFile() {
     $this->conn->connect();
     $this->assertFalse($this->conn->rootDir()->getDir('htdocs')->hasFile(':DOES_NOT_EXIST'));
   }
 
-  #[@test, @expect(FileNotFoundException::class)]
+  #[Test, Expect(FileNotFoundException::class)]
   public function getNonExistantFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getFile(':DOES_NOT_EXIST');
   }
 
-  #[@test, @expect(IllegalStateException::class)]
+  #[Test, Expect(IllegalStateException::class)]
   public function directoryViaGetFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getFile('htdocs');
   }
 
-  #[@test, @expect(IllegalStateException::class)]
+  #[Test, Expect(IllegalStateException::class)]
   public function fileViaGetDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getDir('index.html');
   }
 
-  #[@test]
+  #[Test]
   public function uploadFile() {
     $this->conn->connect();
 
@@ -250,7 +251,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function renameFile() {
     $this->conn->connect();
 
@@ -275,7 +276,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function moveFile() {
     $this->conn->connect();
 
@@ -302,7 +303,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function downloadFile() {
     $this->conn->connect();
 
@@ -316,7 +317,7 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertEquals("<html/>\n", $m->getBytes());
   }
 
-  #[@test]
+  #[Test]
   public function getInputStream() {
     $this->conn->connect();
 
@@ -330,7 +331,7 @@ class IntegrationTest extends \unittest\TestCase {
     $this->assertEquals("<html/>\n", Streams::readAll($s));
   }
 
-  #[@test]
+  #[Test]
   public function getInputStreams() {
     $this->conn->connect();
     $dir= $this->conn->rootDir()->getDir('htdocs');
@@ -345,7 +346,7 @@ class IntegrationTest extends \unittest\TestCase {
     }
   }
 
-  #[@test]
+  #[Test]
   public function getOutputStream() {
     $this->conn->connect();
 

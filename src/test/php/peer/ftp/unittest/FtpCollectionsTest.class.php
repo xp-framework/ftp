@@ -1,9 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
 use io\collections\iterate\IOCollectionIterator;
-use peer\ftp\{FtpConnection, FtpDir};
 use peer\ftp\collections\FtpCollection;
-use unittest\TestCase;
+use peer\ftp\{FtpConnection, FtpDir};
+use unittest\{Test, TestCase};
 
 
 /**
@@ -38,7 +38,7 @@ class FtpCollectionsTest extends TestCase {
    * Test hasNext() and next() methods
    *
    */
-  #[@test]
+  #[Test]
   public function hasNextAndNext() {
     $results= [];
     for ($c= new IOCollectionIterator(new FtpCollection($this->dir)); $c->hasNext(); ) {
@@ -51,7 +51,7 @@ class FtpCollectionsTest extends TestCase {
    * Test iteration via foreach
    *
    */
-  #[@test]
+  #[Test]
   public function foreachIteration() {
     $results= [];
     foreach (new IOCollectionIterator(new FtpCollection($this->dir)) as $e) {
