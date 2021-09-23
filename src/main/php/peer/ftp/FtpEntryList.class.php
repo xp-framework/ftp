@@ -1,6 +1,7 @@
 <?php namespace peer\ftp;
 
 use lang\Value;
+use util\Objects;
 
 /**
  * List of entries on an FTP server
@@ -75,7 +76,7 @@ class FtpEntryList implements Value, \IteratorAggregate {
 
   /** @return string */
   public function toString() {
-    return nameof($this).'('.$this->size().' entries)@'.\xp::stringOf($this->list);
+    return nameof($this).'('.$this->size().' entries)@'.Objects::stringOf($this->list);
   }
 
   /**

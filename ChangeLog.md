@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Replaced deprecated xp::stringOf() calls with util.Objects - @thekid
+
 ## 10.0.0 / 2020-04-10
 
 * Implemented xp-framework/rfc#334: Drop PHP 5.6:

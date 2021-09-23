@@ -2,7 +2,7 @@
 
 use io\{FileNotFoundException, IOException};
 use peer\ProtocolException;
-
+use util\Objects;
 
 /**
  * FTP directory
@@ -71,7 +71,7 @@ class FtpDir extends FtpEntry {
       if ('.' === $entry[strlen($entry)- 1]) {
         $entry= substr($entry, 0, -1).basename($name);
       } else {
-        throw new ProtocolException('List "'.$this->name.$name.'" yielded '.$s.' result(s), expected: 1 ('.\xp::stringOf($list).')');
+        throw new ProtocolException('List "'.$this->name.$name.'" yielded '.$s.' result(s), expected: 1 ('.Objects::stringOf($list).')');
       }
     }
     

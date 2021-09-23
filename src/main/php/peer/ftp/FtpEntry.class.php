@@ -1,7 +1,7 @@
 <?php namespace peer\ftp;
  
 use lang\Value;
-use util\Date;
+use util\{Date, Objects};
 
 /**
  * Base class for all FTP entries
@@ -296,7 +296,7 @@ abstract class FtpEntry implements Value {
       $this->user,
       $this->group,
       $this->size,
-      \xp::stringOf($this->date)
+      Objects::stringOf($this->date)
     );
   }
 
