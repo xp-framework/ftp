@@ -3,6 +3,7 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed connection to FTP servers with multiline banner message - @thekid
 * Replaced deprecated xp::stringOf() calls with util.Objects - @thekid
 
 ## 10.0.0 / 2020-04-10
