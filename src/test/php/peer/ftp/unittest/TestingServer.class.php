@@ -3,6 +3,7 @@
 use lang\Throwable;
 use peer\ftp\server\{Authentication, FtpProtocol};
 use peer\server\Server;
+use peer\ServerSocket;
 use util\cmd\Console;
 use util\log\Logging;
 
@@ -54,10 +55,9 @@ class TestingServer {
     };
     isset($args[0]) && $protocol->setTrace(Logging::all()->toFile($args[0]));
 
-    $s= new Server('127.0.0.1', 0);
+    $s= new Server();
     try {
-      $s->setProtocol($protocol);
-      $s->init();
+      $s->listen(new ServerSocket('127.0.0.1', 0), $protocol);
       Console::writeLinef('+ Service %s:%d', $s->socket->host, $s->socket->port);
       $s->service();
       Console::writeLine('+ Done');

@@ -1,8 +1,8 @@
 <?php namespace peer\ftp\collections;
 
+use Iterator;
 use io\collections\IOCollection;
 use peer\ftp\FtpDir;
-
 
 /**
  * FTP collection
@@ -21,11 +21,16 @@ class FtpCollection implements IOCollection {
   private static $INVALID;
 
   static function __static() {
-    self::$INVALID= newinstance('Iterator', [], '{
+    self::$INVALID= newinstance(Iterator::class, [], '{
+      #[\ReturnTypeWillChange]
       public function rewind() { throw new \lang\IllegalStateException("Collection needs to be opened first"); }
+      #[\ReturnTypeWillChange]
       public function key() { return null; }
+      #[\ReturnTypeWillChange]
       public function current() { return null; }
+      #[\ReturnTypeWillChange]
       public function next() { return null; }
+      #[\ReturnTypeWillChange]
       public function valid() { return false; }
     }');
   }

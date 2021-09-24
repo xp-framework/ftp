@@ -103,8 +103,17 @@ class FtpConnection implements Traceable {
   public function connect() {
     $this->socket->connect($this->timeout());
     
-    // Read banner message
-    $this->expect($this->getResponse(), [220]);
+    // Read banner message, which may span several lines w/ status code 220
+    do {
+      sscanf($this->getResponse()[0], "%d%c%[^\r]", $status, $continue, $message);
+      if (220 !== $status) {
+        throw new \peer\ProtocolException(sprintf(
+          'Unexpected response [%d:%s], expecting 220',
+          $code,
+          $message
+        ));
+      }
+    } while ('-' === $continue);
     
     // User & password
     if (null !== ($user= $this->url->getUser())) {

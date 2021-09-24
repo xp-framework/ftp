@@ -12,11 +12,7 @@ use util\Date;
 class DefaultFtpListParserTest extends \unittest\TestCase {
   protected $parser, $connectionl;
 
-  /**
-   * Setup this testcase
-   *
-   * @return void
-   */
+  /** @return void */
   public function setUp() {
     $this->parser= new DefaultFtpListParser();
     $this->connection= new FtpConnection('ftp://mock/');

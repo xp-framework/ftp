@@ -15,10 +15,7 @@ use unittest\{Test, TestCase};
 class FtpCollectionsTest extends TestCase {
   protected $dir= null;
 
-  /**
-   * Sets up test case
-   *
-   */
+  /** @return void */
   public function setUp() {
     $conn= new FtpConnection('ftp://mock');
     $conn->parser= new \peer\ftp\DefaultFtpListParser();
