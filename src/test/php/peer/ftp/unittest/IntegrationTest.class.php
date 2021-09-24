@@ -318,27 +318,27 @@ class IntegrationTest extends TestCase {
   }
 
   #[Test]
-  public function getInputStream() {
+  public function in() {
     $this->conn->connect();
 
     $s= $this->conn
       ->rootDir()
       ->getDir('htdocs')
       ->getFile('index.html')
-      ->getInputStream()
+      ->in()
     ;
 
     $this->assertEquals("<html/>\n", Streams::readAll($s));
   }
 
   #[Test]
-  public function getInputStreams() {
+  public function consecutive_inputstream_reads() {
     $this->conn->connect();
     $dir= $this->conn->rootDir()->getDir('htdocs');
 
     for ($i= 0; $i < 2; $i++) {
       try {
-        $s= $dir->getFile('index.html')->getInputStream();
+        $s= $dir->getFile('index.html')->in();
         $this->assertEquals("<html/>\n", Streams::readAll($s));
       } catch (IOException $e) {
         $this->fail('Round '.($i + 1), $e, null);
@@ -347,11 +347,11 @@ class IntegrationTest extends TestCase {
   }
 
   #[Test]
-  public function getOutputStream() {
+  public function out() {
     $this->conn->connect();
 
     $file= $this->conn->rootDir()->getDir('htdocs')->file('name.txt');
-    $s= $file->getOutputStream();
+    $s= $file->out();
     try {
       $s->write($this->name);
       $s->close();
