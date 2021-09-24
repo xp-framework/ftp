@@ -11,17 +11,13 @@ use util\Date;
 class DefaultFtpListParserTest extends \unittest\TestCase {
   protected $parser, $connectionl;
 
-  /**
-   * Setup this testcase
-   *
-   * @return void
-   */
+  /** @return void */
   public function setUp() {
     $this->parser= new DefaultFtpListParser();
     $this->connection= new FtpConnection('ftp://mock/');
   }
 
-  #[@test]
+  #[Test]
   public function dotDirectory() {
     $e= $this->parser->entryFrom('drwx---r-t 37 p159995 ftpusers 4096 Apr 4 2009 .', $this->connection, '/');
 
@@ -35,7 +31,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
     $this->assertEquals(704, $e->getPermissions());
   }
 
-  #[@test]
+  #[Test]
   public function regularFile() {
     $e= $this->parser->entryFrom('-rw----r-- 1 p159995 ftpusers 415 May 23 2000 write.html', $this->connection, '/');
 
@@ -49,7 +45,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
     $this->assertEquals(604, $e->getPermissions());
   }
 
-  #[@test]
+  #[Test]
   public function whitespaceInFileName() {
     $e= $this->parser->entryFrom('-rw----r-- 1 p159995 ftpusers 415 May 23 2000 answer me.html', $this->connection, '/');
 
@@ -98,7 +94,7 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
   /**
    * Test compact date format
    */
-  #[@test, @values('compactDates')]
+  #[Test, Values('compactDates')]
   public function compactDate($listed, $meaning) {
     $ref= new Date('2009-01-22 20:16');
     $this->assertEquals(new Date($meaning), $this->entryWithDate($listed, $ref)->getDate());

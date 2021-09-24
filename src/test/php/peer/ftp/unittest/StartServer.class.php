@@ -69,7 +69,7 @@ class StartServer implements \unittest\TestClassAction {
     }
 
     $status= $this->serverProcess->out->readLine();
-    if (!strlen($status) || '+' != $status{0}) {
+    if (!strlen($status) || '+' != $status[0]) {
       while ($l= $this->serverProcess->out->readLine()) {
         $status.= $l;
       }

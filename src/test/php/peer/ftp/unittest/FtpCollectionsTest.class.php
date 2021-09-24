@@ -15,10 +15,7 @@ use unittest\TestCase;
 class FtpCollectionsTest extends TestCase {
   protected $dir= null;
 
-  /**
-   * Sets up test case
-   *
-   */
+  /** @return void */
   public function setUp() {
     $conn= new FtpConnection('ftp://mock');
     $conn->parser= new \peer\ftp\DefaultFtpListParser();
@@ -38,7 +35,7 @@ class FtpCollectionsTest extends TestCase {
    * Test hasNext() and next() methods
    *
    */
-  #[@test]
+  #[Test]
   public function hasNextAndNext() {
     $results= [];
     for ($c= new IOCollectionIterator(new FtpCollection($this->dir)); $c->hasNext(); ) {
@@ -51,7 +48,7 @@ class FtpCollectionsTest extends TestCase {
    * Test iteration via foreach
    *
    */
-  #[@test]
+  #[Test]
   public function foreachIteration() {
     $results= [];
     foreach (new IOCollectionIterator(new FtpCollection($this->dir)) as $e) {
