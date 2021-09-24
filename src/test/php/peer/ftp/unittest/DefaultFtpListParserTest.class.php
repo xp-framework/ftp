@@ -18,6 +18,17 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
     $this->connection= new FtpConnection('ftp://mock/');
   }
 
+  /** @return iterable */
+  public function compactDates() {
+    return [
+      ['Jul 23 20:16', '23.07.2009 20:16'],   // 182 days in the future
+      ['Apr 4 20:16' , '04.04.2009 20:16'],
+      ['Jan 22 20:16', '22.01.2009 20:16'],   // exactly "today"
+      ['Dec 1 20:16' , '01.12.2008 20:16'],
+      ['Jul 24 20:16', '24.07.2008 20:16'],   // 182 days in the past
+    ];
+  }
+
   #[Test]
   public function dotDirectory() {
     $e= $this->parser->entryFrom('drwx---r-t 37 p159995 ftpusers 4096 Apr 4 2009 .', $this->connection, '/');
@@ -60,44 +71,14 @@ class DefaultFtpListParserTest extends \unittest\TestCase {
     $this->assertEquals(604, $e->getPermissions());
   }
 
-  /**
-   * Return an entry from a given date in its listing with a given 
-   * reference date
-   *
-   * @param   string listed
-   * @param   util.Date ref
-   * @return  peer.ftp.FtpEntry
-   */
-  protected function entryWithDate($listed, Date $ref) {
-    return $this->parser->entryFrom(
-      'drwx---r-t 37 p159995 ftpusers 4096 '.$listed.' .', 
-      $this->connection, 
-      '/', 
-      $ref
-    );
-  }
-
-  /**
-   * Provides values for compactDate() test
-   *
-   * @return  var[]
-   */
-  public function compactDates() {
-    return [
-      ['Jul 23 20:16', '23.07.2009 20:16'],   // 182 days in the future
-      ['Apr 4 20:16' , '04.04.2009 20:16'],
-      ['Jan 22 20:16', '22.01.2009 20:16'],   // exactly "today"
-      ['Dec 1 20:16' , '01.12.2008 20:16'],
-      ['Jul 24 20:16', '24.07.2008 20:16'],   // 182 days in the past
-    ];
-  }
-
-  /**
-   * Test compact date format
-   */
   #[Test, Values('compactDates')]
   public function compactDate($listed, $meaning) {
-    $ref= new Date('2009-01-22 20:16');
-    $this->assertEquals(new Date($meaning), $this->entryWithDate($listed, $ref)->getDate());
+    $entry= $this->parser->entryFrom(
+      'drwx---r-t 37 p159995 ftpusers 4096 '.$listed.' .',
+      $this->connection,
+      '/',
+      new Date('2009-01-22 20:16')
+    );
+    $this->assertEquals(new Date($meaning), $entry->getDate());
   }
 }

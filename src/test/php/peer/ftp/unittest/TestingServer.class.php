@@ -1,9 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
 use lang\Throwable;
+use peer\ServerSocket;
 use peer\ftp\server\{Authentication, FtpProtocol};
 use peer\server\Server;
-use peer\ServerSocket;
 use util\cmd\Console;
 use util\log\Logging;
 
@@ -43,7 +43,7 @@ class TestingServer {
 
     $auth= new class() implements Authentication {
       public function authenticate($user, $password) {
-        return ('testtest' == $user.$password);
+        return ('testtest' === $user.$password);
       }
     };
 
