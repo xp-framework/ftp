@@ -1,13 +1,14 @@
 <?php namespace peer\ftp\unittest;
 
+use peer\ftp\server\storage\StorageCollection;
+
 /**
  * Memory storage used by testing server: collection
  *
- * @see   xp://net.xp_framework.unittest.peer.ftp.TestingServer
+ * @see  net.xp_framework.unittest.peer.ftp.TestingServer
  */
-class TestingCollection implements \peer\ftp\server\storage\StorageCollection {
-  protected $name= '';
-  protected $storage= null;
+class TestingCollection implements StorageCollection {
+  protected $name, $storage;
   protected $perm= 040777;        // drwxrwxrx
 
   /**

@@ -17,9 +17,9 @@ use util\log\Traceable;
  * $c->close();
  * ```
  *
- * @test  xp://net.xp_framework.unittest.peer.ftp.FtpConnectionTest
- * @test  xp://net.xp_framework.unittest.peer.ftp.IntegrationTest
- * @see   rfc://959
+ * @test  net.xp_framework.unittest.peer.ftp.FtpConnectionTest
+ * @test  net.xp_framework.unittest.peer.ftp.IntegrationTest
+ * @see   https://datatracker.ietf.org/doc/html/rfc959
  */
 class FtpConnection implements Traceable {
   protected
@@ -146,10 +146,11 @@ class FtpConnection implements Traceable {
   /**
    * Setup directory list parser
    *
+   * @return void
    */
   protected function setupListParser() {
     $type= $this->expect($this->sendCommand('SYST'), [215]);
-    if ('Windows_NT' == $type) {
+    if ('Windows_NT' === $type) {
       $this->parser= new WindowsFtpListParser();
     } else {
       $this->parser= new DefaultFtpListParser();
@@ -203,7 +204,7 @@ class FtpConnection implements Traceable {
    * Enables or disables the passive ftp mode at runtime.
    *
    * @param   bool enable enable or disable passive mode
-   * @return  bool success
+   * @return  void
    */
   public function setPassive($enable) {
     $this->passive= $enable;
@@ -303,9 +304,9 @@ class FtpConnection implements Traceable {
    *
    * Accepts a command which will be socketd as format-string for
    * further arbitrary arguments, e.g.:
-   * <code>
-   *   $c->sendCommand('CLNT %s', $clientName);
-   * </code>
+   * ```php
+   * $c->sendCommand('CLNT %s', $clientName);
+   * ```
    *
    * @param   string command
    * @param   string... args

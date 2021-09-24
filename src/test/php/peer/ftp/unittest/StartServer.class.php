@@ -1,11 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
 use lang\{IllegalStateException, Runtime, Throwable, XPClass};
-use unittest\{TestClassAction, PrerequisitesNotMetError};
+use unittest\{PrerequisitesNotMetError, TestClassAction};
 
-/**
- * Starts a server for integration tests
- */
+/** Starts a server for integration tests */
 class StartServer implements TestClassAction {
   protected $serverProcess;
   protected $mainClass;

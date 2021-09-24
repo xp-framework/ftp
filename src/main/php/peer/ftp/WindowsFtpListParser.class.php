@@ -5,8 +5,8 @@ use util\Date;
 /**
  * Parses output from a FTP LIST command from Windows FTP daemons.
  *
- * @test  xp://peer.ftp.unittest.WindowsFtpListParserTest
- * @see   xp://peer.ftp.FtpListParser
+ * @test  peer.ftp.unittest.WindowsFtpListParserTest
+ * @see   peer.ftp.FtpListParser
  */
 class WindowsFtpListParser implements FtpListParser {
 

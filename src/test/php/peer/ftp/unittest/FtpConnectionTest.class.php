@@ -3,11 +3,11 @@
 use lang\{FormatException, IllegalArgumentException};
 use peer\URL;
 use peer\ftp\FtpConnection;
-use unittest\{Expect, Test, Values};
+use unittest\{Assert, Expect, Test, Values};
 
-class FtpConnectionTest extends \unittest\TestCase {
+class FtpConnectionTest {
 
-  /** @return var[][] */
+  /** @return iterable */
   private function dsns() {
     return [
       ['ftp://localhost'],
@@ -49,41 +49,41 @@ class FtpConnectionTest extends \unittest\TestCase {
 
   #[Test]
   public function timeout_defaults_to_four_seconds() {
-    $this->assertEquals(4.0, (new FtpConnection('ftp://localhost'))->timeout());
+    Assert::equals(4.0, (new FtpConnection('ftp://localhost'))->timeout());
   }
 
   #[Test]
   public function timeout_can_be_set_via_dsn() {
-    $this->assertEquals(1.0, (new FtpConnection('ftp://localhost?timeout=1.0'))->timeout());
+    Assert::equals(1.0, (new FtpConnection('ftp://localhost?timeout=1.0'))->timeout());
   }
 
   #[Test]
   public function passive_mode_defaults_to_true() {
-    $this->assertEquals(true, (new FtpConnection('ftp://localhost'))->passive());
+    Assert::equals(true, (new FtpConnection('ftp://localhost'))->passive());
   }
 
   #[Test, Values([['false', false], ['off', false], ['no', false], ['0', false], ['true', true], ['on', true], ['yes', true], ['1', true]])]
   public function passive_mode_can_be_set_via_dsn($value, $result) {
-    $this->assertEquals($result, (new FtpConnection('ftp://localhost?passive='.$value))->passive());
+    Assert::equals($result, (new FtpConnection('ftp://localhost?passive='.$value))->passive());
   }
 
   #[Test]
   public function remote_endpoint() {
-    $this->assertEquals('localhost:21', (new FtpConnection('ftp://localhost'))->remoteEndpoint()->getAddress());
+    Assert::equals('localhost:21', (new FtpConnection('ftp://localhost'))->remoteEndpoint()->getAddress());
   }
 
   #[Test]
   public function remote_endpoint_with_non_default_port() {
-    $this->assertEquals('localhost:2121', (new FtpConnection('ftp://localhost:2121'))->remoteEndpoint()->getAddress());
+    Assert::equals('localhost:2121', (new FtpConnection('ftp://localhost:2121'))->remoteEndpoint()->getAddress());
   }
 
   #[Test]
   public function anonymous_user() {
-    $this->assertNull((new FtpConnection('ftp://localhost'))->user());
+    Assert::null((new FtpConnection('ftp://localhost'))->user());
   }
 
   #[Test]
   public function authenticated_user() {
-    $this->assertEquals('test', (new FtpConnection('ftp://test:pass@localhost'))->user());
+    Assert::equals('test', (new FtpConnection('ftp://test:pass@localhost'))->user());
   }
 }

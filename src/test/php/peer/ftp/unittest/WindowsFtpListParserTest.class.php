@@ -1,52 +1,48 @@
 <?php namespace peer\ftp\unittest;
- 
+
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, WindowsFtpListParser};
-use unittest\Test;
+use unittest\{Assert, Before, Test};
 use util\Date;
 
 /**
  * Tests Windows list parser
  *
- * @see      xp://peer.ftp.WindowsFtpListParser
+ * @see  peer.ftp.WindowsFtpListParser
  */
-class WindowsFtpListParserTest extends \unittest\TestCase {
-  protected $parser, $connectionl;
+class WindowsFtpListParserTest {
+  private $conn;
 
-  /**
-   * Setup this testcase
-   *
-   * @return void
-   */
-  public function setUp() {
-    $this->parser= new WindowsFtpListParser();
-    $this->connection= new FtpConnection('ftp://mock/');
+  #[Before]
+  public function conn() {
+    $this->conn= new FtpConnection('ftp://mock/');
+    $this->conn->parser= new WindowsFtpListParser();
   }
   
   #[Test]
   public function directory() {
-    $e= $this->parser->entryFrom('01-04-06  04:51PM       <DIR>          _db_import', $this->connection, '/');
+    $e= $this->conn->parser->entryFrom('01-04-06  04:51PM       <DIR>          _db_import', $this->conn, '/');
 
-    $this->assertInstanceOf(FtpDir::class, $e);
-    $this->assertEquals('/_db_import/', $e->getName());
-    $this->assertEquals(0, $e->getNumlinks());
-    $this->assertEquals(null, $e->getUser());
-    $this->assertEquals(null, $e->getGroup());
-    $this->assertEquals(0, $e->getSize());
-    $this->assertEquals(new Date('04.01.2006 16:51'), $e->getDate());
-    $this->assertEquals(0, $e->getPermissions());
+    Assert::instance(FtpDir::class, $e);
+    Assert::equals('/_db_import/', $e->getName());
+    Assert::equals(0, $e->getNumlinks());
+    Assert::equals(null, $e->getUser());
+    Assert::equals(null, $e->getGroup());
+    Assert::equals(0, $e->getSize());
+    Assert::equals(new Date('04.01.2006 16:51'), $e->getDate());
+    Assert::equals(0, $e->getPermissions());
   }
 
   #[Test]
   public function regularFile() {
-    $e= $this->parser->entryFrom('11-08-06  10:04AM                   27 info.txt', $this->connection, '/');
+    $e= $this->conn->parser->entryFrom('11-08-06  10:04AM                   27 info.txt', $this->conn, '/');
 
-    $this->assertInstanceOf(FtpEntry::class, $e);
-    $this->assertEquals('/info.txt', $e->getName());
-    $this->assertEquals(0, $e->getNumlinks());
-    $this->assertEquals(null, $e->getUser());
-    $this->assertEquals(null, $e->getGroup());
-    $this->assertEquals(27, $e->getSize());
-    $this->assertEquals(new Date('08.11.2006 10:04'), $e->getDate());
-    $this->assertEquals(0, $e->getPermissions());
+    Assert::instance(FtpEntry::class, $e);
+    Assert::equals('/info.txt', $e->getName());
+    Assert::equals(0, $e->getNumlinks());
+    Assert::equals(null, $e->getUser());
+    Assert::equals(null, $e->getGroup());
+    Assert::equals(27, $e->getSize());
+    Assert::equals(new Date('08.11.2006 10:04'), $e->getDate());
+    Assert::equals(0, $e->getPermissions());
   }
 }

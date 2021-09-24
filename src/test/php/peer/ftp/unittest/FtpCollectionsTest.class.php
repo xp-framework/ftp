@@ -2,58 +2,49 @@
 
 use io\collections\iterate\IOCollectionIterator;
 use peer\ftp\collections\FtpCollection;
-use peer\ftp\{FtpConnection, FtpDir};
-use unittest\{Test, TestCase};
-
+use peer\ftp\{FtpConnection, FtpDir, FtpEntryList, DefaultFtpListParser};
+use unittest\{Assert, Before, Test};
 
 /**
  * TestCase for FTP collections API
  *
- * @see      xp://peer.ftp.collections.FtpCollection
- * @purpose  Unittest
+ * @see  peer.ftp.collections.FtpCollection
  */
-class FtpCollectionsTest extends TestCase {
-  protected $dir= null;
+class FtpCollectionsTest {
+  private $dir;
 
-  /** @return void */
-  public function setUp() {
-    $conn= new FtpConnection('ftp://mock');
-    $conn->parser= new \peer\ftp\DefaultFtpListParser();
-    $this->dir= newinstance(FtpDir::class, ['/', $conn], '{
+  #[Before]
+  public function dir() {
+    $connection= new FtpConnection('ftp://mock');
+    $connection->parser= new DefaultFtpListParser();
+
+    $this->dir= new class('/', $connection) extends FtpDir {
       public function entries() {
-        return new FtpEntryList(array(
-          "drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 .",
-          "drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 ..",
-          "drwxr-xr-x   2 p159995  ftpusers     4096 Mar 19  2007 .ssh",
-          "-rw-------   1 p159995  ftpusers     7507 Nov 21  2000 .bash_history",
-        ), $this->connection, "/");
+        return new FtpEntryList([
+          'drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 .',
+          'drwx---r-t  37 p159995  ftpusers     4096 Jul 30 18:59 ..',
+          'drwxr-xr-x   2 p159995  ftpusers     4096 Mar 19  2007 .ssh',
+          '-rw-------   1 p159995  ftpusers     7507 Nov 21  2000 .bash_history',
+        ], $this->connection, '/');
       }
-    }');
+    };
   }
   
-  /**
-   * Test hasNext() and next() methods
-   *
-   */
   #[Test]
-  public function hasNextAndNext() {
+  public function has_next_and_next() {
     $results= [];
     for ($c= new IOCollectionIterator(new FtpCollection($this->dir)); $c->hasNext(); ) {
       $results[]= $c->next()->getURI();
     }
-    $this->assertEquals(['/.ssh/', '/.bash_history'], $results);
+    Assert::equals(['/.ssh/', '/.bash_history'], $results);
   }
 
-  /**
-   * Test iteration via foreach
-   *
-   */
   #[Test]
-  public function foreachIteration() {
+  public function foreach_iteration() {
     $results= [];
     foreach (new IOCollectionIterator(new FtpCollection($this->dir)) as $e) {
       $results[]= $e->getURI();
     }
-    $this->assertEquals(['/.ssh/', '/.bash_history'], $results);
+    Assert::equals(['/.ssh/', '/.bash_history'], $results);
   }
 }

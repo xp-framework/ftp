@@ -1,15 +1,15 @@
 <?php namespace peer\ftp\unittest;
 
+use peer\ftp\server\storage\StorageElement;
+
 /**
  * Memory storage used by testing server: element
  *
- * @see   xp://net.xp_framework.unittest.peer.ftp.TestingServer
+ * @see  net.xp_framework.unittest.peer.ftp.TestingServer
  */
-class TestingElement implements \peer\ftp\server\storage\StorageElement {
-  protected $name= '';
-  protected $storage= null;
+class TestingElement implements StorageElement {
+  protected $name, $storage, $contents;
   protected $perm= 0666;
-  protected $contents= '';
   protected $offset= 0;
 
   /**
