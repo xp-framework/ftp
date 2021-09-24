@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 10.0.1 / 2021-09-24
+
 * Fixed PHP 8.0 and PHP 8.1 compatibility - @thekid
 * Fixed connection to FTP servers with multiline banner message - @thekid
 * Replaced deprecated xp::stringOf() calls with util.Objects - @thekid
