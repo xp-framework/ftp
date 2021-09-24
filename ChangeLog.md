@@ -3,6 +3,12 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 10.1.0 / 2021-09-24
+
+* Merged PR #6: Add `FtpFile::in()` and `FtpFile::out()` and implement
+  the `io.Channel` interface to make FTP files usable with a variety of
+  APIs from `io.streams`.
+  (@thekid)
 * Migrated testing from Travis CI to GitHub actions - @thekid
 
 ## 10.0.1 / 2021-09-24
