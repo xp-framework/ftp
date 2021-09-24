@@ -5,7 +5,7 @@ use io\{FileNotFoundException, IOException};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
-use unittest\{Expect, Test};
+use unittest\{Action, Expect, Test, TestCase};
 
 /**
  * TestCase for FTP API.
@@ -13,7 +13,7 @@ use unittest\{Expect, Test};
  * @see      xp://peer.ftp.FtpConnection
  */
 #[Action(eval: 'new StartServer("peer.ftp.unittest.TestingServer", "connected", "shutdown")')]
-class IntegrationTest extends \unittest\TestCase {
+class IntegrationTest extends TestCase {
   public static $bindAddress= null;
   protected $conn= null;
 
