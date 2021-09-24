@@ -2,12 +2,10 @@
 
 use io\streams\InputStream;
 
-
 /**
  * InputStream that reads from FTP files
  *
- * @see      xp://peer.ftp.FtpFile#getInputStream
- * @purpose  InputStream implementation
+ * @see  peer.ftp.FtpFile::in()
  */
 class FtpInputStream extends FtpTransferStream implements InputStream {
 
@@ -41,6 +39,7 @@ class FtpInputStream extends FtpTransferStream implements InputStream {
    * Returns the number of bytes that can be read from this stream 
    * without blocking.
    *
+   * @return int
    */
   public function available() {
     return $this->eof ? 0 : 1;

@@ -2,12 +2,10 @@
 
 use io\streams\OutputStream;
 
-
 /**
  * OuputStream that writes to FTP files
  *
- * @see      xp://peer.ftp.FtpFile#getOutputStream
- * @purpose  OutputStream implementation
+ * @see  peer.ftp.FtpFile::out()
  */
 class FtpOutputStream extends FtpTransferStream implements OutputStream {
 
@@ -32,6 +30,7 @@ class FtpOutputStream extends FtpTransferStream implements OutputStream {
   /**
    * Close this stream
    *
+   * @return void
    */
   public function close() {
     parent::close();
@@ -45,5 +44,6 @@ class FtpOutputStream extends FtpTransferStream implements OutputStream {
    *
    */
   public function flush() { 
+    // NOOP
   }
 }

@@ -1,5 +1,6 @@
 <?php namespace peer\ftp;
 
+use io\Channel;
 use io\streams\{InputStream, OutputStream, Streams};
 
 /**
@@ -7,7 +8,7 @@ use io\streams\{InputStream, OutputStream, Streams};
  *
  * @see   xp://peer.ftp.FtpDir#getFile
  */
-class FtpFile extends FtpEntry {
+class FtpFile extends FtpEntry implements Channel {
 
   /**
    * Delete this entry
@@ -17,10 +18,29 @@ class FtpFile extends FtpEntry {
   public function delete() {
     $this->connection->expect($this->connection->sendCommand('DELE %s', $this->name), [250]);
   }
-  
+
   /**
    * Returns an input stream to read from this file
    *
+   * @return  io.streams.InputStream
+   */
+  public function in() {
+    return new FtpInputStream($this);
+  }
+
+  /**
+   * Returns an output stream to write to this file
+   *
+   * @return  io.streams.OutputStream
+   */
+  public function out() {
+    return new FtpOutputStream($this);
+  }
+
+  /**
+   * Returns an input stream to read from this file
+   *
+   * @deprecated Use in() instead
    * @return  io.streams.InputStream
    */
   public function getInputStream() {
@@ -30,6 +50,7 @@ class FtpFile extends FtpEntry {
   /**
    * Returns an output stream to write to this file
    *
+   * @deprecated Use out() instead
    * @return  io.streams.OutputStream
    */
   public function getOutputStream() {
