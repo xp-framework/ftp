@@ -1,6 +1,6 @@
 <?php namespace peer\ftp;
 
-
+use Iterator, ReturnTypeWillChange;
 
 /**
  * Iterator for FtpEntryList which removes "." and ".." directories
@@ -8,7 +8,7 @@
  * @see      php://language.oop5.iterations
  * @purpose  Iterator implementation
  */
-class FtpListIterator implements \Iterator {
+class FtpListIterator implements Iterator {
   private 
     $i= 0, 
     $v= [], 
@@ -34,6 +34,7 @@ class FtpListIterator implements \Iterator {
    *
    * @return  peer.ftp.FtpEntry
    */
+  #[ReturnTypeWillChange]
   public function current() {
     return $this->e; 
   }
@@ -43,6 +44,7 @@ class FtpListIterator implements \Iterator {
    *
    * @return  string
    */
+  #[ReturnTypeWillChange]
   public function key() { 
     return $this->e->getName(); 
   }
@@ -51,6 +53,7 @@ class FtpListIterator implements \Iterator {
    * Forward to next element
    *
    */    
+  #[ReturnTypeWillChange]
   public function next() {
     // Intentionally empty, cursor is forwaded inside valid()
   }
@@ -59,6 +62,7 @@ class FtpListIterator implements \Iterator {
    * Rewind iterator
    *
    */
+  #[ReturnTypeWillChange]
   public function rewind() { 
     $this->i= 0; 
   }
@@ -68,6 +72,7 @@ class FtpListIterator implements \Iterator {
    *
    * @return  bool
    */
+  #[ReturnTypeWillChange]
   public function valid() { 
     $dotdirs= [$this->b.'./', $this->b.'../'];
     do {

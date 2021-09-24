@@ -1,5 +1,6 @@
 <?php namespace peer\ftp;
 
+use IteratorAggregate, Traversable;
 use lang\Value;
 use util\Objects;
 
@@ -8,7 +9,7 @@ use util\Objects;
  *
  * @see   xp://peer.ftp.FtpDir#entries
  */
-class FtpEntryList implements Value, \IteratorAggregate {
+class FtpEntryList implements Value, IteratorAggregate {
   protected
     $connection   = null,
     $list         = [],
@@ -27,13 +28,8 @@ class FtpEntryList implements Value, \IteratorAggregate {
     $this->base= $base;
   }
   
-  /**
-   * Returns an iterator for use in foreach()
-   *
-   * @see     php://language.oop5.iterations
-   * @return  php.Iterator
-   */
-  public function getIterator() {
+  /** Iterators over all entries */
+  public function getIterator(): Traversable {
     return new FtpListIterator($this->list, $this->connection, $this->base);
   }
 
