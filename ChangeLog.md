@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Migrated testing from Travis CI to GitHub actions - @thekid
+
 ## 10.0.1 / 2021-09-24
 
 * Fixed PHP 8.0 and PHP 8.1 compatibility - @thekid
