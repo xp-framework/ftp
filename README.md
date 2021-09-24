@@ -8,6 +8,8 @@ FTP protocol support for the XP Framework
 [![Supports PHP 8.0+](https://raw.githubusercontent.com/xp-framework/web/master/static/php-8_0plus.svg)](http://php.net/)
 [![Latest Stable Version](https://poser.pugx.org/xp-framework/ftp/version.png)](https://packagist.org/packages/xp-framework/ftp)
 
+Userland FTP protocol implementation, no dependency on PHP's *ftp* extension.
+
 Client
 ------
 
@@ -18,17 +20,15 @@ use peer\ftp\{FtpConnection, FtpTransfer};
 use io\streams\FileInputStream;
 use io\File;
 
-with ($c= new FtpConnection('ftp://user:pass@example.com/')); {
-  $c->connect();
+$c= (new FtpConnection('ftp://user:pass@example.com/'))->connect();
 
-  // Upload index.txt to the connection's root directory
-  $c->rootDir()->file('index.txt')->uploadFrom(
-    new FileInputStream(new File('index.txt')),
-    FtpTransfer::ASCII
-  );
+// Upload index.txt to the connection's root directory
+$c->rootDir()->file('index.txt')->uploadFrom(
+  new FileInputStream(new File('index.txt')),
+  FtpTransfer::ASCII
+);
 
-  $c->close();
-}
+$c->close();
 ```
 
 ### Example: Listing
@@ -36,14 +36,12 @@ with ($c= new FtpConnection('ftp://user:pass@example.com/')); {
 ```php
 use peer\ftp\FtpConnection;
 
-with ($c= new FtpConnection('ftp://user:pass@example.com/')); {
-  $c->connect();
+$c= (new FtpConnection('ftp://user:pass@example.com/'))->connect();
 
-  // List root directory's contents
-  foreach ($c->rootDir()->entries() as $entry) {
-    Console::writeLine('- ', $entry);
-  }
-
-  $c->close();
+// List root directory's contents
+foreach ($c->rootDir()->entries() as $entry) {
+  Console::writeLine('- ', $entry);
 }
+
+$c->close();
 ```
