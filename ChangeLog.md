@@ -3,6 +3,11 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #7: Add FtpEntry::isFile() and FtpEntry::isFolder() methods
+  (@thekid)
+* Merged PR #8: Also accept io.Channel instances for up- and downloading
+  (@thekid)
+
 ## 10.1.0 / 2021-09-24
 
 * Merged PR #6: Add `FtpFile::in()` and `FtpFile::out()` and implement
