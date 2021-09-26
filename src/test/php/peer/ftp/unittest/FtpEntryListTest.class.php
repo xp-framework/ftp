@@ -65,12 +65,10 @@ class FtpEntryListTest {
   public function asArray() {
     $names= ['/secret/', '/wetter.html', '/.htaccess'];
     $classes= ['peer.ftp.FtpDir', 'peer.ftp.FtpFile', 'peer.ftp.FtpFile'];
-    $offset= 0;
 
-    foreach ($this->listFixture()->asArray() as $entry) {
+    foreach ($this->listFixture()->asArray() as $offset => $entry) {
       Assert::instance($classes[$offset], $entry);
       Assert::equals($names[$offset], $entry->getName());
-      $offset++;
     } 
   }
 
