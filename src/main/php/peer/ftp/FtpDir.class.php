@@ -248,15 +248,4 @@ class FtpDir extends FtpEntry {
     }
     return $e;
   }
-
-  /**
-   * Get entries (iterative function)
-   *
-   * @deprecated Use entries() instead!   
-   * @return  peer.ftp.FtpEntry FALSE to indicate EOL
-   * @throws  peer.SocketException in case the directory could not be read
-   */
-  public function getEntry() {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpDir::getEntry');
-  }
 }
