@@ -1,7 +1,6 @@
 <?php namespace peer\ftp;
 
 use io\Channel;
-use io\streams\{InputStream, OutputStream, Streams};
 
 /**
  * FTP file
