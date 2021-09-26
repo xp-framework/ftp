@@ -59,9 +59,8 @@ class FtpEntryList implements Value, IteratorAggregate {
    */
   public function asArray() {
     $dotdirs= [$this->base.'./', $this->base.'../'];
-
-    for ($i= 0, $r= [], $s= sizeof($this->list); $i < $s; $i++) {
-      $e= $this->connection->parser->entryFrom($this->list[$i], $this->connection, $this->base);
+    foreach ($this->list as $line) {
+      $e= $this->connection->parser->entryFrom($line, $this->connection, $this->base);
       in_array($e->getName(), $dotdirs) || $r[]= $e;
     }
     return $r;
