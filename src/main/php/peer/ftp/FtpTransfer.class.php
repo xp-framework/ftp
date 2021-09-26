@@ -1,12 +1,13 @@
 <?php namespace peer\ftp;
 
-use lang\Value;
+use lang\{Value, IllegalStateException};
+use peer\ProtocolException;
 
 /**
  * Base class for up- and downloads
  *
- * @see   xp://peer.ftp.FtpUpload
- * @see   xp://peer.ftp.FtpDownload
+ * @see   peer.ftp.FtpUpload
+ * @see   peer.ftp.FtpDownload
  */
 abstract class FtpTransfer implements Value {
   const ASCII  = 1;
@@ -27,7 +28,8 @@ abstract class FtpTransfer implements Value {
   /**
    * Sets the remote file
    *
-   * @param   peer.ftp.FtpFile remote
+   * @param  peer.ftp.FtpFile $remote
+   * @return void
    */
   public function setRemote(FtpFile $remote) {
     $this->remote= $remote;
@@ -36,7 +38,7 @@ abstract class FtpTransfer implements Value {
   /**
    * Returns the remote file
    *
-   * @return  peer.ftp.FtpFile
+   * @return peer.ftp.FtpFile
    */
   public function getRemote() {
     return $this->remote;
@@ -45,8 +47,8 @@ abstract class FtpTransfer implements Value {
   /**
    * Returns the remote file
    *
-   * @return  peer.ftp.FtpTransferListener l
-   * @return  peer.ftp.FtpTransfer this transfer object
+   * @param  peer.ftp.FtpTransferListener $l
+   * @return self
    */
   public function withListener(FtpTransferListener $l= null) {
     $this->listener= $l;
@@ -56,6 +58,7 @@ abstract class FtpTransfer implements Value {
   /**
    * Aborts this transfer
    *
+   * @return void
    */
   public function abort() {
     $this->state= 3;
@@ -67,22 +70,22 @@ abstract class FtpTransfer implements Value {
    * @return  bool TRUE if this transfer is complete, FALSE otherwise
    */
   public function complete() {
-    return 2 == $this->state;
+    return 2 === $this->state;
   }
  
   /**
    * Returns whether this transfer has been aborted
    *
-   * @return  bool
+   * @return bool
    */
   public function aborted() {
-    return 3 == $this->state;
+    return 3 === $this->state;
   }
 
   /**
    * Retrieves how many bytes have already been transferred
    *
-   * @param   int size
+   * @return int size
    */
   public function transferred() {
     return $this->transferred;
@@ -91,39 +94,38 @@ abstract class FtpTransfer implements Value {
   /**
    * Starts this transfer
    *
-   * @param   int mode
-   * @return  peer.ftp.FtpTransfer this
+   * @param  int $mode
+   * @return self
    */
   public function start($mode) {      
-    with ($conn= $this->remote->getConnection()); {
-
-      // Set mode
-      $conn->expect($conn->sendCommand('TYPE %s', self::$modes[$mode]), [200]);
-    
-      // Issue the transfer command
-      $this->socket= $conn->transferSocket();
-      $r= $conn->sendCommand('%s %s', $this->getCommand(), $this->remote->getName());
-      sscanf($r[0], "%d %[^\r\n]", $code, $message);
-      if (150 !== $code) {
-        throw new \peer\ProtocolException(sprintf(
-          '%s: Cannot transfer %s (%d: %s)',
-          $this->getCommand(),
-          $this->remote->getName(),
-          $code,
-          $message
-        ));
-      }
-    
-      $this->transferred= 0;
-      $this->state= 1;
+    $conn= $this->remote->getConnection();
+    $conn->expect($conn->sendCommand('TYPE %s', self::$modes[$mode]), [200]);
+  
+    // Issue the transfer command
+    $this->socket= $conn->transferSocket();
+    $r= $conn->sendCommand('%s %s', $this->getCommand(), $this->remote->getName());
+    sscanf($r[0], "%d %[^\r\n]", $code, $message);
+    if (150 !== $code) {
+      throw new ProtocolException(sprintf(
+        '%s: Cannot transfer %s (%d: %s)',
+        $this->getCommand(),
+        $this->remote->getName(),
+        $code,
+        $message
+      ));
     }
+  
+    $this->transferred= 0;
+    $this->state= 1;
     $this->listener && $this->listener->started($this);
+
     return $this;
   }
 
   /**
    * Close down communication
-   *
+   * 
+   * @return void
    */
   protected function close() {
     $this->socket->close();
@@ -135,21 +137,22 @@ abstract class FtpTransfer implements Value {
   /**
    * Continues this transfer
    *
-   * @throws  peer.SocketException in case this transfer fails
-   * @throws  lang.IllegalStateException in case start() has not been called before
+   * @return void
+   * @throws peer.SocketException in case this transfer fails
+   * @throws lang.IllegalStateException in case start() has not been called before
    */
   public function perform() {
     if (1 === $this->state) {
       $this->doTransfer();
     } else if (2 === $this->state) {
-      throw new \lang\IllegalStateException('Transfer finished');
+      throw new IllegalStateException('Transfer finished');
     } else if (3 === $this->state) {
       $this->close();
       $this->listener && $this->listener->aborted($this);
       return;
     } else {
       $this->close();
-      $e= new \lang\IllegalStateException('Transfer has not been started yet');
+      $e= new IllegalStateException('Transfer has not been started yet');
       $this->listener && $this->listener->failed($this, $e);
       throw $e;
     }
@@ -165,15 +168,15 @@ abstract class FtpTransfer implements Value {
   /**
    * Continues this transfer
    *
-   * @throws  peer.SocketException in case this transfer fails
-   * @throws  lang.IllegalStateException in case start() has not been called before
+   * @throws peer.SocketException in case this transfer fails
+   * @throws lang.IllegalStateException in case start() has not been called before
    */
   protected abstract function doTransfer();
 
   /**
    * Retrieves this transfer's total size
    *
-   * @param   int size
+   * @param  int
    */
   public abstract function size();
 
