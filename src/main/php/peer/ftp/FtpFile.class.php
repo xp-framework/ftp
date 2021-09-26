@@ -40,26 +40,6 @@ class FtpFile extends FtpEntry implements Channel {
   }
 
   /**
-   * Returns an input stream to read from this file
-   *
-   * @deprecated Use in() instead
-   * @return  io.streams.InputStream
-   */
-  public function getInputStream() {
-    return new FtpInputStream($this);
-  }
-
-  /**
-   * Returns an output stream to write to this file
-   *
-   * @deprecated Use out() instead
-   * @return  io.streams.OutputStream
-   */
-  public function getOutputStream() {
-    return new FtpOutputStream($this);
-  }
-  
-  /**
    * Reload this file's details.
    *
    * @param   string state
