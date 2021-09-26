@@ -3,6 +3,9 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Removed deprecated methods from `peer.ftp.FtpConnection` which have
+  survived there since 2007, when xp-framework/rfc#140 was implemented!
+  (@thekid)
 * Merged PR #7: Add FtpEntry::isFile() and FtpEntry::isFolder() methods
   (@thekid)
 * Merged PR #8: Also accept io.Channel instances for up- and downloading
