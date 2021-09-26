@@ -302,8 +302,9 @@ class FtpConnection implements Traceable {
    * Sends a raw command to the FTP server and returns the server's
    * response (unparsed) as an array of strings.
    *
-   * Accepts a command which will be socketd as format-string for
+   * Accepts a command which will be handled as format-string for
    * further arbitrary arguments, e.g.:
+   *
    * ```php
    * $c->sendCommand('CLNT %s', $clientName);
    * ```
@@ -313,120 +314,15 @@ class FtpConnection implements Traceable {
    * @return  string[] result
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function sendCommand($command) {
+  public function sendCommand($command, ... $args) {
     if (null === $this->socket) {
       throw new SocketException('Not connected');
     }
 
-    if (func_num_args() > 1) {
-      $args= func_get_args();
-      $cmd= vsprintf($command, array_slice($args, 1));
-    } else {
-      $cmd= $command;
-    }
+    $cmd= $args ? vsprintf($command, $args) : $command;
     $this->cat && $this->cat->debug('>>>', $cmd);
     $this->socket->write($cmd."\r\n");
     return $this->getResponse();
-  }
-
-  /**
-   * Get a directory object
-   *
-   * @deprecated Use FtpDir::getDir() instead!
-   * @param   string dir default NULL directory name, defaults to working directory
-   * @return  peer.ftp.FtpDir
-   * @throws  peer.SocketException
-   */
-  public function getDir($dir= null) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::getDir');
-  }
-  
-  /**
-   * Set working directory
-   *
-   * @deprecated Without replacement...
-   * @param   peer.ftp.FtpDir f
-   * @throws  peer.SocketException
-   * @return  bool success
-   */
-  public function setDir($f) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::setDir');
-  }
-
-  /**
-   * Create a directory
-   *
-   * @deprecated Use FtpDir::newDir() instead!
-   * @param   peer.ftp.FtpDir f
-   * @return  bool success
-   */
-  public function makeDir($f) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::makeDir');
-  }
-  
-  /**
-   * Upload a file
-   *
-   * @deprecated Use FtpFile::uploadFrom() instead!
-   * @param   var arg either a filename or an open File object
-   * @param   string remote default NULL remote filename, will default to basename of arg
-   * @param   string mode default FTP_ASCII (either FTP_ASCII or FTP_BINARY)
-   * @return  bool success
-   * @throws  peer.SocketException
-   */
-  public function put($arg, $remote= null, $mode= FTP_ASCII) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::put');
-  }
-
-  /**
-   * Download a file
-   *
-   * @deprecated Use FtpFile::downloadTo() instead!
-   * @param   string remote remote filename
-   * @param   var arg either a filename or an open File object
-   * @param   string mode default FTP_ASCII (either FTP_ASCII or FTP_BINARY)
-   * @return  bool success
-   * @throws  peer.SocketException
-   */
-  public function get($remote, $arg, $mode= FTP_ASCII) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::get');
-  }
-  
-  /**
-   * Deletes a file.
-   *
-   * @deprecated Use FtpEntry::delete() instead!
-   * @param   string filename
-   * @return  bool success
-   */
-  public function delete($remote) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::delete');
-  }    
-
-  /**
-   * Renames a file in this directory.
-   *
-   * @deprecated Use FtpEntry::rename() instead!
-   * @param   string source
-   * @param   string target
-   * @return  bool success
-   */
-  public function rename($src, $target) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::rename');
-  }
-  
-  /**
-   * Sends a raw command directly to the FTP-Server.
-   *
-   * Please note, that the function does not parse whether the 
-   * command was successful or not.
-   *
-   * @deprecated Use sendCommand() instead!
-   * @param   string command
-   * @return  array ServerResponse
-   */
-  public function quote($command) {
-    raise('lang.MethodNotImplementedException', 'Deprecated', 'FtpConnection::quote');
   }
 
   /**
