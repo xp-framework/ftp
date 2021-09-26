@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 11.0.0 / ????-??-??
+
+* Merged PR #9: Default transfer mode to binary - @thekid
+
 ## 10.2.0 / 2021-09-26
 
 * Merged PR #10: Replace `FtpListIterator` with yield, deprecating the
