@@ -9,6 +9,9 @@ use io\Channel;
  */
 class FtpFile extends FtpEntry implements Channel {
 
+  /** Returns TRUE */
+  public function isFile(): bool { return true; }
+
   /**
    * Delete this entry
    *

@@ -31,15 +31,15 @@ abstract class FtpEntry implements Value {
     $this->name= $name;
     $this->connection= $connection;
   }
-  
-  /**
-   * Get connection
-   *
-   * @return  peer.ftp.FtpConnection 
-   */
-  public function getConnection() {
-    return $this->connection;
-  }
+
+  /** Returns whether this is a file */
+  public function isFile(): bool { return false; }
+
+  /** Returns whether this is a folder */
+  public function isFolder(): bool { return false; }
+
+  /** @return peer.ftp.FtpConnection */
+  public function getConnection() { return $this->connection; }
 
   /**
    * Checks whether this entry exists.

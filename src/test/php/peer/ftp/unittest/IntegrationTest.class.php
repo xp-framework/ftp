@@ -97,19 +97,18 @@ class IntegrationTest extends TestCase {
     with ($root= $this->conn->rootDir()); {
       $this->assertInstanceOf(FtpDir::class, $root);
       $this->assertEquals('/', $root->getName());
+      $this->assertTrue($root->isFolder());
     }
   }
-
 
   #[Test]
   public function retrieve_root_dir_entries() {
     $this->conn->connect();
+
     $entries= $this->conn->rootDir()->entries();
     $this->assertInstanceOf(FtpEntryList::class, $entries);
     $this->assertFalse($entries->isEmpty());
-    foreach ($entries as $entry) {
-      $this->assertInstanceOf(FtpEntry::class, $entry);
-    }
+    $this->assertInstanceOf('peer.ftp.FtpEntry[]', $entries->asArray());
   }
 
   #[Test]
@@ -204,6 +203,7 @@ class IntegrationTest extends TestCase {
       $index= $htdocs->getFile('index.html');
       $this->assertInstanceOf(FtpFile::class, $index);
       $this->assertEquals('/htdocs/index.html', $index->getName());
+      $this->assertTrue($index->isFile());
     }
   }
 
@@ -215,6 +215,7 @@ class IntegrationTest extends TestCase {
       $file= $htdocs->getFile('file with whitespaces.html');
       $this->assertInstanceOf(FtpFile::class, $file);
       $this->assertEquals('/htdocs/file with whitespaces.html', $file->getName());
+      $this->assertTrue($file->isFile());
     }
   }
 

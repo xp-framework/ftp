@@ -25,6 +25,9 @@ class FtpDir extends FtpEntry {
     $normalized= '/'.trim($name, '/').'/';
     parent::__construct('//' === $normalized ? '/' : $normalized, $connection);
   }
+
+  /** Returns TRUE */
+  public function isFolder(): bool { return true; }
   
   /**
    * Returns a list of entries
