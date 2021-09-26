@@ -89,11 +89,9 @@ class FtpCollection implements IOCollection {
     if (!$this->it->valid()) return null;
 
     $entry= $this->it->current();
-    if ($entry instanceof FtpDir) {
-      $next= new FtpCollection($entry);
-    } else {
-      $next= new FtpElement($entry);
-    }
+    $this->it->next();
+
+    $next= $entry->isFile() ? new FtpElement($entry) : new FtpCollection($entry);
     $next->setOrigin($this);
     return $next;
   }

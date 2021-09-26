@@ -7,13 +7,11 @@ use util\Objects;
 /**
  * List of entries on an FTP server
  *
- * @see   xp://peer.ftp.FtpDir#entries
+ * @test  peer.ftp.unittest.FtpEntryListTest
+ * @see   peer.ftp.FtpDir::entries()
  */
 class FtpEntryList implements Value, IteratorAggregate {
-  protected
-    $connection   = null,
-    $list         = [],
-    $base         = '';
+  protected $connection, $list, $base;
 
   /**
    * Constructor
@@ -30,7 +28,11 @@ class FtpEntryList implements Value, IteratorAggregate {
   
   /** Iterators over all entries */
   public function getIterator(): Traversable {
-    return new FtpListIterator($this->list, $this->connection, $this->base);
+    $dotdirs= [$this->base.'./', $this->base.'../'];
+    foreach ($this->list as $line) {
+      $e= $this->connection->parser->entryFrom($line, $this->connection, $this->base);
+      in_array($e->getName(), $dotdirs) || yield $e->getName() => $e;
+    }
   }
 
   /**
