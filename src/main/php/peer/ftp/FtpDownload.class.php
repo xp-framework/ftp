@@ -1,11 +1,13 @@
 <?php namespace peer\ftp;
 
+use io\Channel;
 use io\streams\OutputStream;
+use lang\IllegalArgumentException;
 
 /**
  * Represents an download
  *
- * @see   xp://peer.ftp.FtpFile#downloadTo
+ * @see   peer.ftp.FtpFile::downloadTo()
  */
 class FtpDownload extends FtpTransfer {
   protected $out= null;
@@ -13,19 +15,25 @@ class FtpDownload extends FtpTransfer {
   /**
    * Constructor
    *
-   * @param   peer.ftp.FtpFile remote
-   * @param   io.streams.OutputStream out
+   * @param  peer.ftp.FtpFile $remote
+   * @param  io.streams.OutputStream|io.Channel $target
    */
-  public function __construct(FtpFile $remote= null, OutputStream $out) {
+  public function __construct(FtpFile $remote= null, $target) {
     $this->remote= $remote;
-    $this->out= $out;
+    if ($target instanceof OutputStream) {
+      $this->out= $target;
+    } else if ($target instanceof Channel) {
+      $this->out= $target->out();
+    } else {
+      throw new IllegalArgumentException('Expected either an output stream or a channel, have '.typeof($source));
+    }
   }
   
   /**
    * Creates a new FtpDownload instance without a remote file
    *
-   * @see     xp://peer.ftp.FtpFile#start
-   * @param   io.streams.OutputStream out
+   * @see    peer.ftp.FtpFile::start()
+   * @param  io.streams.OutputStream|io.Channel $target
    */
   public static function to(OutputStream $out) {
     return new self(null, $out);

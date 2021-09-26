@@ -1,7 +1,7 @@
 <?php namespace peer\ftp\unittest;
 
 use io\streams\{MemoryInputStream, MemoryOutputStream, Streams};
-use io\{FileNotFoundException, IOException};
+use io\{FileNotFoundException, IOException, TempFile};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
@@ -34,6 +34,19 @@ class IntegrationTest extends TestCase {
     $c->connect();
     $c->sendCommand('SHUTDOWN');
     $c->close();
+  }
+
+  /** @return iterable */
+  private function uploads() {
+    yield [new MemoryInputStream($this->name)];
+
+    $t= new TempFile();
+    $t->open(TempFile::READWRITE);
+    $t->write($this->name);
+    $t->seek(0, SEEK_SET);
+    yield [$t];
+    $t->close();
+    $t->unlink();
   }
 
   /**
@@ -229,25 +242,17 @@ class IntegrationTest extends TestCase {
     $this->conn->rootDir()->getDir('htdocs')->getDir('index.html');
   }
 
-  #[Test]
-  public function uploadFile() {
+  #[Test, Values('uploads')]
+  public function uploadFile($source) {
     $this->conn->connect();
 
     try {
       $dir= $this->conn->rootDir()->getDir('htdocs');
-      $file= $dir->file('name.txt')->uploadFrom(new MemoryInputStream($this->name));
+      $file= $dir->file('name.txt')->uploadFrom($source);
       $this->assertTrue($file->exists());
       $this->assertEquals(strlen($this->name), $file->getSize());
-      $file->delete();
-    } catch (\lang\Throwable $e) {
-
-      // Unfortunately, try { } finally does not exist...
-      try {
-        $file && $file->delete();
-      } catch (\io\IOException $ignored) {
-        // Can't really do anything here
-      }
-      throw $e;
+    } finally {
+      isset($file) && $file->delete();
     }
   }
 
@@ -263,16 +268,8 @@ class IntegrationTest extends TestCase {
 
       $file= $dir->file('renamed.txt');
       $this->assertTrue($file->exists(), 'Renamed file does not exist');
-      $file->delete();
-    } catch (\lang\Throwable $e) {
-
-      // Unfortunately, try { } finally does not exist...
-      try {
-        $file && $file->delete();
-      } catch (\io\IOException $ignored) {
-        // Can't really do anything here
-      }
-      throw $e;
+    } finally {
+      isset($file) && $file->delete();
     }
   }
 
@@ -290,21 +287,13 @@ class IntegrationTest extends TestCase {
 
       $file= $trash->file('name.txt');
       $this->assertTrue($file->exists());
-      $file->delete();
-    } catch (\lang\Throwable $e) {
-
-      // Unfortunately, try { } finally does not exist...
-      try {
-        $file && $file->delete();
-      } catch (\io\IOException $ignored) {
-        // Can't really do anything here
-      }
-      throw $e;
+    } finally {
+      isset($file) && $file->delete();
     }
   }
 
   #[Test]
-  public function downloadFile() {
+  public function download_to_stream() {
     $this->conn->connect();
 
     $m= $this->conn
@@ -315,6 +304,23 @@ class IntegrationTest extends TestCase {
     ;
 
     $this->assertEquals("<html/>\n", $m->getBytes());
+  }
+
+  #[Test]
+  public function download_to_file() {
+    $this->conn->connect();
+    $f= new TempFile();
+    $f->open(TempFile::READWRITE);
+
+    $this->conn->rootDir()->getDir('htdocs')->getFile('index.html')->downloadTo($f);
+
+    $f->seek(0, SEEK_SET);
+    try {
+      $this->assertEquals("<html/>\n", $f->read(8));
+    } finally {
+      $f->close();
+      $f->unlink();
+    }
   }
 
   #[Test]
@@ -358,16 +364,8 @@ class IntegrationTest extends TestCase {
 
       $this->assertTrue($file->exists());
       $this->assertEquals(strlen($this->name), $file->getSize());
+    } finally {
       $file->delete();
-    } catch (Throwable $e) {
-
-      // Unfortunately, try { } finally does not exist...
-      try {
-        $file && $file->delete();
-      } catch (IOException $ignored) {
-        // Can't really do anything here
-      }
-      throw $e;
     }
   }
 }

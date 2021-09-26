@@ -17,16 +17,12 @@ Client
 
 ```php
 use peer\ftp\{FtpConnection, FtpTransfer};
-use io\streams\FileInputStream;
 use io\File;
 
 $c= (new FtpConnection('ftp://user:pass@example.com/'))->connect();
 
 // Upload index.txt to the connection's root directory
-$c->rootDir()->file('index.txt')->uploadFrom(
-  new FileInputStream(new File('index.txt')),
-  FtpTransfer::ASCII
-);
+$c->rootDir()->file('index.txt')->uploadFrom(new File('index.txt'), FtpTransfer::ASCII);
 
 $c->close();
 ```

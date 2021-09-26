@@ -1,7 +1,6 @@
 <?php namespace peer\ftp;
 
 use io\Channel;
-use io\streams\{InputStream, OutputStream, Streams};
 
 /**
  * FTP file
@@ -81,13 +80,13 @@ class FtpFile extends FtpEntry implements Channel {
   /**
    * Upload to this file from an input stream
    *
-   * @param   io.streams.InputStream in
+   * @param   io.streams.InputStream|io.Channel in
    * @param   int mode default FtpTransfer::ASCII
    * @param   peer.ftp.FtpTransferListener listener default NULL
    * @return  peer.ftp.FtpFile this file
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function uploadFrom(InputStream $in, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function uploadFrom($in, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
     $transfer= (new FtpUpload($this, $in))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
@@ -120,13 +119,13 @@ class FtpFile extends FtpEntry implements Channel {
   /**
    * Download this file to an output stream
    *
-   * @param   io.streams.OutputStream out
+   * @param   io.streams.OutputStream|io.Channel out
    * @param   int mode default FtpTransfer::ASCII
    * @param   peer.ftp.FtpTransferListener listener default NULL
    * @return  io.streams.OutputStream the output stream passed
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function downloadTo(OutputStream $out, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function downloadTo($out, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
     $transfer= (new FtpDownload($this, $out))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
@@ -136,6 +135,6 @@ class FtpFile extends FtpEntry implements Channel {
         $in->toString(), $this->name, $mode
       ));
     }
-    return $out;
+    return $transfer->outputStream();
   }
 }
