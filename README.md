@@ -21,8 +21,14 @@ use io\File;
 
 $c= (new FtpConnection('ftp://user:pass@example.com/'))->connect();
 
-// Upload index.txt to the connection's root directory
-$c->rootDir()->file('index.txt')->uploadFrom(new File('index.txt'), FtpTransfer::ASCII);
+// Upload logo.png to the connection's root directory
+$c->rootDir()->file('logo.png')->uploadFrom(new File('logo.png'));
+
+// Upload from a stream using ASCII mode
+$c->rootDir()->file('README.md')->uploadFrom(
+  new MemoryInputStream('Read me first!'),
+  FtpTransfer::ASCII
+);
 
 $c->close();
 ```

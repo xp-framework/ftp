@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 10.2.0 / 2021-09-26
+
 * Merged PR #10: Replace `FtpListIterator` with yield, deprecating the
   class while doing so
   (@thekid)
