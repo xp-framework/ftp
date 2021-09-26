@@ -1,12 +1,11 @@
 <?php namespace peer\ftp\unittest;
 
-use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpEntryList, FtpListIterator};
+use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpEntryList};
 use unittest\{Assert, Test};
 
 /**
  * TestCase FTP listing functionality
  *
- * @see  peer.ftp.FtpListIterator
  * @see  peer.ftp.FtpEntryList
  */
 class FtpEntryListTest {
@@ -19,7 +18,7 @@ class FtpEntryListTest {
    * @return  string[] results each element as {qualified.className}({elementName})
    */
   private function iterationOn($list) {
-    $it= new FtpListIterator($list, $this->conn);
+    $it= new FtpEntryList($list, $this->conn);
     $r= [];
     foreach ($it as $entry) {
       $r[]= nameof($entry).'('.$entry->getName().')';

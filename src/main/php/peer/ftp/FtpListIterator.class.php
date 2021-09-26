@@ -5,6 +5,7 @@ use Iterator, ReturnTypeWillChange;
 /**
  * Iterator for FtpEntryList which removes "." and ".." directories
  *
+ * @deprecated
  * @see      php://language.oop5.iterations
  * @purpose  Iterator implementation
  */
