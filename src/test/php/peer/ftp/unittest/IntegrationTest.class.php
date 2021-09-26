@@ -293,7 +293,7 @@ class IntegrationTest extends TestCase {
   }
 
   #[Test]
-  public function downloadFile() {
+  public function download_to_stream() {
     $this->conn->connect();
 
     $m= $this->conn
@@ -304,6 +304,23 @@ class IntegrationTest extends TestCase {
     ;
 
     $this->assertEquals("<html/>\n", $m->getBytes());
+  }
+
+  #[Test]
+  public function download_to_file() {
+    $this->conn->connect();
+    $f= new TempFile();
+    $f->open(TempFile::READWRITE);
+
+    $this->conn->rootDir()->getDir('htdocs')->getFile('index.html')->downloadTo($f);
+
+    $f->seek(0, SEEK_SET);
+    try {
+      $this->assertEquals("<html/>\n", $f->read(8));
+    } finally {
+      $f->close();
+      $f->unlink();
+    }
   }
 
   #[Test]
