@@ -5,6 +5,7 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## 11.0.0 / ????-??-??
 
+* Removed deprecated *FtpListIterator* class - @thekid
 * Merged PR #9: Default transfer mode to binary - @thekid
 
 ## 10.2.0 / 2021-09-26
