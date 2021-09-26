@@ -1,34 +1,43 @@
 <?php namespace peer\ftp;
 
 use io\streams\InputStream;
+use io\{Channel, IOException};
+use lang\IllegalArgumentException;
 
 /**
  * Represents an upload
  *
- * @see      xp://peer.ftp.FtpFile#uploadFrom
- * @purpose  FtpTransfer implementation
+ * @see   peer.ftp.FtpFile::uploadFrom()
  */
 class FtpUpload extends FtpTransfer {
-  protected $in = null;
+  protected $in;
 
   /**
    * Constructor
    *
-   * @param   peer.ftp.FtpFile remote
-   * @param   io.streams.InputStream in
+   * @param  peer.ftp.FtpFile $remote
+   * @param  io.streams.InputStream|io.Channel $source
+   * @throws lang.IllegalArgumentException
    */
-  public function __construct(FtpFile $remote= null, InputStream $in) {
+  public function __construct(FtpFile $remote= null, $source) {
     $this->remote= $remote;
-    $this->in= $in;
+    if ($source instanceof InputStream) {
+      $this->in= $source;
+    } else if ($source instanceof Channel) {
+      $this->in= $source->in();
+    } else {
+      throw new IllegalArgumentException('Expected either an input stream or a channel, have '.typeof($source));
+    }
   }
 
   /**
    * Creates a new FtpDownload instance without a remote file
    *
-   * @see     xp://peer.ftp.FtpFile#start
-   * @param   io.streams.InputStream in
+   * @see    peer.ftp.FtpFile::start()
+   * @param  io.streams.InputStream|io.Channel $source
+   * @return self
    */
-  public static function from(InputStream $in) {
+  public static function from($in) {
     return new self(null, $in);
   }
 
@@ -67,7 +76,7 @@ class FtpUpload extends FtpTransfer {
     try {
       $chunk= $this->in->read(8192);
       $this->socket->write($chunk);
-    } catch (\io\IOException $e) {
+    } catch (IOException $e) {
       $this->listener && $this->listener->failed($this, $e);
       $this->close();
       throw $e;
