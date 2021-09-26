@@ -3,8 +3,12 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #10: Replace `FtpListIterator` with yield, deprecating the
+  class while doing so
+  (@thekid)
 * Removed deprecated methods from `peer.ftp.FtpConnection` which have
   survived there since 2007, when xp-framework/rfc#140 was implemented!
+  No BC break since all these methods did was raise exceptions.
   (@thekid)
 * Merged PR #7: Add FtpEntry::isFile() and FtpEntry::isFolder() methods
   (@thekid)
