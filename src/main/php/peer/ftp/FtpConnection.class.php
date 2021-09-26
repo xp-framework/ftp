@@ -125,8 +125,8 @@ class FtpConnection implements Traceable {
         throw new AuthenticationException(sprintf(
           'Authentication failed for %s@%s:%d (using password: %s): %s',
           $this->url->getUser(),
-          $this->url->getPort(21),
           $this->url->getHost(),
+          $this->url->getPort(21),
           $this->url->getPassword() ? 'yes' : 'no',
           $e->getMessage()
         ), $this->url->getUser(), $this->url->getPassword());
