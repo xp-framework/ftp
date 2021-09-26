@@ -1,7 +1,7 @@
 <?php namespace peer\ftp;
  
 use lang\IllegalArgumentException;
-use peer\{AuthenticationException, ConnectException, SSLSocket, Socket, SocketException, URL};
+use peer\{AuthenticationException, ProtocolException, ConnectException, SSLSocket, Socket, SocketException, URL};
 use util\log\Traceable;
 
 /**
@@ -107,7 +107,7 @@ class FtpConnection implements Traceable {
     do {
       sscanf($this->getResponse()[0], "%d%c%[^\r]", $status, $continue, $message);
       if (220 !== $status) {
-        throw new \peer\ProtocolException(sprintf(
+        throw new ProtocolException(sprintf(
           'Unexpected response [%d:%s], expecting 220',
           $code,
           $message
@@ -120,7 +120,7 @@ class FtpConnection implements Traceable {
       try {
         $this->expect($this->sendCommand('USER %s', $user), [331]);
         $this->expect($this->sendCommand('PASS %s', $this->url->getPassword()), [230]);
-      } catch (\peer\ProtocolException $e) {
+      } catch (ProtocolException $e) {
         $this->socket->close();
         throw new AuthenticationException(sprintf(
           'Authentication failed for %s@%s:%d (using password: %s): %s',
@@ -257,7 +257,7 @@ class FtpConnection implements Traceable {
         $message,
         1 == sizeof($codes) ? $codes[0] : 'one of ('.implode(', ', $codes).')'
       );
-      throw new \peer\ProtocolException($error);
+      throw new ProtocolException($error);
     }
     return $message;
   }
