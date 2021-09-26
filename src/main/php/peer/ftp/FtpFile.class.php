@@ -84,12 +84,12 @@ class FtpFile extends FtpEntry implements Channel {
    * Upload to this file from an input stream
    *
    * @param   io.streams.InputStream|io.Channel in
-   * @param   int mode default FtpTransfer::ASCII
+   * @param   int mode default FtpTransfer::BINARY
    * @param   peer.ftp.FtpTransferListener listener default NULL
    * @return  peer.ftp.FtpFile this file
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function uploadFrom($in, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function uploadFrom($in, $mode= FtpTransfer::BINARY, FtpTransferListener $listener= null) {
     $transfer= (new FtpUpload($this, $in))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
@@ -110,10 +110,10 @@ class FtpFile extends FtpEntry implements Channel {
    * @see     xp://peer.ftp.FtpDownload#to
    * @see     xp://peer.ftp.FtpUpload#from
    * @param   peer.ftp.FtpTransfer transfer
-   * @param   int mode default FtpTransfer::ASCII
+   * @param   int mode default FtpTransfer::BINARY
    * @return  peer.ftp.FtpTransfer 
    */
-  public function start(FtpTransfer $transfer, $mode= FtpTransfer::ASCII) {
+  public function start(FtpTransfer $transfer, $mode= FtpTransfer::BINARY) {
     $transfer->setRemote($this);
     $transfer->start($mode);
     return $transfer;
@@ -123,12 +123,12 @@ class FtpFile extends FtpEntry implements Channel {
    * Download this file to an output stream
    *
    * @param   io.streams.OutputStream|io.Channel out
-   * @param   int mode default FtpTransfer::ASCII
+   * @param   int mode default FtpTransfer::BINARY
    * @param   peer.ftp.FtpTransferListener listener default NULL
    * @return  io.streams.OutputStream the output stream passed
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function downloadTo($out, $mode= FtpTransfer::ASCII, FtpTransferListener $listener= null) {
+  public function downloadTo($out, $mode= FtpTransfer::BINARY, FtpTransferListener $listener= null) {
     $transfer= (new FtpDownload($this, $out))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
