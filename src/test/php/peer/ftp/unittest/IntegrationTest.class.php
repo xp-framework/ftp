@@ -304,7 +304,7 @@ class IntegrationTest extends TestCase {
       ->downloadTo(new MemoryOutputStream())
     ;
 
-    $this->assertEquals("<html/>\n", $m->getBytes());
+    $this->assertEquals("<html/>\n", $m->bytes());
   }
 
   #[Test]

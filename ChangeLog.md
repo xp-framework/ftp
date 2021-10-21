@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 11.0.1 / 2021-10-21
+
+* Made library compatible with XP 11 - @thekid
+
 ## 11.0.0 / 2021-09-26
 
 * Merged PR #11: Drop support for XP < 9 - @thekid
