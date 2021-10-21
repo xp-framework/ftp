@@ -3,6 +3,11 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 11.0.2 / 2021-10-21
+
+* Made library compatible with `xp-framework/logging` version 11.0.0
+  (@thekid)
+
 ## 11.0.1 / 2021-10-21
 
 * Made library compatible with XP 11 - @thekid
