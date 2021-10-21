@@ -1,11 +1,11 @@
 <?php namespace peer\ftp\server;
 
-use peer\{BSDSocket, SocketException};
 use peer\ftp\server\storage\{Storage, StorageCollection, StorageElement};
 use peer\server\ServerProtocol;
+use peer\{BSDSocket, SocketException};
 use security\auth\Authenticator;
-use util\{Date, DateUtil};
 use util\log\Traceable;
+use util\{Date, Dates};
 
 /**
  * Implement FTP server functionality
@@ -444,7 +444,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
       $elements= [$entry];
     }
     
-    $before6Months= DateUtil::addMonths(Date::now(), -6)->getTime();
+    $before6Months= Dates::add(Date::now(), '-6 months')->getTime();
     for ($i= 0, $s= sizeof($elements); $i < $s; $i++) {
       $buf= sprintf(
         '%s  %2d %s  %s  %8d %s %s',

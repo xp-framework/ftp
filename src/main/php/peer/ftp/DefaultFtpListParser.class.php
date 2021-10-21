@@ -1,6 +1,6 @@
 <?php namespace peer\ftp;
 
-use util\{Date, DateUtil};
+use util\{Date, Dates};
 
 /**
  * Parses output from a FTP LIST command from Un*x FTP daemons.
@@ -56,7 +56,7 @@ class DefaultFtpListParser implements FtpListParser {
       $ref || $ref= Date::now();
       $d= new Date($month.' '.$day.' '.$ref->getYear().' '.$date);
       if ($d->getTime() - $ref->getTime() > 15724800) {
-        $d= DateUtil::addMonths($d, -12);
+        $d= Dates::add($d, '-12 months');
       }
     } else {
       $d= new Date($month.' '.$day.' '.$date);
