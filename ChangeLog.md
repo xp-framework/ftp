@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added PHP 8.2, 8.3 and 8.4 to the test matrix - @thekid
+
 ## 11.0.3 / 2021-10-21
 
 * Replaced deprecated util.DateUtil class with `util.Dates` - @thekid
