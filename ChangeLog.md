@@ -3,6 +3,10 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 11.1.0 / 2024-03-24
+
+* Made compatible with XP 12 - @thekid
+
 * Added PHP 8.2, 8.3 and 8.4 to the test matrix - @thekid
 
 ## 11.0.3 / 2021-10-21
