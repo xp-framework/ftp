@@ -3,6 +3,9 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* **Heads up:** Dropped support for PHP < 7.4, see xp-framework/rfc#343
+  (@thekid)
+* Migrated to the `xp-framework/test` library - @thekid
 * Fixed deprecation warning *Non-canonical cast (double) is deprecated,
   use the (float) cast instead* in PHP 8.5
   (@thekid)
