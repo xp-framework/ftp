@@ -764,7 +764,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
       $this->answer($socket, 550, $params.': No such file or directory');
       return;
     }
-    $this->cat && $this->cat->debug($entry->toString());
+    $this->cat && $this->cat->debug($entry);
     
     $this->sessions[$socket->hashCode()]->setTempVar('rnfr', $entry);
     $this->answer($socket, 350, 'File or directory exists, ready for destination name.');

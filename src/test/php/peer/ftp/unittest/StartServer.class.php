@@ -20,7 +20,7 @@ class StartServer implements Provider {
   }
 
   public function values(Context $context) {
-    $this->process= Runtime::getInstance()->newInstance(null, 'class', $this->server, ['debug']);
+    $this->process= Runtime::getInstance()->newInstance(null, 'class', $this->server, []);
     $this->process->in->close();
 
     // Check if startup succeeded

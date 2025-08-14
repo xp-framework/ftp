@@ -3,7 +3,7 @@
 use Throwable;
 use peer\ServerSocket;
 use peer\ftp\server\{Authentication, FtpProtocol};
-use peer\server\Server;
+use peer\server\AsyncServer;
 use util\cmd\Console;
 use util\log\Logging;
 
@@ -55,10 +55,11 @@ class TestingServer {
     };
     isset($args[0]) && $protocol->setTrace(Logging::all()->toFile($args[0]));
 
-    $s= new Server();
+    $socket= new ServerSocket('127.0.0.1', 0);
+    $s= new AsyncServer();
     try {
-      $s->listen(new ServerSocket('127.0.0.1', 0), $protocol);
-      Console::writeLinef('+ Service %s:%d', $s->socket->host, $s->socket->port);
+      $s->listen($socket, $protocol);
+      Console::writeLinef('+ Service %s:%d', $socket->host, $socket->port);
       $s->service();
       Console::writeLine('+ Done');
     } catch (Throwable $e) {

@@ -47,10 +47,10 @@ abstract class FtpTransfer implements Value {
   /**
    * Returns the remote file
    *
-   * @param  peer.ftp.FtpTransferListener $l
+   * @param  ?peer.ftp.FtpTransferListener $l
    * @return self
    */
-  public function withListener(FtpTransferListener $l= null) {
+  public function withListener(?FtpTransferListener $l= null) {
     $this->listener= $l;
     return $this;
   }
