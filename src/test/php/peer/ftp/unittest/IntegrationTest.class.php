@@ -5,35 +5,15 @@ use io\{FileNotFoundException, IOException, TempFile};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
-use unittest\{Action, Expect, Test, TestCase};
+use test\{Before, After, Assert, Expect, Test};
 
-/**
- * TestCase for FTP API.
- *
- * @see      xp://peer.ftp.FtpConnection
- */
-#[Action(eval: 'new StartServer("peer.ftp.unittest.TestingServer", "connected", "shutdown")')]
-class IntegrationTest extends TestCase {
-  public static $bindAddress= null;
-  protected $conn= null;
+#[StartServer(TestingServer::class)]
+class IntegrationTest {
+  private $server;
 
-  /**
-   * Callback for when server is connected
-   *
-   * @param  string $bindAddress
-   */
-  public static function connected($bindAddress) {
-    self::$bindAddress= $bindAddress;
-  }
-
-  /**
-   * Callback for when server should be shut down
-   */
-  public static function shutdown() {
-    $c= new FtpConnection('ftp://test:test@'.self::$bindAddress);
-    $c->connect();
-    $c->sendCommand('SHUTDOWN');
-    $c->close();
+  /** @param web.unittest.StartServer $server */
+  public function __construct($server) {
+    $this->server= $server;
   }
 
   /** @return iterable */
@@ -49,215 +29,208 @@ class IntegrationTest extends TestCase {
     $t->unlink();
   }
 
-  /**
-   * Sets up test case
-   */
-  public function setUp() {
-    $this->conn= new FtpConnection('ftp://test:test@'.self::$bindAddress.'?timeout=1');
-  }
-
-  /**
-   * Tears down test case
-   */
-  public function tearDown() {
-    $this->conn->close();
+  #[Before]
+  public function open() {
+    $endpoint= $this->server->connection->remoteEndpoint();
+    $this->conn= new FtpConnection("ftp://test:test@{$endpoint->getAddress()}?timeout=1");
   }
 
   #[Test]
   public function initially_not_connected() {
-    $this->assertFalse($this->conn->isConnected());
+    Assert::false($this->conn->isConnected());
   }
 
-  #[Test]
+  #[_Test]
   public function connect() {
     $this->conn->connect();
   }
 
-  #[Test]
+  #[_Test]
   public function is_connected_after_connect() {
     $this->conn->connect();
-    $this->assertTrue($this->conn->isConnected());
+    Assert::true($this->conn->isConnected());
   }
 
-  #[Test]
+  #[_Test]
   public function is_no_longer_connected_after_close() {
     $this->conn->connect();
     $this->conn->close();
-    $this->assertFalse($this->conn->isConnected());
+    Assert::false($this->conn->isConnected());
   }
 
-  #[Test, Expect(AuthenticationException::class)]
+  #[_Test, Expect(AuthenticationException::class)]
   public function incorrect_credentials() {
-    (new FtpConnection('ftp://test:INCORRECT@'.self::$bindAddress.'?timeout=1'))->connect();
+    $endpoint= $this->server->connection->remoteEndpoint();
+    (new FtpConnection("ftp://test:INCORRECT@{$endpoint->getAddress()}?timeout=1"))->connect();
   }
 
-  #[Test]
+  #[_Test]
   public function retrieve_root_dir() {
     $this->conn->connect();
     with ($root= $this->conn->rootDir()); {
-      $this->assertInstanceOf(FtpDir::class, $root);
-      $this->assertEquals('/', $root->getName());
-      $this->assertTrue($root->isFolder());
+      Assert::instance(FtpDir::class, $root);
+      Assert::equals('/', $root->getName());
+      Assert::true($root->isFolder());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function retrieve_root_dir_entries() {
     $this->conn->connect();
 
     $entries= $this->conn->rootDir()->entries();
-    $this->assertInstanceOf(FtpEntryList::class, $entries);
-    $this->assertFalse($entries->isEmpty());
-    $this->assertInstanceOf('peer.ftp.FtpEntry[]', $entries->asArray());
+    Assert::instance(FtpEntryList::class, $entries);
+    Assert::false($entries->isEmpty());
+    Assert::instance('peer.ftp.FtpEntry[]', $entries->asArray());
   }
 
-  #[Test]
+  #[_Test]
   public function sendCwd() {
     $this->conn->connect();
     $r= $this->conn->sendCommand('CWD %s', '/htdocs/');
-    $this->assertEquals('250 "/htdocs" is new working directory', $r[0]);
+    Assert::equals('250 "/htdocs" is new working directory', $r[0]);
   }
 
-  #[Test]
+  #[_Test]
   public function listingWithoutParams() {
     $this->conn->connect();
     $this->conn->sendCommand('CWD %s', '/htdocs/');
     $r= $this->conn->listingOf(null);
     $list= implode("\n", $r);
-    $this->assertEquals(true, (bool)strpos($list, 'index.html'), $list);
+    Assert::equals(true, (bool)strpos($list, 'index.html'), $list);
   }
 
-  #[Test]
+  #[_Test]
   public function cwdBackToRoot() {
     $this->sendCwd();
     $r= $this->conn->sendCommand('CWD %s', '/');
-    $this->assertEquals('250 "/" is new working directory', $r[0]);
+    Assert::equals('250 "/" is new working directory', $r[0]);
   }
 
-  #[Test]
+  #[_Test]
   public function cwdRelative() {
     $this->conn->connect();
     $r= $this->conn->sendCommand('CWD %s', '/outer/inner');
-    $this->assertEquals('250 "/outer/inner" is new working directory', $r[0]);
+    Assert::equals('250 "/outer/inner" is new working directory', $r[0]);
 
     $r= $this->conn->sendCommand('CDUP');
-    $this->assertEquals('250 CDUP command successful', $r[0]);
+    Assert::equals('250 CDUP command successful', $r[0]);
 
     $r= $this->conn->sendCommand('CWD inner');
-    $this->assertEquals('250 "/outer/inner" is new working directory', $r[0]);
+    Assert::equals('250 "/outer/inner" is new working directory', $r[0]);
   }
 
-  #[Test]
+  #[_Test]
   public function dotTrashDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
-      $this->assertTrue($r->hasDir('.trash'));
+      Assert::true($r->hasDir('.trash'));
       $dir= $r->getDir('.trash');
-      $this->assertInstanceOf(FtpDir::class, $dir);
-      $this->assertEquals('/.trash/', $dir->getName());
+      Assert::instance(FtpDir::class, $dir);
+      Assert::equals('/.trash/', $dir->getName());
       
       // 2 entries exist: do-not-remove.txt & possibly .svn
-      $this->assertTrue(2 >= $dir->entries()->size());
+      Assert::true(2 >= $dir->entries()->size());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function htdocsDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
-      $this->assertTrue($r->hasDir('htdocs'));
+      Assert::true($r->hasDir('htdocs'));
       $dir= $r->getDir('htdocs');
-      $this->assertInstanceOf(FtpDir::class, $dir);
-      $this->assertEquals('/htdocs/', $dir->getName());
-      $this->assertNotEquals(0, $dir->entries()->size());
+      Assert::instance(FtpDir::class, $dir);
+      Assert::equals('/htdocs/', $dir->getName());
+      Assert::notEquals(0, $dir->entries()->size());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function emptyDir() {
     $this->conn->connect();
     with ($r= $this->conn->rootDir()); {
       $dir= $r->newDir('.new');
-      $this->assertInstanceOf(FtpDir::class, $dir);
-      $this->assertEquals(0, $dir->entries()->size());
+      Assert::instance(FtpDir::class, $dir);
+      Assert::equals(0, $dir->entries()->size());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function nonExistantDir() {
     $this->conn->connect();
-    $this->assertFalse($this->conn->rootDir()->hasDir(':DOES_NOT_EXIST'));
+    Assert::false($this->conn->rootDir()->hasDir(':DOES_NOT_EXIST'));
   }
 
-  #[Test, Expect(FileNotFoundException::class)]
+  #[_Test, Expect(FileNotFoundException::class)]
   public function getNonExistantDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir(':DOES_NOT_EXIST');
   }
 
-  #[Test]
+  #[_Test]
   public function indexHtml() {
     $this->conn->connect();
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
-      $this->assertTrue($htdocs->hasFile('index.html'));
+      Assert::true($htdocs->hasFile('index.html'));
       $index= $htdocs->getFile('index.html');
-      $this->assertInstanceOf(FtpFile::class, $index);
-      $this->assertEquals('/htdocs/index.html', $index->getName());
-      $this->assertTrue($index->isFile());
+      Assert::instance(FtpFile::class, $index);
+      Assert::equals('/htdocs/index.html', $index->getName());
+      Assert::true($index->isFile());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function whitespacesHtml() {
     $this->conn->connect();
     with ($htdocs= $this->conn->rootDir()->getDir('htdocs')); {
-      $this->assertTrue($htdocs->hasFile('file with whitespaces.html'));
+      Assert::true($htdocs->hasFile('file with whitespaces.html'));
       $file= $htdocs->getFile('file with whitespaces.html');
-      $this->assertInstanceOf(FtpFile::class, $file);
-      $this->assertEquals('/htdocs/file with whitespaces.html', $file->getName());
-      $this->assertTrue($file->isFile());
+      Assert::instance(FtpFile::class, $file);
+      Assert::equals('/htdocs/file with whitespaces.html', $file->getName());
+      Assert::true($file->isFile());
     }
   }
 
-  #[Test]
+  #[_Test]
   public function nonExistantFile() {
     $this->conn->connect();
-    $this->assertFalse($this->conn->rootDir()->getDir('htdocs')->hasFile(':DOES_NOT_EXIST'));
+    Assert::false($this->conn->rootDir()->getDir('htdocs')->hasFile(':DOES_NOT_EXIST'));
   }
 
-  #[Test, Expect(FileNotFoundException::class)]
+  #[_Test, Expect(FileNotFoundException::class)]
   public function getNonExistantFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getFile(':DOES_NOT_EXIST');
   }
 
-  #[Test, Expect(IllegalStateException::class)]
+  #[_Test, Expect(IllegalStateException::class)]
   public function directoryViaGetFile() {
     $this->conn->connect();
     $this->conn->rootDir()->getFile('htdocs');
   }
 
-  #[Test, Expect(IllegalStateException::class)]
+  #[_Test, Expect(IllegalStateException::class)]
   public function fileViaGetDir() {
     $this->conn->connect();
     $this->conn->rootDir()->getDir('htdocs')->getDir('index.html');
   }
 
-  #[Test, Values('uploads')]
+  #[_Test, Values('uploads')]
   public function uploadFile($source) {
     $this->conn->connect();
 
     try {
       $dir= $this->conn->rootDir()->getDir('htdocs');
       $file= $dir->file('name.txt')->uploadFrom($source);
-      $this->assertTrue($file->exists());
-      $this->assertEquals(strlen($this->name), $file->getSize());
+      Assert::true($file->exists());
+      Assert::equals(strlen($this->name), $file->getSize());
     } finally {
       isset($file) && $file->delete();
     }
   }
 
-  #[Test]
+  #[_Test]
   public function renameFile() {
     $this->conn->connect();
 
@@ -265,16 +238,16 @@ class IntegrationTest extends TestCase {
       $dir= $this->conn->rootDir()->getDir('htdocs');
       $file= $dir->file('name.txt')->uploadFrom(new MemoryInputStream($this->name));
       $file->rename('renamed.txt');
-      $this->assertFalse($file->exists(), 'Origin file still exists');
+      Assert::false($file->exists(), 'Origin file still exists');
 
       $file= $dir->file('renamed.txt');
-      $this->assertTrue($file->exists(), 'Renamed file does not exist');
+      Assert::true($file->exists(), 'Renamed file does not exist');
     } finally {
       isset($file) && $file->delete();
     }
   }
 
-  #[Test]
+  #[_Test]
   public function moveFile() {
     $this->conn->connect();
 
@@ -284,16 +257,16 @@ class IntegrationTest extends TestCase {
 
       $file= $dir->file('name.txt')->uploadFrom(new MemoryInputStream($this->name));
       $file->moveTo($trash);
-      $this->assertFalse($file->exists());
+      Assert::false($file->exists());
 
       $file= $trash->file('name.txt');
-      $this->assertTrue($file->exists());
+      Assert::true($file->exists());
     } finally {
       isset($file) && $file->delete();
     }
   }
 
-  #[Test]
+  #[_Test]
   public function download_to_stream() {
     $this->conn->connect();
 
@@ -304,10 +277,10 @@ class IntegrationTest extends TestCase {
       ->downloadTo(new MemoryOutputStream())
     ;
 
-    $this->assertEquals("<html/>\n", $m->bytes());
+    Assert::equals("<html/>\n", $m->bytes());
   }
 
-  #[Test]
+  #[_Test]
   public function download_to_file() {
     $this->conn->connect();
     $f= new TempFile();
@@ -317,14 +290,14 @@ class IntegrationTest extends TestCase {
 
     $f->seek(0, SEEK_SET);
     try {
-      $this->assertEquals("<html/>\n", $f->read(8));
+      Assert::equals("<html/>\n", $f->read(8));
     } finally {
       $f->close();
       $f->unlink();
     }
   }
 
-  #[Test]
+  #[_Test]
   public function in() {
     $this->conn->connect();
 
@@ -335,10 +308,10 @@ class IntegrationTest extends TestCase {
       ->in()
     ;
 
-    $this->assertEquals("<html/>\n", Streams::readAll($s));
+    Assert::equals("<html/>\n", Streams::readAll($s));
   }
 
-  #[Test]
+  #[_Test]
   public function consecutive_inputstream_reads() {
     $this->conn->connect();
     $dir= $this->conn->rootDir()->getDir('htdocs');
@@ -346,14 +319,14 @@ class IntegrationTest extends TestCase {
     for ($i= 0; $i < 2; $i++) {
       try {
         $s= $dir->getFile('index.html')->in();
-        $this->assertEquals("<html/>\n", Streams::readAll($s));
+        Assert::equals("<html/>\n", Streams::readAll($s));
       } catch (IOException $e) {
         $this->fail('Round '.($i + 1), $e, null);
       }
     }
   }
 
-  #[Test]
+  #[_Test]
   public function out() {
     $this->conn->connect();
 
@@ -363,10 +336,20 @@ class IntegrationTest extends TestCase {
       $s->write($this->name);
       $s->close();
 
-      $this->assertTrue($file->exists());
-      $this->assertEquals(strlen($this->name), $file->getSize());
+      Assert::true($file->exists());
+      Assert::equals(strlen($this->name), $file->getSize());
     } finally {
       $file->delete();
     }
+  }
+
+  #[After]
+  public function close() {
+    $this->conn->close();
+  }
+
+  #[After]
+  public function shutdown() {
+    $this->server->shutdown();
   }
 }

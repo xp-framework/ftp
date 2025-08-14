@@ -1,13 +1,8 @@
 <?php namespace peer\ftp\unittest;
 
 use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpEntryList};
-use unittest\{Assert, Test};
+use test\{Assert, Before, Test};
 
-/**
- * TestCase FTP listing functionality
- *
- * @see  peer.ftp.FtpEntryList
- */
 class FtpEntryListTest {
   private $conn;
 

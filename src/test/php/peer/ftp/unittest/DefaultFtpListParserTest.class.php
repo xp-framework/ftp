@@ -1,14 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
 use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpDir, FtpEntry};
-use unittest\{Assert, Before, Test, Values};
+use test\{Assert, Before, Test, Values};
 use util\Date;
 
-/**
- * Tests default list parser
- *
- * @see  peer.ftp.DefaultFtpListParser
- */
 class DefaultFtpListParserTest {
   private $conn;
 

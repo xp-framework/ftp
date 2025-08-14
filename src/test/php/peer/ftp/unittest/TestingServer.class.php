@@ -1,6 +1,6 @@
 <?php namespace peer\ftp\unittest;
 
-use lang\Throwable;
+use Throwable;
 use peer\ServerSocket;
 use peer\ftp\server\{Authentication, FtpProtocol};
 use peer\server\Server;

@@ -3,7 +3,7 @@
 use lang\{FormatException, IllegalArgumentException};
 use peer\URL;
 use peer\ftp\FtpConnection;
-use unittest\{Assert, Expect, Test, Values};
+use test\{Assert, Expect, Test, Values};
 
 class FtpConnectionTest {
 

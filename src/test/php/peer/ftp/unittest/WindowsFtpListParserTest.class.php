@@ -1,14 +1,9 @@
 <?php namespace peer\ftp\unittest;
 
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, WindowsFtpListParser};
-use unittest\{Assert, Before, Test};
+use test\{Assert, Before, Test};
 use util\Date;
 
-/**
- * Tests Windows list parser
- *
- * @see  peer.ftp.WindowsFtpListParser
- */
 class WindowsFtpListParserTest {
   private $conn;
 

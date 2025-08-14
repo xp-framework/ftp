@@ -1,12 +1,11 @@
 <?php namespace peer\ftp\unittest;
 
 use peer\ftp\server\storage\{Storage, StorageEntry};
-use unittest\Assert;
 
 /**
  * Memory storage used by testing server
  *
- * @see   xp://net.xp_framework.unittest.peer.ftp.TestingServer
+ * @see   net.xp_framework.unittest.peer.ftp.TestingServer
  */
 class TestingStorage implements Storage {
   protected $base= [];

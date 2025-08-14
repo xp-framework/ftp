@@ -1,83 +1,52 @@
 <?php namespace peer\ftp\unittest;
 
-use lang\{IllegalStateException, Runtime, Throwable, XPClass};
-use unittest\{PrerequisitesNotMetError, TestClassAction};
+use lang\{Runtime, IllegalStateException};
+use peer\{Socket, SocketException};
+use test\Provider;
+use test\execution\Context;
 
-/** Starts a server for integration tests */
-class StartServer implements TestClassAction {
-  protected $serverProcess;
-  protected $mainClass;
-  protected $connected;
-  protected $shutdown;
+class StartServer implements Provider {
+  private $server;
+  private $process= null;
+  public $connection= null;
 
   /**
    * Constructor
    *
-   * @param string $mainClass Server process main class
-   * @param string $connected Name of method to invoke once connected
-   * @param string $shutdown Name of method to invoke to shut down
-   * @param string[] $arguments Arguments to server process
+   * @param string $server Server process main class
    */
-  public function __construct($mainClass, $connected, $shutdown, $arguments= []) {
-    $this->mainClass= $mainClass;
-    $this->connected= $connected;
-    $this->shutdown= $shutdown;
-    $this->arguments= $arguments;
+  public function __construct($server) {
+    $this->server= strtr($server, '\\', '.');
   }
 
-  /**
-   * Starts server
-   *
-   * @param  lang.XPClass $c
-   * @return void
-   * @throws unittest.PrerequisitesNotMetError
-   */
-  public function beforeTestClass(XPClass $c) {
-
-    // Start server process
-    $this->serverProcess= Runtime::getInstance()->newInstance(null, 'class', $this->mainClass, $this->arguments);
-    $this->serverProcess->in->close();
+  public function values(Context $context) {
+    $this->process= Runtime::getInstance()->newInstance(null, 'class', $this->server, ['debug']);
+    $this->process->in->close();
 
     // Check if startup succeeded
-    $status= $this->serverProcess->out->readLine();
-    if (1 != sscanf($status, '+ Service %[0-9.:]', $bindAddress)) {
-      try {
-        $this->afterTestClass($c);
-      } catch (IllegalStateException $e) {
-        $status.= $e->getMessage();
-      }
-      throw new PrerequisitesNotMetError('Cannot start server: '.$status, null);
+    $status= $this->process->out->readLine();
+    if (2 !== sscanf($status, '+ Service %[0-9.]:%d', $host, $port)) {
+      $this->shutdown();
+      throw new IllegalStateException('Cannot start server: '.$status, null);
     }
 
-    $c->getMethod($this->connected)->invoke(null, [$bindAddress]);
+    $this->connection= new Socket($host, $port);
+    yield $this;
   }
 
-  /**
-   * Shuts down server
-   *
-   * @param  lang.XPClass $c
-   * @return void
-   */
-  public function afterTestClass(XPClass $c) {
+  /** @return void */
+  public function shutdown() {
+    if (null === $this->process) return;
 
-    // Tell the server to shut down
     try {
-      $c->getMethod($this->shutdown)->invoke(null, []);
-    } catch (Throwable $ignored) {
-      // Fall through, below should terminate the process anyway
+      $this->connection->write("SHUTDOWN\n");
+    } catch (SocketException $ignored) {
+      // ...
     }
 
-    $status= $this->serverProcess->out->readLine();
-    if (!strlen($status) || '+' != $status[0]) {
-      while ($l= $this->serverProcess->out->readLine()) {
-        $status.= $l;
-      }
-      while ($l= $this->serverProcess->err->readLine()) {
-        $status.= $l;
-      }
-      $this->serverProcess->close();
-      throw new IllegalStateException($status);
-    }
-    $this->serverProcess->close();
+    $this->process->err->close();
+    $this->process->out->close();
+    $this->process->terminate();
+    $this->process= null;
   }
 }

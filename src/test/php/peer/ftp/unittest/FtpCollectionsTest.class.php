@@ -2,14 +2,9 @@
 
 use io\collections\iterate\IOCollectionIterator;
 use peer\ftp\collections\FtpCollection;
-use peer\ftp\{FtpConnection, FtpDir, FtpEntryList, DefaultFtpListParser};
-use unittest\{Assert, Before, Test};
+use peer\ftp\{DefaultFtpListParser, FtpConnection, FtpDir, FtpEntryList};
+use test\{Assert, Before, Test};
 
-/**
- * TestCase for FTP collections API
- *
- * @see  peer.ftp.collections.FtpCollection
- */
 class FtpCollectionsTest {
   private $dir;
 
