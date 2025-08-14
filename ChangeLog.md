@@ -3,10 +3,13 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed deprecation warning *Non-canonical cast (double) is deprecated,
+  use the (float) cast instead* in PHP 8.5
+  (@thekid)
+
 ## 11.1.0 / 2024-03-24
 
 * Made compatible with XP 12 - @thekid
-
 * Added PHP 8.2, 8.3 and 8.4 to the test matrix - @thekid
 
 ## 11.0.3 / 2021-10-21

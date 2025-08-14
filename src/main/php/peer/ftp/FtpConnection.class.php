@@ -89,8 +89,8 @@ class FtpConnection implements Traceable {
   /** @return bool */
   public function passive() { return $this->passive; }
 
-  /** @return double */
-  public function timeout() { return (double)$this->url->getParam('timeout', 4); }
+  /** @return float */
+  public function timeout() { return (float)$this->url->getParam('timeout', 4.0); }
 
   /**
    * Connect (and log in, if necessary)
