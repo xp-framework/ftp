@@ -27,11 +27,11 @@ interface FtpListParser {
    * Parse raw listing entry.
    *
    * @param   string $raw a single line
-   * @param   peer.ftp.FtpConnection $connection
+   * @param   peer.ftp.FtpConnection $conn
    * @param   string $base default "/"
-   * @param   util.Date $ref default NULL
+   * @param   ?util.Date $ref default NULL
    * @return  peer.ftp.FtpEntry
    */
-  public function entryFrom($raw, FtpConnection $conn= null, $base= '/', Date $ref= null);
+  public function entryFrom($raw, FtpConnection $conn, $base= '/', ?Date $ref= null);
 
 }

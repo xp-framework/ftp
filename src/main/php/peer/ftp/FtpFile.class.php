@@ -65,11 +65,11 @@ class FtpFile extends FtpEntry implements Channel {
    *
    * @param   io.streams.InputStream|io.Channel in
    * @param   int mode default FtpTransfer::BINARY
-   * @param   peer.ftp.FtpTransferListener listener default NULL
-   * @return  peer.ftp.FtpFile this file
+   * @param   ?peer.ftp.FtpTransferListener listener default NULL
+   * @return  self
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function uploadFrom($in, $mode= FtpTransfer::BINARY, FtpTransferListener $listener= null) {
+  public function uploadFrom($in, $mode= FtpTransfer::BINARY, ?FtpTransferListener $listener= null) {
     $transfer= (new FtpUpload($this, $in))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
@@ -87,8 +87,8 @@ class FtpFile extends FtpEntry implements Channel {
   /**
    * Starts a transfer
    *
-   * @see     xp://peer.ftp.FtpDownload#to
-   * @see     xp://peer.ftp.FtpUpload#from
+   * @see     peer.ftp.FtpDownload::to
+   * @see     peer.ftp.FtpUpload::from
    * @param   peer.ftp.FtpTransfer transfer
    * @param   int mode default FtpTransfer::BINARY
    * @return  peer.ftp.FtpTransfer 
@@ -104,11 +104,11 @@ class FtpFile extends FtpEntry implements Channel {
    *
    * @param   io.streams.OutputStream|io.Channel out
    * @param   int mode default FtpTransfer::BINARY
-   * @param   peer.ftp.FtpTransferListener listener default NULL
+   * @param   ?peer.ftp.FtpTransferListener listener default NULL
    * @return  io.streams.OutputStream the output stream passed
    * @throws  peer.SocketException in case of an I/O error
    */
-  public function downloadTo($out, $mode= FtpTransfer::BINARY, FtpTransferListener $listener= null) {
+  public function downloadTo($out, $mode= FtpTransfer::BINARY, ?FtpTransferListener $listener= null) {
     $transfer= (new FtpDownload($this, $out))->withListener($listener)->start($mode);
     while (!$transfer->complete()) $transfer->perform();
 
