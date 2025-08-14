@@ -764,7 +764,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
       $this->answer($socket, 550, $params.': No such file or directory');
       return;
     }
-    $this->cat && $this->cat->debug($entry);
+    $this->cat && $this->cat->debug($entry->toString());
     
     $this->sessions[$socket->hashCode()]->setTempVar('rnfr', $entry);
     $this->answer($socket, 350, 'File or directory exists, ready for destination name.');
@@ -936,8 +936,9 @@ class FtpProtocol implements ServerProtocol, Traceable {
 
     // Enter passive
     $this->cat && $this->cat->debug('Passive mode: Data socket is', $this->datasock[$key]);
+    $host= $this->datasock[$key]->host;
     $port= $this->datasock[$key]->port;
-    $octets= strtr(gethostbyname($this->server->socket->host), '.', ',').','.($port >> 8).','.($port & 0xFF);
+    $octets= strtr(gethostbyname($host), '.', ',').','.($port >> 8).','.($port & 0xFF);
     $this->answer($socket, 227, 'Entering passive mode ('.$octets.')');
   }
   
