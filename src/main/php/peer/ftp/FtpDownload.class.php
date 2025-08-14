@@ -18,7 +18,7 @@ class FtpDownload extends FtpTransfer {
    * @param  peer.ftp.FtpFile $remote
    * @param  io.streams.OutputStream|io.Channel $target
    */
-  public function __construct(FtpFile $remote= null, $target) {
+  public function __construct(FtpFile $remote, $target) {
     $this->remote= $remote;
     if ($target instanceof OutputStream) {
       $this->out= $target;

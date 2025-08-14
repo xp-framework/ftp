@@ -19,7 +19,7 @@ class FtpUpload extends FtpTransfer {
    * @param  io.streams.InputStream|io.Channel $source
    * @throws lang.IllegalArgumentException
    */
-  public function __construct(FtpFile $remote= null, $source) {
+  public function __construct(FtpFile $remote, $source) {
     $this->remote= $remote;
     if ($source instanceof InputStream) {
       $this->in= $source;
