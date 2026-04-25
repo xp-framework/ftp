@@ -3,6 +3,8 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added PHP 8.6 to the test matrix - @thekid
+
 ## 12.0.0 / 2025-08-14
 
 * **Heads up:** Dropped support for PHP < 7.4, see xp-framework/rfc#343
