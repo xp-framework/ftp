@@ -1,6 +1,6 @@
 <?php namespace peer\ftp;
 
-use io\{FileNotFoundException, OperationFailed};
+use io\{NotFound, OperationFailed};
 use peer\ProtocolException;
 use util\Objects;
 
@@ -110,12 +110,12 @@ class FtpDir extends FtpEntry {
    *
    * @param   string name
    * @return  peer.ftp.FtpFile the instance
-   * @throws  io.FileNotFoundException in case the file was not found
+   * @throws  io.NotFound in case the file was not found
    * @throws  lang.IllegalStateException in case the file exists but is a directory
    */
   public function getFile($name) {
     if (!($e= $this->findEntry($name))) {
-      throw new FileNotFoundException('File "'.$name.'" not found');
+      throw new NotFound('File "'.$name.'" not found');
     } else if ($e instanceof FtpDir) {
       throw new \lang\IllegalStateException('File "'.$name.'" is a directory');
     }
@@ -180,12 +180,12 @@ class FtpDir extends FtpEntry {
    *
    * @param   string name
    * @return  peer.ftp.FtpDir the instance
-   * @throws  io.FileNotFoundException in case the directory was not found
+   * @throws  io.NotFound in case the directory was not found
    * @throws  lang.IllegalStateException in case the directory exists but is a file
    */
   public function getDir($name) {
     if (!($e= $this->findEntry($name))) {
-      throw new FileNotFoundException('Directory "'.$name.'" not found');
+      throw new NotFound('Directory "'.$name.'" not found');
     } else if ($e instanceof FtpFile) {
       throw new \lang\IllegalStateException('Directory "'.$name.'" is a file');
     }
