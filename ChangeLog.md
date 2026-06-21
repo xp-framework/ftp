@@ -3,6 +3,13 @@ FTP protocol support for the XP Framework ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 12.2.0 / 2026-06-21
+
+* Merged PR #12: Refactor I/O exceptions, dropping XP 10 support in the
+  doing. See xp-framework/core#363 for a write-up on the reason behind
+  this and the plan to move forward.
+  (@thekid)
+
 ## 12.1.0 / 2026-04-25
 
 * Made compatible with `xp-framework/networking` version 11.0 - @thekid
