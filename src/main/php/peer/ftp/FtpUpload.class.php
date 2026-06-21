@@ -1,7 +1,7 @@
 <?php namespace peer\ftp;
 
 use io\streams\InputStream;
-use io\{Channel, IOException};
+use io\{Channel, OperationFailed};
 use lang\IllegalArgumentException;
 
 /**
@@ -76,7 +76,7 @@ class FtpUpload extends FtpTransfer {
     try {
       $chunk= $this->in->read(8192);
       $this->socket->write($chunk);
-    } catch (IOException $e) {
+    } catch (OperationFailed $e) {
       $this->listener && $this->listener->failed($this, $e);
       $this->close();
       throw $e;

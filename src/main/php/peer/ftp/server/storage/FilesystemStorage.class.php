@@ -74,7 +74,7 @@ class FilesystemStorage {
    */
   public function setBase($clientId, $uri= null) {
     if (!is_dir($path= $this->realname($clientId, $uri))) {
-      throw new \io\IOException($uri.': not a directory');
+      throw new \io\OperationFailed($uri.': not a directory');
     }
     $this->base[$clientId]= DIRECTORY_SEPARATOR.ltrim(
       str_replace($this->root, '', $path),
@@ -134,13 +134,13 @@ class FilesystemStorage {
     switch ($type) {
       case ST_ELEMENT:
         if (false === touch($path)) {
-          throw new \io\IOException('File '.$path.' could not be created');
+          throw new \io\OperationFailed('File '.$path.' could not be created');
         }
         break;
       
       case ST_COLLECTION:
         if (false === mkdir($path)) {
-          throw new \io\IOException($path.' could not be created');
+          throw new \io\OperationFailed($path.' could not be created');
         }
         break;
     }

@@ -45,7 +45,7 @@ abstract class FtpEntry implements Value {
    * Checks whether this entry exists.
    *
    * @return  bool TRUE if the file exists, FALSE otherwise
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function exists() {
     $r= $this->connection->sendCommand('SIZE %s', $this->name);
@@ -73,7 +73,7 @@ abstract class FtpEntry implements Value {
    * </ul>
    *
    * @param   string to the new name
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function rename($to) {
     $target= ('/' === $to[0] ? $to : dirname($this->name).'/'.$to);
@@ -81,7 +81,7 @@ abstract class FtpEntry implements Value {
       $this->connection->expect($this->connection->sendCommand('RNFR %s', $this->name), [350]);
       $this->connection->expect($this->connection->sendCommand('RNTO %s', $target), [250]);
     } catch (\peer\ProtocolException $e) {
-      throw new \io\IOException('Could not rename '.$this->name.' to '.$to.': '.$e->getMessage());
+      throw new \io\OperationFailed('Could not rename '.$this->name.' to '.$to.': '.$e->getMessage());
     }
   }
 
@@ -90,7 +90,7 @@ abstract class FtpEntry implements Value {
    *
    * @param   peer.ftp.FtpDir to the new location
    * @param   string name default NULL the new name - if omitted, will stay the same
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function moveTo(FtpDir $to, $name= null) {
     try {
@@ -101,7 +101,7 @@ abstract class FtpEntry implements Value {
         $name ? $name : basename($this->name)
       ), [250]);
     } catch (\peer\ProtocolException $e) {
-      throw new \io\IOException('Could not rename '.$this->name.' to '.$to->getName().': '.$e->getMessage());
+      throw new \io\OperationFailed('Could not rename '.$this->name.' to '.$to->getName().': '.$e->getMessage());
     }
   }
 
@@ -109,7 +109,7 @@ abstract class FtpEntry implements Value {
    * Change this entry's permissions
    *
    * @param   int to the new permissions
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function changePermissions($to) {
     $this->connection->expect($this->connection->sendCommand('SITE CHMOD %s %d', $this->name, $to));
@@ -118,7 +118,7 @@ abstract class FtpEntry implements Value {
   /**
    * Delete this entry
    *
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public abstract function delete();
 
@@ -253,7 +253,7 @@ abstract class FtpEntry implements Value {
    * Get last modified date. Uses the "MDTM" command internally.
    *
    * @return  util.Date or NULL if the server does not support this
-   * @throws  io.IOException in case the connection is closed
+   * @throws  io.OperationFailed in case the connection is closed
    */
   public function lastModified() {
     $r= $this->connection->sendCommand('MDTM %s', $this->name);

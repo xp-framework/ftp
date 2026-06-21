@@ -268,7 +268,7 @@ class FtpConnection implements Traceable {
    * @param   string name the directory's name
    * @param   string options default NULL
    * @return  string[] list or NULL if nothing can be found
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function listingOf($name, $options= null) {
     with ($transfer= $this->transferSocket()); {
@@ -293,7 +293,7 @@ class FtpConnection implements Traceable {
         }
       } else {                      // Unexpected response
         $transfer->close();
-        throw new \io\IOException('Listing '.$this->name.$name.' failed ('.$code.': '.$message.')');
+        throw new \io\OperationFailed('Listing '.$this->name.$name.' failed ('.$code.': '.$message.')');
       }
     }
   }

@@ -1,7 +1,7 @@
 <?php namespace peer\ftp\unittest;
 
 use io\streams\{MemoryInputStream, MemoryOutputStream, Streams};
-use io\{FileNotFoundException, IOException, TempFile};
+use io\{NotFound, OperationFailed, TempFile};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
@@ -171,7 +171,7 @@ class IntegrationTest {
     Assert::false($conn->rootDir()->hasDir(':DOES_NOT_EXIST'));
   }
 
-  #[Test, Expect(FileNotFoundException::class)]
+  #[Test, Expect(NotFound::class)]
   public function getNonExistantDir() {
     $conn= $this->connection()->connect();
     $conn->rootDir()->getDir(':DOES_NOT_EXIST');
@@ -207,7 +207,7 @@ class IntegrationTest {
     Assert::false($conn->rootDir()->getDir('htdocs')->hasFile(':DOES_NOT_EXIST'));
   }
 
-  #[Test, Expect(FileNotFoundException::class)]
+  #[Test, Expect(NotFound::class)]
   public function getNonExistantFile() {
     $conn= $this->connection()->connect();
     $conn->rootDir()->getDir('htdocs')->getFile(':DOES_NOT_EXIST');
@@ -329,7 +329,7 @@ class IntegrationTest {
       try {
         $s= $dir->getFile('index.html')->in();
         Assert::equals("<html/>\n", Streams::readAll($s));
-      } catch (IOException $e) {
+      } catch (OperationFailed $e) {
         $this->fail('Round '.($i + 1), $e, null);
       }
     }

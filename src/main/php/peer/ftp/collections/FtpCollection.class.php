@@ -171,19 +171,19 @@ class FtpCollection implements IOCollection {
    * Gets input stream to read from this element
    *
    * @return  io.streams.InputStream
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function getInputStream() {
-    throw new \io\IOException('Cannot read from a directory');
+    throw new \io\OperationFailed('Cannot read from a directory');
   }
 
   /**
    * Gets output stream to read from this element
    *
    * @return  io.streams.OutputStream
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function getOutputStream() {
-    throw new \io\IOException('Cannot write to a directory');
+    throw new \io\OperationFailed('Cannot write to a directory');
   }
 } 

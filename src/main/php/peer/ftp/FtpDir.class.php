@@ -1,6 +1,6 @@
 <?php namespace peer\ftp;
 
-use io\{FileNotFoundException, IOException};
+use io\{NotFound, OperationFailed};
 use peer\ProtocolException;
 use util\Objects;
 
@@ -33,11 +33,11 @@ class FtpDir extends FtpEntry {
    * Returns a list of entries
    *
    * @return  peer.ftp.FtpEntryList
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function entries() {
     if (null === ($list= $this->connection->listingOf($this->name, '-al'))) {
-      throw new IOException('Cannot list "'.$this->name.'"');
+      throw new OperationFailed('Cannot list "'.$this->name.'"');
     }
     
     return new FtpEntryList($list, $this->connection, $this->name);
@@ -46,7 +46,7 @@ class FtpDir extends FtpEntry {
   /**
    * Delete this entry
    *
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function delete() {
     $this->connection->expect($this->connection->sendCommand('RMD %s', $this->name), [250]);
@@ -57,7 +57,7 @@ class FtpDir extends FtpEntry {
    *
    * @param   string name
    * @return  peer.ftp.FtpEntry entry or NULL if nothing was found
-   * @throws  io.IOException in case listing fails
+   * @throws  io.OperationFailed in case listing fails
    * @throws  peer.ProtocolException in case listing yields an unexpected result
    */
   protected function findEntry($name) {
@@ -110,12 +110,12 @@ class FtpDir extends FtpEntry {
    *
    * @param   string name
    * @return  peer.ftp.FtpFile the instance
-   * @throws  io.FileNotFoundException in case the file was not found
+   * @throws  io.NotFound in case the file was not found
    * @throws  lang.IllegalStateException in case the file exists but is a directory
    */
   public function getFile($name) {
     if (!($e= $this->findEntry($name))) {
-      throw new FileNotFoundException('File "'.$name.'" not found');
+      throw new NotFound('File "'.$name.'" not found');
     } else if ($e instanceof FtpDir) {
       throw new \lang\IllegalStateException('File "'.$name.'" is a directory');
     }
@@ -180,12 +180,12 @@ class FtpDir extends FtpEntry {
    *
    * @param   string name
    * @return  peer.ftp.FtpDir the instance
-   * @throws  io.FileNotFoundException in case the directory was not found
+   * @throws  io.NotFound in case the directory was not found
    * @throws  lang.IllegalStateException in case the directory exists but is a file
    */
   public function getDir($name) {
     if (!($e= $this->findEntry($name))) {
-      throw new FileNotFoundException('Directory "'.$name.'" not found');
+      throw new NotFound('Directory "'.$name.'" not found');
     } else if ($e instanceof FtpFile) {
       throw new \lang\IllegalStateException('Directory "'.$name.'" is a file');
     }
@@ -196,7 +196,7 @@ class FtpDir extends FtpEntry {
    * Create a new directory
    *
    * @param   string name
-   * @throws  io.IOException if directory cannot be created
+   * @throws  io.OperationFailed if directory cannot be created
    * @throws  peer.ProtocolException in case the created directory cannot be located or is a file
    */
   protected function makeDir($name) {
@@ -217,7 +217,7 @@ class FtpDir extends FtpEntry {
    * @param   string name
    * @return  peer.ftp.FtpDir the created instance
    * @throws  lang.IllegalStateException in case the directory already exists
-   * @throws  io.IOException in case the directory could not be created
+   * @throws  io.OperationFailed in case the directory could not be created
    */
   public function newDir($name) {
     if ($e= $this->findEntry($name)) {
@@ -238,7 +238,7 @@ class FtpDir extends FtpEntry {
    * @param   string name
    * @return  peer.ftp.FtpDir the instance
    * @throws  lang.IllegalStateException in case the directory exists and is a file
-   * @throws  io.IOException in case the directory could not be created
+   * @throws  io.OperationFailed in case the directory could not be created
    */
   public function dir($name) {
     if (!($e= $this->findEntry($name))) {
