@@ -15,7 +15,7 @@ class FtpFile extends FtpEntry implements Channel {
   /**
    * Delete this entry
    *
-   * @throws  io.IOException in case of an I/O error
+   * @throws  io.OperationFailed in case of an I/O error
    */
   public function delete() {
     $this->connection->expect($this->connection->sendCommand('DELE %s', $this->name), [250]);

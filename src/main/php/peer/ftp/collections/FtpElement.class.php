@@ -109,7 +109,7 @@ class FtpElement implements IOElement {
    * Gets input stream to read from this element
    *
    * @return  io.streams.InputStream
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function getInputStream() {
     return new FtpInputStream($this->file);
@@ -119,7 +119,7 @@ class FtpElement implements IOElement {
    * Gets output stream to read from this element
    *
    * @return  io.streams.OutputStream
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function getOutputStream() {
     return new FtpOutputStream($this->file);

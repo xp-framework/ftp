@@ -66,7 +66,7 @@ class FtpDownload extends FtpTransfer {
   protected function doTransfer() {
     try {
       $chunk= $this->socket->readBinary();
-    } catch (\io\IOException $e) {
+    } catch (\io\OperationFailed $e) {
       $this->listener && $this->listener->failed($this, $e);
       $this->close();
       throw $e;
@@ -81,7 +81,7 @@ class FtpDownload extends FtpTransfer {
 
     try {
       $this->out->write($chunk);
-    } catch (\io\IOException $e) {
+    } catch (\io\OperationFailed $e) {
       $this->listener && $this->listener->failed($this, $e);
       $this->close();
       throw $e;

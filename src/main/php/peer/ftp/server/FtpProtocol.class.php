@@ -152,7 +152,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
    * @param   string text
    * @param   array lines default NULL lines of a multiline response
    * @return  int number of bytes written
-   * @throws  io.IOException
+   * @throws  io.OperationFailed
    */
   public function answer($sock, $code, $text, $lines= null) {
     if (is_array($lines)) {
@@ -745,7 +745,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
 
     try {
       $entry->delete();
-    } catch (\io\IOException $e) {
+    } catch (\io\OperationFailed $e) {
       $this->answer($socket, 450, $params.': ', $e->getMessage());
       return;
     }
@@ -927,7 +927,7 @@ class FtpProtocol implements ServerProtocol, Traceable {
         $this->datasock[$key]->create();
         $this->datasock[$key]->bind();
         $this->datasock[$key]->listen();
-      } catch (\io\IOException $e) {
+      } catch (\io\OperationFailed $e) {
         $this->answer($socket, 425, 'Cannot open passive connection '.$e->getMessage());
         unset($this->datasock[$key]);
         return;

@@ -1,7 +1,7 @@
 <?php namespace peer\ftp\unittest;
 
 use io\streams\{MemoryInputStream, MemoryOutputStream, Streams};
-use io\{FileNotFoundException, IOException, TempFile};
+use io\{FileNotFoundException, OperationFailed, TempFile};
 use lang\{IllegalStateException, Throwable};
 use peer\AuthenticationException;
 use peer\ftp\{FtpConnection, FtpDir, FtpEntry, FtpEntryList, FtpFile};
@@ -329,7 +329,7 @@ class IntegrationTest {
       try {
         $s= $dir->getFile('index.html')->in();
         Assert::equals("<html/>\n", Streams::readAll($s));
-      } catch (IOException $e) {
+      } catch (OperationFailed $e) {
         $this->fail('Round '.($i + 1), $e, null);
       }
     }
