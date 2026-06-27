@@ -181,7 +181,7 @@ abstract class FtpTransfer implements Value {
   public abstract function size();
 
   /** @return string */
-  public function hashCode() { return spl_object_hash($this); }
+  public function hashCode() { return spl_object_id($this); }
 
   /** @return string */
   public function toString() { return nameof($this); }

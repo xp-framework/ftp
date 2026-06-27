@@ -69,7 +69,7 @@ class FtpEntryList implements Value, IteratorAggregate {
   }
 
   /** @return string */
-  public function hashCode() { return spl_object_hash($this); }
+  public function hashCode() { return spl_object_id($this); }
 
   /** @return string */
   public function toString() {
